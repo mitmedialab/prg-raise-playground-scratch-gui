@@ -12,15 +12,26 @@ var autoprefixer = require('autoprefixer');
 var postcssVars = require('postcss-simple-vars');
 var postcssImport = require('postcss-import');
 
+const { createSveltePreprocessor } = require("./svelte.config.js");
+
 const STATIC_PATH = process.env.STATIC_PATH || '/static';
 
 const base = {
     mode: process.env.NODE_ENV === 'production' ? 'production' : 'development',
+    node: {
+        fs: "empty"
+    },
     devtool: 'cheap-module-source-map',
     devServer: {
         contentBase: path.resolve(__dirname, 'build'),
         host: '0.0.0.0',
-        port: process.env.PORT || 8601
+        port: process.env.PORT || 8601,
+        // sockPort and disableHostCheck fix viewing over ssh tunneled ports, e.g. with gitpod.io
+        sockPort: 'location',
+        disableHostCheck: true,
+        watchOptions: {
+            ignored: ['**/*.ts']
+        },
     },
     output: {
         library: 'GUI',
@@ -32,7 +43,7 @@ const base = {
         ReactDOM: 'react-dom'
     },
     resolve: {
-        symlinks: false
+        symlinks: false,
     },
     module: {
         rules: [{
@@ -42,7 +53,8 @@ const base = {
                 path.resolve(__dirname, 'src'),
                 /node_modules[\\/]scratch-[^\\/]+[\\/]src/,
                 /node_modules[\\/]pify/,
-                /node_modules[\\/]@vernier[\\/]godirect/
+                /node_modules[\\/]@vernier[\\/]godirect/,
+                path.resolve(__dirname, "../../extensions/src/common")
             ],
             options: {
                 // Explicitly disable babelrc so we don't catch various config
@@ -50,13 +62,29 @@ const base = {
                 babelrc: false,
                 plugins: [
                     '@babel/plugin-syntax-dynamic-import',
+                    '@babel/plugin-transform-spread',
                     '@babel/plugin-transform-async-to-generator',
                     '@babel/plugin-proposal-object-rest-spread',
+                    '@babel/plugin-proposal-optional-chaining',
                     ['react-intl', {
                         messagesDir: './translations/messages/'
                     }]],
                 presets: ['@babel/preset-env', '@babel/preset-react']
             }
+        },
+        {
+            test: /\.svelte$/,
+            use: {
+                loader: 'svelte-loader',
+                options: {
+                    preprocess: createSveltePreprocessor(),
+                }
+            },
+            include: [
+                path.resolve(__dirname, 'src'),
+                path.resolve(__dirname, 'node_modules', 'scratch-vm', 'src'),
+                path.resolve(__dirname, '..', 'scratch-vm', 'src'),
+            ]
         },
         {
             test: /\.css$/,
@@ -142,26 +170,26 @@ module.exports = [
             new HtmlWebpackPlugin({
                 chunks: ['lib.min', 'gui'],
                 template: 'src/playground/index.ejs',
-                title: 'Scratch 3.0 GUI',
+                title: 'PRG AI Blocks',
                 sentryConfig: process.env.SENTRY_CONFIG ? '"' + process.env.SENTRY_CONFIG + '"' : null
             }),
             new HtmlWebpackPlugin({
                 chunks: ['lib.min', 'blocksonly'],
                 template: 'src/playground/index.ejs',
                 filename: 'blocks-only.html',
-                title: 'Scratch 3.0 GUI: Blocks Only Example'
+                title: 'PRG AI Blocks: Blocks Only Example'
             }),
             new HtmlWebpackPlugin({
                 chunks: ['lib.min', 'compatibilitytesting'],
                 template: 'src/playground/index.ejs',
                 filename: 'compatibility-testing.html',
-                title: 'Scratch 3.0 GUI: Compatibility Testing'
+                title: 'PRG AI Blocks: Compatibility Testing'
             }),
             new HtmlWebpackPlugin({
                 chunks: ['lib.min', 'player'],
                 template: 'src/playground/index.ejs',
                 filename: 'player.html',
-                title: 'Scratch 3.0 GUI: Player Example'
+                title: 'PRG AI Blocks: Player Example'
             }),
             new CopyWebpackPlugin([{
                 from: 'static',
