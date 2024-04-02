@@ -1,13 +1,17 @@
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import React from 'react';
-import {defineMessages, injectIntl, intlShape} from 'react-intl';
+import { defineMessages, injectIntl, intlShape } from 'react-intl';
 
 import GreenFlag from '../green-flag/green-flag.jsx';
 import StopAll from '../stop-all/stop-all.jsx';
 import TurboMode from '../turbo-mode/turbo-mode.jsx';
 
 import styles from './controls.css';
+
+/** PRG ADDITION BEGIN */
+import Record from '../prg/record-button/record.jsx';
+/** PRG ADDITION END */
 
 const messages = defineMessages({
     goTitle: {
@@ -30,6 +34,10 @@ const Controls = function (props) {
         onGreenFlagClick,
         onStopAllClick,
         turbo,
+        /** PRG ADDITION BEGIN */
+        recording,
+        onRecordClick,
+        /** PRG ADDITION END */
         ...componentProps
     } = props;
     return (
@@ -47,6 +55,13 @@ const Controls = function (props) {
                 title={intl.formatMessage(messages.stopTitle)}
                 onClick={onStopAllClick}
             />
+            {/** PRG ADDITION BEGIN */}
+            <Record
+                active={recording}
+                title={intl.formatMessage(messages.stopTitle)}
+                onClick={onRecordClick}
+            />
+            {/** PRG ADDITION END */}
             {turbo ? (
                 <TurboMode />
             ) : null}
@@ -60,7 +75,11 @@ Controls.propTypes = {
     intl: intlShape.isRequired,
     onGreenFlagClick: PropTypes.func.isRequired,
     onStopAllClick: PropTypes.func.isRequired,
-    turbo: PropTypes.bool
+    turbo: PropTypes.bool,
+    /** PRG ADDITION BEGIN */
+    recording: PropTypes.bool,
+    onRecordClick: PropTypes.func,
+    /** PRG ADDITION END */
 };
 
 Controls.defaultProps = {

@@ -2,6 +2,11 @@
 @import "../../css/units.css";
 @import "../../css/z-index.css";
 
+.blank-link::after {
+    content: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAASUlEQVQoU5WQwQ4AIAhC4/8/2rJmQ5NDHuUNBhjizMxYwvMAEABrGwSJHeS/FkxOwGGqY4UiIYEKaqO7BO8gy3Cpf1CNfous+SZoSE/7IpEx6wAAAABJRU5ErkJggg==);
+    margin: 0 3px 0 7px;
+}
+
 .menu-bar {
     display: flex;
     flex-direction: row;
@@ -39,11 +44,13 @@
     align-items: center;
     flex-grow: 1;
 }
+
 .inactive {
     opacity: 0;
 }
+
 .scratch-logo {
-    height:  1.6rem;
+    height: 1.6rem;
     vertical-align: middle;
 }
 
@@ -131,7 +138,7 @@
     height: 1.25rem;
 }
 
-.coming-soon >:not(.coming-soon-tooltip) {
+.coming-soon>:not(.coming-soon-tooltip) {
     opacity: 0.5;
 }
 
@@ -159,7 +166,8 @@
     margin: 0 0 0 .25rem;
 }
 
-.account-nav-menu, .mystuff-button {
+.account-nav-menu,
+.mystuff-button {
     padding: 0 .25rem;
     display: flex;
     flex-direction: row;
@@ -189,23 +197,24 @@
     opacity: 0.5;
 }
 
-.mystuff > a {
-  background-repeat: no-repeat;
-  background-position: center center;
-  background-size: 45%;
-  padding-right: 10px;
-  padding-left: 10px;
-  width: 30px;
-  overflow: hidden;
-  text-indent: 50px;
-  white-space: nowrap;
-}
-.mystuff > a:hover {
-  background-size: 50%;
+.mystuff>a {
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: 45%;
+    padding-right: 10px;
+    padding-left: 10px;
+    width: 30px;
+    overflow: hidden;
+    text-indent: 50px;
+    white-space: nowrap;
 }
 
-.mystuff > a {
-  background-image: url("/images/mystuff.png");
+.mystuff>a:hover {
+    background-size: 50%;
+}
+
+.mystuff>a {
+    background-image: url("/images/mystuff.png");
 }
 
 .about-icon {
@@ -223,7 +232,9 @@
 }
 
 @media only screen and (max-width: 1024px) {
-    .tutorials-label, .collapsible-label {
+
+    .tutorials-label,
+    .collapsible-label {
         display: none;
     }
 

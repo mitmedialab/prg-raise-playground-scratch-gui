@@ -2,10 +2,10 @@ import classNames from 'classnames';
 import omit from 'lodash.omit';
 import PropTypes from 'prop-types';
 import React from 'react';
-import {defineMessages, FormattedMessage, injectIntl, intlShape} from 'react-intl';
-import {connect} from 'react-redux';
+import { defineMessages, FormattedMessage, injectIntl, intlShape } from 'react-intl';
+import { connect } from 'react-redux';
 import MediaQuery from 'react-responsive';
-import {Tab, Tabs, TabList, TabPanel} from 'react-tabs';
+import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import tabStyles from 'react-tabs/style/react-tabs.css';
 import VM from 'scratch-vm';
 import Renderer from 'scratch-render';
@@ -31,15 +31,19 @@ import DragLayer from '../../containers/drag-layer.jsx';
 import ConnectionModal from '../../containers/connection-modal.jsx';
 import TelemetryModal from '../telemetry-modal/telemetry-modal.jsx';
 
-import layout, {STAGE_SIZE_MODES} from '../../lib/layout-constants';
-import {resolveStageSize} from '../../lib/screen-utils';
-import {themeMap} from '../../lib/themes';
+import layout, { STAGE_SIZE_MODES } from '../../lib/layout-constants';
+import { resolveStageSize } from '../../lib/screen-utils';
+import { themeMap } from '../../lib/themes';
 
 import styles from './gui.css';
 import addExtensionIcon from './icon--extensions.svg';
 import codeIcon from './icon--code.svg';
 import costumesIcon from './icon--costumes.svg';
 import soundsIcon from './icon--sounds.svg';
+
+/** PRG ADDITION BEGIN */
+import ProgrammaticModal from '../prg/programmatic-modal/programmatic-modal.jsx';
+/** PRG ADDITION END */
 
 const messages = defineMessages({
     addExtension: {
@@ -124,6 +128,9 @@ const GUIComponent = props => {
         theme,
         tipsLibraryVisible,
         vm,
+        /** PRG ADDITION BEGIN */
+        programmaticModalDetails,
+        /** PRG ADDITION END */
         ...componentProps
     } = omit(props, 'dispatch');
     if (children) {
@@ -188,6 +195,11 @@ const GUIComponent = props => {
                 {tipsLibraryVisible ? (
                     <TipsLibrary />
                 ) : null}
+                /** PRG ADDITION BEGIN */
+                {programmaticModalDetails ? (
+                    <ProgrammaticModal vm={vm} {...programmaticModalDetails} />
+                ) : null}
+                /** PRG ADDITION END */
                 {cardsVisible ? (
                     <Cards />
                 ) : null}
@@ -436,7 +448,10 @@ GUIComponent.propTypes = {
     telemetryModalVisible: PropTypes.bool,
     theme: PropTypes.string,
     tipsLibraryVisible: PropTypes.bool,
-    vm: PropTypes.instanceOf(VM).isRequired
+    vm: PropTypes.instanceOf(VM).isRequired,
+    /** PRG ADDITION BEGIN */
+    programmaticModalDetails: PropTypes.shape({}),
+    /** PRG ADDITION END */
 };
 GUIComponent.defaultProps = {
     backpackHost: null,
