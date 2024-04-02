@@ -1,5 +1,6 @@
 # Generated content
 static/extension-bundles/*
+src/dist/globals.js
 
 # pnpm used at the root level
 package-lock.json
