@@ -1,5 +1,5 @@
 /* DO NOT REMOVE */
-import generatedDetails from '../../../generated/details.generated';
+import generatedDetails from '../../../generated/prg/details.generated';
 /* DO NOT REMOVE */
 
 import React from 'react';

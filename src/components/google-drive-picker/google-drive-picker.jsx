@@ -27,7 +27,7 @@ class GoogleChooser extends React.Component {
   }
 
   componentDidMount() {
-    if(this.isGoogleReady()) {
+    if (this.isGoogleReady()) {
       // google api is already exists
       // init immediately
       this.onApiLoad();
@@ -42,7 +42,7 @@ class GoogleChooser extends React.Component {
 
   onClientLoad() {
     window.gapi.client.init({
-        apiKey: this.props.developerKey,
+      apiKey: this.props.developerKey,
     });
   }
 
@@ -68,9 +68,9 @@ class GoogleChooser extends React.Component {
 
   doAuth(callback) {
     const client = google.accounts.oauth2.initTokenClient({
-        client_id: this.props.clientId,
-        scope: this.props.scope,
-        callback: callback,
+      client_id: this.props.clientId,
+      scope: this.props.scope,
+      callback: callback,
     });
 
     client.requestAccessToken();
@@ -78,16 +78,16 @@ class GoogleChooser extends React.Component {
 
   onChoose() {
     if (!this.isGoogleReady() || !this.isGoogleAuthReady() || !this.isGooglePickerReady() || this.props.disabled) {
-        console.error("Some api is missing:");
-        if (!this.isGoogleReady()) {
-          console.log("\tGoogle API");
-        }
-        if (!this.isGoogleAuthReady()) {
-          console.log("\tGoogle Auth");
-        }
-        if (!this.isGoogleReady()) {
-          console.log("\tGoogle Picker");
-        }
+      console.error("Some api is missing:");
+      if (!this.isGoogleReady()) {
+        console.log("\tGoogle API");
+      }
+      if (!this.isGoogleAuthReady()) {
+        console.log("\tGoogle Auth");
+      }
+      if (!this.isGoogleReady()) {
+        console.log("\tGoogle Picker");
+      }
       return null;
     }
 
@@ -111,7 +111,7 @@ class GoogleChooser extends React.Component {
 
     this.props.onAuthenticate(oauthToken);
 
-    if(this.props.createPicker){
+    if (this.props.createPicker) {
       return this.props.createPicker(google, oauthToken)
     }
 
@@ -130,11 +130,11 @@ class GoogleChooser extends React.Component {
     }
 
     const picker = new window.google.picker.PickerBuilder()
-                             .addView(view)
-                             .setOAuthToken(oauthToken)
-                             .setDeveloperKey(this.props.developerKey)
-                             .setCallback(this.props.onChange)
-                             .setAppId(this.props.appId);
+      .addView(view)
+      .setOAuthToken(oauthToken)
+      .setDeveloperKey(this.props.developerKey)
+      .setCallback(this.props.onChange)
+      .setAppId(this.props.appId);
 
     if (this.props.origin) {
       picker.setOrigin(this.props.origin);
@@ -149,7 +149,7 @@ class GoogleChooser extends React.Component {
     }
 
     picker.build()
-          .setVisible(true);
+      .setVisible(true);
   }
 
   render() {
@@ -166,33 +166,33 @@ class GoogleChooser extends React.Component {
 }
 
 GoogleChooser.propTypes = {
-    appId: PropTypes.string.isRequired,
-    children: PropTypes.node,
-    clientId: PropTypes.string.isRequired,
-    developerKey: PropTypes.string,
-    scope: PropTypes.array,
-    viewId: PropTypes.string,
-    authImmediate: PropTypes.bool,
-    origin: PropTypes.string,
-    onChange: PropTypes.func,
-    onAuthenticate: PropTypes.func,
-    onAuthFailed: PropTypes.func,
-    createPicker: PropTypes.func,
-    multiselect: PropTypes.bool,
-    navHidden: PropTypes.bool,
-    disabled: PropTypes.bool
+  appId: PropTypes.string.isRequired,
+  children: PropTypes.node,
+  clientId: PropTypes.string.isRequired,
+  developerKey: PropTypes.string,
+  scope: PropTypes.string,
+  viewId: PropTypes.string,
+  authImmediate: PropTypes.bool,
+  origin: PropTypes.string,
+  onChange: PropTypes.func,
+  onAuthenticate: PropTypes.func,
+  onAuthFailed: PropTypes.func,
+  createPicker: PropTypes.func,
+  multiselect: PropTypes.bool,
+  navHidden: PropTypes.bool,
+  disabled: PropTypes.bool
 };
 
 GoogleChooser.defaultProps = {
-    onChange: () => {},
-    onAuthenticate: () => {},
-    onAuthFailed: () => {},
-    scope:'https://www.googleapis.com/auth/drive.file',
-    viewId: 'DOCS',
-    authImmediate: false,
-    multiselect: false,
-    navHidden: false,
-    disabled: false
+  onChange: () => { },
+  onAuthenticate: () => { },
+  onAuthFailed: () => { },
+  scope: 'https://www.googleapis.com/auth/drive.file',
+  viewId: 'DOCS',
+  authImmediate: false,
+  multiselect: false,
+  navHidden: false,
+  disabled: false
 };
 
 export default GoogleChooser;

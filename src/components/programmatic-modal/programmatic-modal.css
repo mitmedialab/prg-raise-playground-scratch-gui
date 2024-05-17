@@ -18,8 +18,6 @@
   --text-primary-transparent: $text-primary-transparent;
   --motion-primary: $motion-primary;
   --motion-tertiary: $motion-tertiary;
-  --motion-transparent: $motion-transparent;
-  --motion-light-transparent: $motion-light-transparent;
   --red-primary: $red-primary;
   --red-tertiary: $red-tertiary;
   --sound-primary: $sound-primary;
@@ -35,5 +33,5 @@
   --extensions-tertiary: $extensions-tertiary;
   --extensions-transparent: $extensions-transparent;
   --extensions-light: $extensions-light;
-  --drop-highlight: $motion-transparent
+  --drop-highlight: $drop-highlight
 }

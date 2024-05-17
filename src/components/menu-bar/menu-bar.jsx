@@ -1,7 +1,7 @@
 import classNames from 'classnames';
-import {connect} from 'react-redux';
-import {compose} from 'redux';
-import {defineMessages, FormattedMessage, injectIntl, intlShape} from 'react-intl';
+import { connect } from 'react-redux';
+import { compose } from 'redux';
+import { defineMessages, FormattedMessage, injectIntl, intlShape } from 'react-intl';
 import PropTypes from 'prop-types';
 import bindAll from 'lodash.bindall';
 import bowser from 'bowser';
@@ -13,12 +13,12 @@ import Box from '../box/box.jsx';
 import Button from '../button/button.jsx';
 import CommunityButton from './community-button.jsx';
 import ShareButton from './share-button.jsx';
-import {ComingSoonTooltip} from '../coming-soon/coming-soon.jsx';
+import { ComingSoonTooltip } from '../coming-soon/coming-soon.jsx';
 import Divider from '../divider/divider.jsx';
 import SaveStatus from './save-status.jsx';
 import ProjectWatcher from '../../containers/project-watcher.jsx';
 import MenuBarMenu from './menu-bar-menu.jsx';
-import {MenuItem, MenuSection} from '../menu/menu.jsx';
+import { MenuItem, MenuSection } from '../menu/menu.jsx';
 import ProjectTitleInput from './project-title-input.jsx';
 import AuthorInfo from './author-info.jsx';
 import AccountNav from '../../containers/account-nav.jsx';
@@ -27,12 +27,10 @@ import SB3Downloader from '../../containers/sb3-downloader.jsx';
 import DeletionRestorer from '../../containers/deletion-restorer.jsx';
 import TurboMode from '../../containers/turbo-mode.jsx';
 import MenuBarHOC from '../../containers/menu-bar-hoc.jsx';
-import GoogleChooser from '../google-drive-picker/google-drive-picker.jsx';
 import SettingsMenu from './settings-menu.jsx';
 
-import {setProjectTitle} from '../../reducers/project-title';
-import {openTipsLibrary} from '../../reducers/modals';
-import {setPlayer} from '../../reducers/mode';
+import { openTipsLibrary } from '../../reducers/modals';
+import { setPlayer } from '../../reducers/mode';
 import {
     isTimeTravel220022BC,
     isTimeTravel1920,
@@ -87,18 +85,13 @@ import aboutIcon from './icon--about.svg';
 import fileIcon from './icon--file.svg';
 import editIcon from './icon--edit.svg';
 
-import scratchLogo from './raise-white.png';
+import scratchLogo from './scratch-logo.svg';
 import ninetiesLogo from './nineties_logo.svg';
 import catLogo from './cat_logo.svg';
 import prehistoricLogo from './prehistoric-logo.svg';
 import oldtimeyLogo from './oldtimey-logo.svg';
 
 import sharedMessages from '../../lib/shared-messages';
-
-import loadScript from 'load-script';
-const GOOGLE_SDK_URL = 'https://apis.google.com/js/api.js';
-let scriptLoadingStarted = false;
-
 
 const ariaMessages = defineMessages({
     tutorials: {
@@ -143,7 +136,7 @@ MenuBarItemTooltip.propTypes = {
     place: PropTypes.oneOf(['top', 'bottom', 'left', 'right'])
 };
 
-const MenuItemTooltip = ({id, isRtl, children, className}) => (
+const MenuItemTooltip = ({ id, isRtl, children, className }) => (
     <ComingSoonTooltip
         className={classNames(styles.comingSoon, className)}
         isRtl={isRtl}
@@ -154,12 +147,6 @@ const MenuItemTooltip = ({id, isRtl, children, className}) => (
         {children}
     </ComingSoonTooltip>
 );
-
-const APP_ID = '906634949042'; // first part of client ID
-const CLIENT_ID = '906634949042-5jbc7q594e69spg2i0bkt9a14iojvtsp.apps.googleusercontent.com';
-const DEVELOPER_KEY = 'AIzaSyDRoOjwaDXOxq4cda1nrCVLaVQvTCh5GYE';
-const DRIVE_SCOPE = 'https://www.googleapis.com/auth/drive.file';
-
 
 MenuItemTooltip.propTypes = {
     children: PropTypes.node,
@@ -182,7 +169,7 @@ AboutButton.propTypes = {
 };
 
 class MenuBar extends React.Component {
-    constructor (props) {
+    constructor(props) {
         super(props);
         bindAll(this, [
             'handleClickNew',
@@ -195,34 +182,16 @@ class MenuBar extends React.Component {
             'handleKeyPress',
             'handleRestoreOption',
             'getSaveToComputerHandler',
-            'restoreOptionMessage',
-            'handleDriveAuthenticate',
-            'handleDriveProjectSelect',
-            'handleClickLoadProjectLink',
-            'handleClickDriveSave',
-            'onApiLoad'
+            'restoreOptionMessage'
         ]);
-        this.state = {
-            authToken: "",
-            fileId: ""
-        };
     }
-    componentDidMount () {
+    componentDidMount() {
         document.addEventListener('keydown', this.handleKeyPress);
-        if(this.isGoogleReady()) {
-            // google api is already exists
-            // init immediately
-            this.onApiLoad();
-        } else if (!scriptLoadingStarted) {
-            // load google api and the init
-            scriptLoadingStarted = true;
-            loadScript(GOOGLE_SDK_URL, this.onApiLoad)
-        }
     }
-    componentWillUnmount () {
+    componentWillUnmount() {
         document.removeEventListener('keydown', this.handleKeyPress);
     }
-    handleClickNew () {
+    handleClickNew() {
         // if the project is dirty, and user owns the project, we will autosave.
         // but if they are not logged in and can't save, user should consider
         // downloading or logging in first.
@@ -234,26 +203,22 @@ class MenuBar extends React.Component {
         this.props.onRequestCloseFile();
         if (readyToReplaceProject) {
             this.props.onClickNew(this.props.canSave && this.props.canCreateNew);
-            
-            this.setState({
-                fileId: null
-            });
         }
         this.props.onRequestCloseFile();
     }
-    handleClickRemix () {
+    handleClickRemix() {
         this.props.onClickRemix();
         this.props.onRequestCloseFile();
     }
-    handleClickSave () {
+    handleClickSave() {
         this.props.onClickSave();
         this.props.onRequestCloseFile();
     }
-    handleClickSaveAsCopy () {
+    handleClickSaveAsCopy() {
         this.props.onClickSaveAsCopy();
         this.props.onRequestCloseFile();
     }
-    handleClickSeeCommunity (waitForUpdate) {
+    handleClickSeeCommunity(waitForUpdate) {
         if (this.props.shouldSaveBeforeTransition()) {
             this.props.autoUpdateProject(); // save before transitioning to project page
             waitForUpdate(true); // queue the transition to project page
@@ -261,7 +226,7 @@ class MenuBar extends React.Component {
             waitForUpdate(false); // immediately transition to project page
         }
     }
-    handleClickShare (waitForUpdate) {
+    handleClickShare(waitForUpdate) {
         if (!this.props.isShared) {
             if (this.props.canShare) { // save before transitioning to project page
                 this.props.onShare();
@@ -274,7 +239,7 @@ class MenuBar extends React.Component {
             }
         }
     }
-    handleSetMode (mode) {
+    handleSetMode(mode) {
         return () => {
             // Turn on/off filters for modes.
             if (mode === '1920') {
@@ -304,20 +269,20 @@ class MenuBar extends React.Component {
             this.props.onSetTimeTravelMode(mode);
         };
     }
-    handleRestoreOption (restoreFun) {
+    handleRestoreOption(restoreFun) {
         return () => {
             restoreFun();
             this.props.onRequestCloseEdit();
         };
     }
-    handleKeyPress (event) {
+    handleKeyPress(event) {
         const modifier = bowser.mac ? event.metaKey : event.ctrlKey;
         if (modifier && event.key === 's') {
             this.props.onClickSave();
             event.preventDefault();
         }
     }
-    getSaveToComputerHandler (downloadProjectCallback) {
+    getSaveToComputerHandler(downloadProjectCallback) {
         return () => {
             this.props.onRequestCloseFile();
             downloadProjectCallback();
@@ -327,165 +292,36 @@ class MenuBar extends React.Component {
             }
         };
     }
-    restoreOptionMessage (deletedItem) {
+    restoreOptionMessage(deletedItem) {
         switch (deletedItem) {
-        case 'Sprite':
-            return (<FormattedMessage
-                defaultMessage="Restore Sprite"
-                description="Menu bar item for restoring the last deleted sprite."
-                id="gui.menuBar.restoreSprite"
-            />);
-        case 'Sound':
-            return (<FormattedMessage
-                defaultMessage="Restore Sound"
-                description="Menu bar item for restoring the last deleted sound."
-                id="gui.menuBar.restoreSound"
-            />);
-        case 'Costume':
-            return (<FormattedMessage
-                defaultMessage="Restore Costume"
-                description="Menu bar item for restoring the last deleted costume."
-                id="gui.menuBar.restoreCostume"
-            />);
-        default: {
-            return (<FormattedMessage
-                defaultMessage="Restore"
-                description="Menu bar item for restoring the last deleted item in its disabled state." /* eslint-disable-line max-len */
-                id="gui.menuBar.restore"
-            />);
-        }
-        }
-    }
-    doAuth(callback) {
-        window.gapi.auth.authorize({
-            client_id: CLIENT_ID,
-            scope: DRIVE_SCOPE,
-            immediate: false
-            },
-            callback
-        );
-    }
-    handleClickLoadProjectLink() {
-        let templateLink = "https://www.dropbox.com/s/o8jegh940y7f7qc/SimpleProject.sb3";
-        let url = window.prompt("Enter project url (e.g. from Dropbox or Github)", templateLink);
-        if (url != null && url != "") {   
-            const readyToReplaceProject = this.props.confirmReadyToReplaceProject(
-                this.props.intl.formatMessage(sharedMessages.replaceProjectWarning)
-            );
-            if (readyToReplaceProject) {
-                this.props.vm.downloadProjectFromURLDirect(url);
-                
-                this.props.onReceivedProjectTitle(this.getProjectTitleFromFilename(url));
-                this.setState({
-                    fileId: null
-                });
+            case 'Sprite':
+                return (<FormattedMessage
+                    defaultMessage="Restore Sprite"
+                    description="Menu bar item for restoring the last deleted sprite."
+                    id="gui.menuBar.restoreSprite"
+                />);
+            case 'Sound':
+                return (<FormattedMessage
+                    defaultMessage="Restore Sound"
+                    description="Menu bar item for restoring the last deleted sound."
+                    id="gui.menuBar.restoreSound"
+                />);
+            case 'Costume':
+                return (<FormattedMessage
+                    defaultMessage="Restore Costume"
+                    description="Menu bar item for restoring the last deleted costume."
+                    id="gui.menuBar.restoreCostume"
+                />);
+            default: {
+                return (<FormattedMessage
+                    defaultMessage="Restore"
+                    description="Menu bar item for restoring the last deleted item in its disabled state." /* eslint-disable-line max-len */
+                    id="gui.menuBar.restore"
+                />);
             }
         }
-        this.props.onRequestCloseFile();
     }
-    handleClickDriveSave() {
-        // make sure user has logged into Google Drive
-        if (!this.state.authToken) {
-            this.doAuth(response => {
-                if (response.access_token) {
-                    this.handleDriveAuthenticate(response.access_token);
-                    this.handleClickDriveSave();
-                }
-            });
-            this.props.onRequestCloseFile();
-            return;
-        }
-        // check if we have already created file
-        let fileId = this.state.fileId;
-        if (!fileId) {
-            if (this.isGoogleDriveReady()) {
-                let fileName = prompt("Name your project", this.props.projectTitle);
-                if (fileName != null && fileName != "") {
-                    window.gapi.client.drive.files.create({
-                        name: fileName + ".sb3",
-                        mimeType: "application/x-zip"
-                    }).then((response) => {
-                        if (response.status == 200) {
-                            this.setState({
-                                fileId: response.result.id
-                            });
-                            this.handleClickDriveSave();
-                        }
-                    });
-                }
-            }
-            this.props.onRequestCloseFile();
-            return;
-        }
-        const url = "https://www.googleapis.com/upload/drive/v3/files/" + fileId + "?uploadType=media;" + this.state.authToken;
-        this.props.vm.uploadProjectToURL(url);
-        
-        // show alert that we are saving project
-        window.alert("Project saved");
-        this.props.onRequestCloseFile();
-    }
-    handleDriveAuthenticate(token) {
-        this.setState({
-            authToken: token
-        });
-    }
-    getProjectTitleFromFilename (fileInputFilename) {
-        if (!fileInputFilename) return '';
-        // only parse title with valid scratch project extensions
-        // (.sb, .sb2, and .sb3)
-        //const matches = fileInputFilename.match(/^(.*)\.sb[23]?$/);
-        const matches = fileInputFilename.match(/\/?(.[^\/]*)\.sb[23]?/);
-        if (!matches) return '';
-        return matches[1].substring(0, 100); // truncate project title to max 100 chars
-    }
-    handleDriveProjectSelect(data) {
-        console.log(data);
-        if (data.docs) {
-            const fileId = data.docs[0].id;
-            const url = "https://www.googleapis.com/drive/v3/files/" + fileId + "/?alt=media;" + this.state.authToken;
-            
-            const readyToReplaceProject = this.props.confirmReadyToReplaceProject(
-                this.props.intl.formatMessage(sharedMessages.replaceProjectWarning)
-            );
-            if (readyToReplaceProject) {
-                this.props.vm.downloadProjectFromURLDirect(url);
-                
-                this.props.onReceivedProjectTitle(this.getProjectTitleFromFilename(data.docs[0].name));
-                
-                // if project does not have a parentId, it's a shared project and you cannot save
-                if (data.docs[0].parentId !== undefined) {
-                    this.setState({
-                        fileId: fileId
-                    });
-                } else {
-                    this.setState({
-                        fileId: null
-                    });
-                }
-            }
-        }
-        this.props.onRequestCloseFile();
-    }
-    isGoogleReady() {
-        return !!window.gapi;
-    }
-    
-    isGoogleAuthReady() {
-        return !!window.gapi.auth;
-    }
-    isGoogleDriveReady() {
-        return !!window.gapi.client.drive;
-    }
-    
-    onApiLoad() {
-        window.gapi.load('auth');
-        window.gapi.load('client', () => {
-            window.gapi.client.load('drive', 'v3');
-        });
-    }
-
-
-    buildAboutMenu (onClickAbout) {
+    buildAboutMenu(onClickAbout) {
         if (!onClickAbout) {
             // hide the button
             return null;
@@ -529,13 +365,13 @@ class MenuBar extends React.Component {
             </div>
         );
     }
-    wrapAboutMenuCallback (callback) {
+    wrapAboutMenuCallback(callback) {
         return () => {
             callback();
             this.props.onRequestCloseAbout();
         };
     }
-    render () {
+    render() {
         const saveNowMessage = (
             <FormattedMessage
                 defaultMessage="Save now"
@@ -676,39 +512,6 @@ class MenuBar extends React.Component {
                                             </MenuItem>
                                         )}</SB3Downloader>
                                     </MenuSection>
-                                    <MenuSection>
-                                        <MenuItem
-                                            onClick={this.handleClickDriveSave}
-                                        >
-                                            <FormattedMessage
-                                                defaultMessage="Save project to Google Drive"
-                                                description="Menu bar item for saving a project to Google Drive" // eslint-disable-line max-len
-                                                id="gui.menuBar.saveToDrive"
-                                            />
-                                        </MenuItem>
-                                        <GoogleChooser 
-                                            appId={APP_ID}
-                                            clientId={CLIENT_ID}
-                                            developerKey={DEVELOPER_KEY}
-                                            scope={DRIVE_SCOPE}
-                                            onAuthenticate={this.handleDriveAuthenticate}
-                                            onChange={this.handleDriveProjectSelect}
-                                            onAuthFailed={data => console.log('on auth failed:', data)}
-                                            multiselect={false}
-                                            navHidden={false}
-                                            authImmediate={false}
-                                            viewID={'DOCS'}
-                                            query={'.sb3'}
-                                            >
-                                            <MenuItem classname="google">
-                                                <FormattedMessage
-                                                    defaultMessage="Load project from Google Drive"
-                                                    description="Menu bar item for loading a project from Google Drive" // eslint-disable-line max-len
-                                                    id="gui.menuBar.loadFromDrive"
-                                                />
-                                            </MenuItem>
-                                        </GoogleChooser>
-                                    </MenuSection>
                                 </MenuBarMenu>
                             </div>
                         )}
@@ -733,16 +536,16 @@ class MenuBar extends React.Component {
                                 place={this.props.isRtl ? 'left' : 'right'}
                                 onRequestClose={this.props.onRequestCloseEdit}
                             >
-                                <DeletionRestorer>{(handleRestore, {restorable, deletedItem}) => (
+                                <DeletionRestorer>{(handleRestore, { restorable, deletedItem }) => (
                                     <MenuItem
-                                        className={classNames({[styles.disabled]: !restorable})}
+                                        className={classNames({ [styles.disabled]: !restorable })}
                                         onClick={this.handleRestoreOption(handleRestore)}
                                     >
                                         {this.restoreOptionMessage(deletedItem)}
                                     </MenuItem>
                                 )}</DeletionRestorer>
                                 <MenuSection>
-                                    <TurboMode>{(toggleTurboMode, {turboMode}) => (
+                                    <TurboMode>{(toggleTurboMode, { turboMode }) => (
                                         <MenuItem onClick={toggleTurboMode}>
                                             {turboMode ? (
                                                 <FormattedMessage
@@ -785,7 +588,7 @@ class MenuBar extends React.Component {
                                 >
                                     <MenuSection>
                                         <MenuItem onClick={this.handleSetMode('NOW')}>
-                                            <span className={classNames({[styles.inactive]: !this.props.modeNow})}>
+                                            <span className={classNames({ [styles.inactive]: !this.props.modeNow })}>
                                                 {'✓'}
                                             </span>
                                             {' '}
@@ -796,7 +599,7 @@ class MenuBar extends React.Component {
                                             />
                                         </MenuItem>
                                         <MenuItem onClick={this.handleSetMode('2020')}>
-                                            <span className={classNames({[styles.inactive]: !this.props.mode2020})}>
+                                            <span className={classNames({ [styles.inactive]: !this.props.mode2020 })}>
                                                 {'✓'}
                                             </span>
                                             {' '}
@@ -811,24 +614,6 @@ class MenuBar extends React.Component {
                             </div>
                         )}
                     </div>
-                    <Divider className={classNames(styles.divider)} />
-                    {true ? (
-                        <div>
-                            <div
-                                aria-label={this.props.intl.formatMessage(ariaMessages.tutorials)}
-                                className={classNames(styles.menuBarItem, styles.hoverable)}
-                                onClick={this.props.onOpenTipLibrary}
-                            >
-                                <img
-                                    className={styles.helpIcon}
-                                    src={helpIcon}
-                                />
-                                <FormattedMessage {...ariaMessages.tutorials} />
-                            </div>
-                        </div>) :
-                        null
-                    }
-                    <Divider className={classNames(styles.divider)} />
                     {this.props.canEditTitle ? (
                         <div className={classNames(styles.menuBarItem, styles.growable)}>
                             <MenuBarItemTooltip
@@ -862,7 +647,7 @@ class MenuBar extends React.Component {
                                                 onClick={() => {
                                                     this.handleClickShare(waitForUpdate);
                                                 }}
-                                                /* eslint-enable react/jsx-no-bind */
+                                            /* eslint-enable react/jsx-no-bind */
                                             />
                                         )
                                     }
@@ -889,7 +674,7 @@ class MenuBar extends React.Component {
                                                 onClick={() => {
                                                     this.handleClickSeeCommunity(waitForUpdate);
                                                 }}
-                                                /* eslint-enable react/jsx-no-bind */
+                                            /* eslint-enable react/jsx-no-bind */
                                             />
                                         )
                                     }
@@ -949,7 +734,7 @@ class MenuBar extends React.Component {
                                     className={classNames(
                                         styles.menuBarItem,
                                         styles.hoverable,
-                                        {[styles.active]: this.props.accountMenuOpen}
+                                        { [styles.active]: this.props.accountMenuOpen }
                                     )}
                                     isOpen={this.props.accountMenuOpen}
                                     isRtl={this.props.isRtl}
@@ -1136,14 +921,13 @@ MenuBar.propTypes = {
     shouldSaveBeforeTransition: PropTypes.func,
     showComingSoon: PropTypes.bool,
     username: PropTypes.string,
-    vm: PropTypes.instanceOf(VM).isRequired,
-    onReceivedProjectTitle: PropTypes.func,
-    userOwnsProject: PropTypes.bool
+    userOwnsProject: PropTypes.bool,
+    vm: PropTypes.instanceOf(VM).isRequired
 };
 
 MenuBar.defaultProps = {
     logo: scratchLogo,
-    onShare: () => {}
+    onShare: () => { }
 };
 
 const mapStateToProps = (state, ownProps) => {
@@ -1198,7 +982,6 @@ const mapDispatchToProps = dispatch => ({
     onClickSave: () => dispatch(manualUpdateProject()),
     onClickSaveAsCopy: () => dispatch(saveProjectAsCopy()),
     onSeeCommunity: () => dispatch(setPlayer(true)),
-    onReceivedProjectTitle: title => dispatch(setProjectTitle(title)),
     onSetTimeTravelMode: mode => dispatch(setTimeTravel(mode))
 });
 

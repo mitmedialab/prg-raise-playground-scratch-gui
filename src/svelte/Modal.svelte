@@ -1,6 +1,6 @@
 <script lang="ts" context="module">
-    import type _ExtensionManager from "scratch-vm/src/extension-support/extension-manager";
-    import type _VirtualMachine from "scratch-vm/src/virtual-machine";
+    import type _ExtensionManager from "../../../scratch-vm/src/extension-support/extension-manager";
+    import type _VirtualMachine from "../../../scratch-vm/src/virtual-machine";
     import type { ExtensionInstance } from "../../../../extensions/src/common";
 
     type ExtensionID = string;
@@ -16,7 +16,7 @@
     type ExtensionManager = _ExtensionManager & {
         getAuxiliaryObject: (
             id: ExtensionID,
-            name: ComponentName
+            name: ComponentName,
         ) => UIConstructor;
         getExtensionInstance: (id: ExtensionID) => ExtensionInstance;
     };
@@ -50,7 +50,7 @@
         const options = { target, props };
         const constructor = vm.extensionManager.getAuxiliaryObject(
             id,
-            component
+            component,
         );
         constructed = new constructor(options);
         return;
@@ -60,7 +60,7 @@
         // HACK: This is a hack to ensure a svelte's `onDestroy` callback(s) is called
         const callbacks = constructed?.["$$"]?.["on_destroy"];
         if (!callbacks) return;
-        callbacks.forEach((callback) => callback());
+        callbacks.forEach((callback: Function) => callback());
     });
 </script>
 
