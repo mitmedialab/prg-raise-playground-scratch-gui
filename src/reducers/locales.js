@@ -1,8 +1,7 @@
 import {addLocaleData} from 'react-intl';
 
-import {localeData} from 'scratch-l10n';
+import {localeData, isRtl} from 'scratch-l10n';
 import editorMessages from 'scratch-l10n/locales/editor-msgs';
-import {isRtl} from 'scratch-l10n';
 
 addLocaleData(localeData);
 
@@ -56,7 +55,7 @@ const setLocales = function (localesMessages) {
     };
 };
 const initLocale = function (currentState, locale) {
-    if (currentState.messagesByLocale.hasOwnProperty(locale)) {
+    if (Object.prototype.hasOwnProperty.call(currentState.messagesByLocale, locale)) {
         return Object.assign(
             {},
             currentState,

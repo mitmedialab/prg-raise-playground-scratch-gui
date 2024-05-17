@@ -1,12 +1,13 @@
-import ScratchBlocks from 'scratch-blocks';
 import { overridesForCustomArgumentSupport } from './prg/customBlockOverrides';
 
 /**
  * Connect scratch blocks with the vm
  * @param {VirtualMachine} vm - The scratch vm
+ * @param {Bool} useCatBlocks - Whether to use cat blocks rendering of ScratchBlocks
  * @return {ScratchBlocks} ScratchBlocks connected with the vm
  */
-export default function (vm) {
+export default function (vm, useCatBlocks) {
+    const ScratchBlocks = useCatBlocks ? require('cat-blocks') : require('scratch-blocks');
     const jsonForMenuBlock = function (name, menuOptionsFn, colors, start) {
         return {
             message0: '%1',
@@ -24,6 +25,7 @@ export default function (vm) {
             colour: colors.secondary,
             colourSecondary: colors.secondary,
             colourTertiary: colors.tertiary,
+            colourQuaternary: colors.quaternary,
             outputShape: ScratchBlocks.OUTPUT_SHAPE_ROUND
         };
     };
@@ -43,6 +45,7 @@ export default function (vm) {
             colour: colors.primary,
             colourSecondary: colors.secondary,
             colourTertiary: colors.tertiary,
+            colourQuaternary: colors.quaternary,
             extensions: ['shape_hat']
         };
     };
@@ -69,6 +72,7 @@ export default function (vm) {
             colour: ScratchBlocks.Colours.sensing.primary,
             colourSecondary: ScratchBlocks.Colours.sensing.secondary,
             colourTertiary: ScratchBlocks.Colours.sensing.tertiary,
+            colourQuaternary: ScratchBlocks.Colours.sensing.quaternary,
             outputShape: ScratchBlocks.OUTPUT_SHAPE_ROUND
         };
     };
@@ -116,7 +120,7 @@ export default function (vm) {
     const spriteMenu = function () {
         const sprites = [];
         for (const targetId in vm.runtime.targets) {
-            if (!vm.runtime.targets.hasOwnProperty(targetId)) continue;
+            if (!Object.prototype.hasOwnProperty.call(vm.runtime.targets, targetId)) continue;
             if (vm.runtime.targets[targetId].isOriginal) {
                 if (!vm.runtime.targets[targetId].isStage) {
                     if (vm.runtime.targets[targetId] === vm.editingTarget) {
@@ -213,6 +217,18 @@ export default function (vm) {
 
     ScratchBlocks.Blocks.sensing_of.init = function () {
         const blockId = this.id;
+        const blockType = this.type;
+
+        // Get the sensing_of block from vm.
+        let defaultSensingOfBlock;
+        const blocks = vm.runtime.flyoutBlocks._blocks;
+        Object.keys(blocks).forEach(id => {
+            const block = blocks[id];
+            if (id === blockType || (block && block.opcode === blockType)) {
+                defaultSensingOfBlock = block;
+            }
+        });
+
         // Function that fills in menu for the first input in the sensing block.
         // Called every time it opens since it depends on the values in the other block input.
         const menuFn = function () {
@@ -236,7 +252,7 @@ export default function (vm) {
 
                 // The block doesn't exist, but should be in the flyout. Look there.
                 if (!sensingOfBlock) {
-                    sensingOfBlock = vm.runtime.flyoutBlocks.getBlock(blockId);
+                    sensingOfBlock = vm.runtime.flyoutBlocks.getBlock(blockId) || defaultSensingOfBlock;
                     // If we still don't have a block, just return an empty list . This happens during
                     // scratch blocks construction.
                     if (!sensingOfBlock) {

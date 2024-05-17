@@ -31,8 +31,9 @@ import DragLayer from '../../containers/drag-layer.jsx';
 import ConnectionModal from '../../containers/connection-modal.jsx';
 import TelemetryModal from '../telemetry-modal/telemetry-modal.jsx';
 
-import layout, { STAGE_SIZE_MODES } from '../../lib/layout-constants';
-import { resolveStageSize } from '../../lib/screen-utils';
+import layout, {STAGE_SIZE_MODES} from '../../lib/layout-constants';
+import {resolveStageSize} from '../../lib/screen-utils';
+import {themeMap} from '../../lib/themes';
 
 import styles from './gui.css';
 import addExtensionIcon from './icon--extensions.svg';
@@ -65,9 +66,11 @@ const GUIComponent = props => {
         backdropLibraryVisible,
         backpackHost,
         backpackVisible,
+        blocksId,
         blocksTabVisible,
         cardsVisible,
         canChangeLanguage,
+        canChangeTheme,
         canCreateNew,
         canEditTitle,
         canManageFiles,
@@ -87,9 +90,12 @@ const GUIComponent = props => {
         isPlayerOnly,
         isRtl,
         isShared,
+        isTelemetryEnabled,
+        isTotallyNormal,
         loading,
         logo,
         renderLogin,
+        onClickAbout,
         onClickAccountNav,
         onCloseAccountNav,
         onLogOut,
@@ -106,6 +112,8 @@ const GUIComponent = props => {
         onRequestCloseTelemetryModal,
         onSeeCommunity,
         onShare,
+        onShowPrivacyPolicy,
+        onStartSelectingFileUpload,
         onTelemetryModalCancel,
         onTelemetryModalOptIn,
         onTelemetryModalOptOut,
@@ -114,6 +122,7 @@ const GUIComponent = props => {
         stageSizeMode,
         targetIsStage,
         telemetryModalVisible,
+        theme,
         tipsLibraryVisible,
         textModelModalVisible,
         programmaticModalDetails,
@@ -162,10 +171,13 @@ const GUIComponent = props => {
             >
                 {telemetryModalVisible ? (
                     <TelemetryModal
+                        isRtl={isRtl}
+                        isTelemetryEnabled={isTelemetryEnabled}
                         onCancel={onTelemetryModalCancel}
                         onOptIn={onTelemetryModalOptIn}
                         onOptOut={onTelemetryModalOptOut}
                         onRequestClose={onRequestCloseTelemetryModal}
+                        onShowPrivacyPolicy={onShowPrivacyPolicy}
                     />
                 ) : null}
                 {loading ? (
@@ -212,6 +224,7 @@ const GUIComponent = props => {
                     authorThumbnailUrl={authorThumbnailUrl}
                     authorUsername={authorUsername}
                     canChangeLanguage={canChangeLanguage}
+                    canChangeTheme={canChangeTheme}
                     canCreateCopy={canCreateCopy}
                     canCreateNew={canCreateNew}
                     canEditTitle={canEditTitle}
@@ -222,9 +235,11 @@ const GUIComponent = props => {
                     className={styles.menuBarPosition}
                     enableCommunity={enableCommunity}
                     isShared={isShared}
+                    isTotallyNormal={isTotallyNormal}
                     logo={logo}
                     renderLogin={renderLogin}
                     showComingSoon={showComingSoon}
+                    onClickAbout={onClickAbout}
                     onClickAccountNav={onClickAccountNav}
                     onClickLogo={onClickLogo}
                     onCloseAccountNav={onCloseAccountNav}
@@ -233,6 +248,7 @@ const GUIComponent = props => {
                     onProjectTelemetryEvent={onProjectTelemetryEvent}
                     onSeeCommunity={onSeeCommunity}
                     onShare={onShare}
+                    onStartSelectingFileUpload={onStartSelectingFileUpload}
                     onToggleLoginOpen={onToggleLoginOpen}
                 />
                 <Box className={styles.bodyWrapper}>
@@ -298,13 +314,15 @@ const GUIComponent = props => {
                                 <TabPanel className={tabClassNames.tabPanel}>
                                     <Box className={styles.blocksWrapper}>
                                         <Blocks
+                                            key={`${blocksId}/${theme}`}
                                             canUseCloud={canUseCloud}
                                             grow={1}
                                             isVisible={blocksTabVisible}
                                             options={{
-                                                media: `${basePath}static/blocks-media/`
+                                                media: `${basePath}static/${themeMap[theme].blocksMediaFolder}/`
                                             }}
                                             stageSize={stageSize}
+                                            theme={theme}
                                             vm={vm}
                                         />
                                     </Box>
@@ -339,6 +357,7 @@ const GUIComponent = props => {
 
                         <Box className={classNames(styles.stageAndTargetWrapper, styles[stageSize])}>
                             <StageWrapper
+                                isFullScreen={isFullScreen}
                                 isRendererSupported={isRendererSupported}
                                 isRtl={isRtl}
                                 stageSize={stageSize}
@@ -370,7 +389,9 @@ GUIComponent.propTypes = {
     backpackVisible: PropTypes.bool,
     basePath: PropTypes.string,
     blocksTabVisible: PropTypes.bool,
+    blocksId: PropTypes.string,
     canChangeLanguage: PropTypes.bool,
+    canChangeTheme: PropTypes.bool,
     canCreateCopy: PropTypes.bool,
     canCreateNew: PropTypes.bool,
     canEditTitle: PropTypes.bool,
@@ -390,6 +411,7 @@ GUIComponent.propTypes = {
     isPlayerOnly: PropTypes.bool,
     isRtl: PropTypes.bool,
     isShared: PropTypes.bool,
+    isTotallyNormal: PropTypes.bool,
     loading: PropTypes.bool,
     logo: PropTypes.string,
     onActivateCostumesTab: PropTypes.func,
@@ -406,6 +428,8 @@ GUIComponent.propTypes = {
     onRequestCloseTelemetryModal: PropTypes.func,
     onSeeCommunity: PropTypes.func,
     onShare: PropTypes.func,
+    onShowPrivacyPolicy: PropTypes.func,
+    onStartSelectingFileUpload: PropTypes.func,
     onTabSelect: PropTypes.func,
     onTelemetryModalCancel: PropTypes.func,
     onTelemetryModalOptIn: PropTypes.func,
@@ -417,6 +441,7 @@ GUIComponent.propTypes = {
     stageSizeMode: PropTypes.oneOf(Object.keys(STAGE_SIZE_MODES)),
     targetIsStage: PropTypes.bool,
     telemetryModalVisible: PropTypes.bool,
+    theme: PropTypes.string,
     tipsLibraryVisible: PropTypes.bool,
     textModelModalVisible: PropTypes.bool,
     programmaticModalVisible: PropTypes.bool,
@@ -427,7 +452,9 @@ GUIComponent.defaultProps = {
     backpackHost: null,
     backpackVisible: false,
     basePath: './',
+    blocksId: 'original',
     canChangeLanguage: true,
+    canChangeTheme: true,
     canCreateNew: false,
     canEditTitle: false,
     canManageFiles: true,
@@ -439,6 +466,7 @@ GUIComponent.defaultProps = {
     enableCommunity: false,
     isCreating: false,
     isShared: false,
+    isTotallyNormal: false,
     loading: false,
     showComingSoon: false,
     stageSizeMode: STAGE_SIZE_MODES.large
@@ -446,7 +474,9 @@ GUIComponent.defaultProps = {
 
 const mapStateToProps = state => ({
     // This is the button's mode, as opposed to the actual current state
-    stageSizeMode: state.scratchGui.stageSize.stageSize
+    blocksId: state.scratchGui.timeTravel.year.toString(),
+    stageSizeMode: state.scratchGui.stageSize.stageSize,
+    theme: state.scratchGui.theme.theme
 });
 
 export default injectIntl(connect(

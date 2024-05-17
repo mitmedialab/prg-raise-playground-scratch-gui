@@ -27,6 +27,7 @@ import {
 
 import FontLoaderHOC from '../lib/font-loader-hoc.jsx';
 import LocalizationHOC from '../lib/localization-hoc.jsx';
+import SBFileUploaderHOC from '../lib/sb-file-uploader-hoc.jsx';
 import ProjectFetcherHOC from '../lib/project-fetcher-hoc.jsx';
 import TitledHOC from '../lib/titled-hoc.jsx';
 import ProjectSaverHOC from '../lib/project-saver-hoc.jsx';
@@ -35,19 +36,36 @@ import storage from '../lib/storage';
 import vmListenerHOC from '../lib/vm-listener-hoc.jsx';
 import vmManagerHOC from '../lib/vm-manager-hoc.jsx';
 import cloudManagerHOC from '../lib/cloud-manager-hoc.jsx';
+import systemPreferencesHOC from '../lib/system-preferences-hoc.jsx';
 
 import GUIComponent from '../components/gui/gui.jsx';
 import {setIsScratchDesktop} from '../lib/isScratchDesktop.js';
+
+const {RequestMetadata, setMetadata, unsetMetadata} = storage.scratchFetch;
+
+const setProjectIdMetadata = projectId => {
+    // If project ID is '0' or zero, it's not a real project ID. In that case, remove the project ID metadata.
+    // Same if it's null undefined.
+    if (projectId && projectId !== '0') {
+        setMetadata(RequestMetadata.ProjectId, projectId);
+    } else {
+        unsetMetadata(RequestMetadata.ProjectId);
+    }
+};
 
 class GUI extends React.Component {
     componentDidMount () {
         setIsScratchDesktop(this.props.isScratchDesktop);
         this.props.onStorageInit(storage);
         this.props.onVmInit(this.props.vm);
+        setProjectIdMetadata(this.props.projectId);
     }
     componentDidUpdate (prevProps) {
-        if (this.props.projectId !== prevProps.projectId && this.props.projectId !== null) {
-            this.props.onUpdateProjectId(this.props.projectId);
+        if (this.props.projectId !== prevProps.projectId) {
+            if (this.props.projectId !== null) {
+                this.props.onUpdateProjectId(this.props.projectId);
+            }
+            setProjectIdMetadata(this.props.projectId);
         }
         if (this.props.isShowingProject && !prevProps.isShowingProject) {
             // this only notifies container when a project changes from not yet loaded to loaded
@@ -103,6 +121,7 @@ GUI.propTypes = {
     isLoading: PropTypes.bool,
     isScratchDesktop: PropTypes.bool,
     isShowingProject: PropTypes.bool,
+    isTotallyNormal: PropTypes.bool,
     loadingStateVisible: PropTypes.bool,
     onProjectLoaded: PropTypes.func,
     onSeeCommunity: PropTypes.func,
@@ -120,6 +139,7 @@ GUI.propTypes = {
 
 GUI.defaultProps = {
     isScratchDesktop: false,
+    isTotallyNormal: false,
     onStorageInit: storageInstance => storageInstance.addOfficialScratchWebStores(),
     onProjectLoaded: () => {},
     onUpdateProjectId: () => {},
@@ -173,7 +193,7 @@ const mapDispatchToProps = dispatch => ({
 
 const ConnectedGUI = injectIntl(connect(
     mapStateToProps,
-    mapDispatchToProps,
+    mapDispatchToProps
 )(GUI));
 
 // note that redux's 'compose' function is just being used as a general utility to make
@@ -189,7 +209,9 @@ const WrappedGui = compose(
     ProjectSaverHOC,
     vmListenerHOC,
     vmManagerHOC,
-    cloudManagerHOC
+    SBFileUploaderHOC,
+    cloudManagerHOC,
+    systemPreferencesHOC
 )(ConnectedGUI);
 
 WrappedGui.setAppElement = ReactModal.setAppElement;

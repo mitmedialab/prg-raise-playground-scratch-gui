@@ -9,7 +9,8 @@
     left: 0;
     top: 0;
     width: 100%;
-    height: 100%
+    height: 100%;
+    direction: ltr;
 }
 
 .image-wrapper {
@@ -28,7 +29,7 @@
     margin-top: -50%;
 
     padding: 0.25rem;
-    border: 2px solid $motion-primary;
+    border: 2px solid $looks-secondary;
     background: $ui-white;
     border-radius: 0.5rem;
 

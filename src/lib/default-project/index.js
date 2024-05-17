@@ -14,7 +14,6 @@ const defaultProject = translator => {
     if (typeof TextEncoder === 'undefined') {
         _TextEncoder = require('text-encoding').TextEncoder;
     } else {
-        /* global TextEncoder */
         _TextEncoder = TextEncoder;
     }
     const encoder = new _TextEncoder();
@@ -46,7 +45,7 @@ const defaultProject = translator => {
         dataFormat: 'SVG',
         data: encoder.encode(backdrop)
     }, {
-        id: 'b7853f557e4426412e64bb3da6531a99',
+        id: 'bcf454acf82e4504149f7ffe07081dbc',
         assetType: 'ImageVector',
         dataFormat: 'SVG',
         data: encoder.encode(costume1)
