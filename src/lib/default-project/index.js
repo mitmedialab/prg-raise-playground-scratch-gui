@@ -9,15 +9,6 @@ import costume1 from '!!raw-loader!./tinybit_top.svg';
 import costume2 from '!!raw-loader!./tinybit_heart.svg';
 /* eslint-enable import/no-unresolved */
 
-function base64ToArrayBuffer(base64) {
-    var binaryString = atob(base64);
-    var bytes = new Uint8Array(binaryString.length);
-    for (var i = 0; i < binaryString.length; i++) {
-        bytes[i] = binaryString.charCodeAt(i);
-    }
-    return bytes.buffer;
-}
-
 const defaultProject = translator => {
 
     let _TextEncoder;
