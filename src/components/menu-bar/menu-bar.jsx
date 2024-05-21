@@ -812,23 +812,6 @@ class MenuBar extends React.Component {
                         )}
                     </div>
                     <Divider className={classNames(styles.divider)} />
-                    {true ? (
-                        <div>
-                            <div
-                                aria-label={this.props.intl.formatMessage(ariaMessages.tutorials)}
-                                className={classNames(styles.menuBarItem, styles.hoverable)}
-                                onClick={this.props.onOpenTipLibrary}
-                            >
-                                <img
-                                    className={styles.helpIcon}
-                                    src={helpIcon}
-                                />
-                                <FormattedMessage {...ariaMessages.tutorials} />
-                            </div>
-                        </div>) :
-                        null
-                    }
-                    <Divider className={classNames(styles.divider)} />
                     {this.props.canEditTitle ? (
                         <div className={classNames(styles.menuBarItem, styles.growable)}>
                             <MenuBarItemTooltip

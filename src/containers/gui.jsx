@@ -209,7 +209,7 @@ const WrappedGui = compose(
     ProjectSaverHOC,
     vmListenerHOC,
     vmManagerHOC,
-    //SBFileUploaderHOC,
+    SBFileUploaderHOC,
     cloudManagerHOC,
     systemPreferencesHOC
 )(ConnectedGUI);
