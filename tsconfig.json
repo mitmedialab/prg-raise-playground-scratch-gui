@@ -1,0 +1,11 @@
+{
+  "extends": "@tsconfig/svelte/tsconfig.json",
+  "compilerOptions": {
+    "ignoreDeprecations": "5.0",
+    "importsNotUsedAsValues": "remove",
+  },
+  "include": [
+    "node_modules/scratch-vm/src/**/*",
+    "../scratch-vm/src/**/*"
+  ]
+}

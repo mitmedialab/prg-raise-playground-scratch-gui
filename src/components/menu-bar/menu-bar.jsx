@@ -27,8 +27,10 @@ import SB3Downloader from '../../containers/sb3-downloader.jsx';
 import DeletionRestorer from '../../containers/deletion-restorer.jsx';
 import TurboMode from '../../containers/turbo-mode.jsx';
 import MenuBarHOC from '../../containers/menu-bar-hoc.jsx';
+import GoogleChooser from '../google-drive-picker/google-drive-picker.jsx';
 import SettingsMenu from './settings-menu.jsx';
 
+import {setProjectTitle} from '../../reducers/project-title';
 import {openTipsLibrary} from '../../reducers/modals';
 import {setPlayer} from '../../reducers/mode';
 import {
@@ -85,13 +87,18 @@ import aboutIcon from './icon--about.svg';
 import fileIcon from './icon--file.svg';
 import editIcon from './icon--edit.svg';
 
-import scratchLogo from './scratch-logo.svg';
+import scratchLogo from './raise-white.png';
 import ninetiesLogo from './nineties_logo.svg';
 import catLogo from './cat_logo.svg';
 import prehistoricLogo from './prehistoric-logo.svg';
 import oldtimeyLogo from './oldtimey-logo.svg';
 
 import sharedMessages from '../../lib/shared-messages';
+
+import loadScript from 'load-script';
+const GOOGLE_SDK_URL = 'https://apis.google.com/js/api.js';
+let scriptLoadingStarted = false;
+
 
 const ariaMessages = defineMessages({
     tutorials: {
@@ -148,6 +155,12 @@ const MenuItemTooltip = ({id, isRtl, children, className}) => (
     </ComingSoonTooltip>
 );
 
+const APP_ID = '906634949042'; // first part of client ID
+const CLIENT_ID = '906634949042-5jbc7q594e69spg2i0bkt9a14iojvtsp.apps.googleusercontent.com';
+const DEVELOPER_KEY = 'AIzaSyDRoOjwaDXOxq4cda1nrCVLaVQvTCh5GYE';
+const DRIVE_SCOPE = 'https://www.googleapis.com/auth/drive.file';
+
+
 MenuItemTooltip.propTypes = {
     children: PropTypes.node,
     className: PropTypes.string,
@@ -182,11 +195,29 @@ class MenuBar extends React.Component {
             'handleKeyPress',
             'handleRestoreOption',
             'getSaveToComputerHandler',
-            'restoreOptionMessage'
+            'restoreOptionMessage',
+            'handleDriveAuthenticate',
+            'handleDriveProjectSelect',
+            'handleClickLoadProjectLink',
+            'handleClickDriveSave',
+            'onApiLoad'
         ]);
+        this.state = {
+            authToken: "",
+            fileId: ""
+        };
     }
     componentDidMount () {
         document.addEventListener('keydown', this.handleKeyPress);
+        if(this.isGoogleReady()) {
+            // google api is already exists
+            // init immediately
+            this.onApiLoad();
+        } else if (!scriptLoadingStarted) {
+            // load google api and the init
+            scriptLoadingStarted = true;
+            loadScript(GOOGLE_SDK_URL, this.onApiLoad)
+        }
     }
     componentWillUnmount () {
         document.removeEventListener('keydown', this.handleKeyPress);
@@ -203,6 +234,10 @@ class MenuBar extends React.Component {
         this.props.onRequestCloseFile();
         if (readyToReplaceProject) {
             this.props.onClickNew(this.props.canSave && this.props.canCreateNew);
+            
+            this.setState({
+                fileId: null
+            });
         }
         this.props.onRequestCloseFile();
     }
@@ -321,6 +356,135 @@ class MenuBar extends React.Component {
         }
         }
     }
+    doAuth(callback) {
+        window.gapi.auth.authorize({
+            client_id: CLIENT_ID,
+            scope: DRIVE_SCOPE,
+            immediate: false
+            },
+            callback
+        );
+    }
+    handleClickLoadProjectLink() {
+        let templateLink = "https://www.dropbox.com/s/o8jegh940y7f7qc/SimpleProject.sb3";
+        let url = window.prompt("Enter project url (e.g. from Dropbox or Github)", templateLink);
+        if (url != null && url != "") {   
+            const readyToReplaceProject = this.props.confirmReadyToReplaceProject(
+                this.props.intl.formatMessage(sharedMessages.replaceProjectWarning)
+            );
+            if (readyToReplaceProject) {
+                this.props.vm.downloadProjectFromURLDirect(url);
+                
+                this.props.onReceivedProjectTitle(this.getProjectTitleFromFilename(url));
+                this.setState({
+                    fileId: null
+                });
+            }
+        }
+        this.props.onRequestCloseFile();
+    }
+    handleClickDriveSave() {
+        // make sure user has logged into Google Drive
+        if (!this.state.authToken) {
+            this.doAuth(response => {
+                if (response.access_token) {
+                    this.handleDriveAuthenticate(response.access_token);
+                    this.handleClickDriveSave();
+                }
+            });
+            this.props.onRequestCloseFile();
+            return;
+        }
+        // check if we have already created file
+        let fileId = this.state.fileId;
+        if (!fileId) {
+            if (this.isGoogleDriveReady()) {
+                let fileName = prompt("Name your project", this.props.projectTitle);
+                if (fileName != null && fileName != "") {
+                    window.gapi.client.drive.files.create({
+                        name: fileName + ".sb3",
+                        mimeType: "application/x-zip"
+                    }).then((response) => {
+                        if (response.status == 200) {
+                            this.setState({
+                                fileId: response.result.id
+                            });
+                            this.handleClickDriveSave();
+                        }
+                    });
+                }
+            }
+            this.props.onRequestCloseFile();
+            return;
+        }
+        const url = "https://www.googleapis.com/upload/drive/v3/files/" + fileId + "?uploadType=media;" + this.state.authToken;
+        this.props.vm.uploadProjectToURL(url);
+        
+        // show alert that we are saving project
+        window.alert("Project saved");
+        this.props.onRequestCloseFile();
+    }
+    handleDriveAuthenticate(token) {
+        this.setState({
+            authToken: token
+        });
+    }
+    getProjectTitleFromFilename (fileInputFilename) {
+        if (!fileInputFilename) return '';
+        // only parse title with valid scratch project extensions
+        // (.sb, .sb2, and .sb3)
+        //const matches = fileInputFilename.match(/^(.*)\.sb[23]?$/);
+        const matches = fileInputFilename.match(/\/?(.[^\/]*)\.sb[23]?/);
+        if (!matches) return '';
+        return matches[1].substring(0, 100); // truncate project title to max 100 chars
+    }
+    handleDriveProjectSelect(data) {
+        console.log(data);
+        if (data.docs) {
+            const fileId = data.docs[0].id;
+            const url = "https://www.googleapis.com/drive/v3/files/" + fileId + "/?alt=media;" + this.state.authToken;
+            
+            const readyToReplaceProject = this.props.confirmReadyToReplaceProject(
+                this.props.intl.formatMessage(sharedMessages.replaceProjectWarning)
+            );
+            if (readyToReplaceProject) {
+                this.props.vm.downloadProjectFromURLDirect(url);
+                
+                this.props.onReceivedProjectTitle(this.getProjectTitleFromFilename(data.docs[0].name));
+                
+                // if project does not have a parentId, it's a shared project and you cannot save
+                if (data.docs[0].parentId !== undefined) {
+                    this.setState({
+                        fileId: fileId
+                    });
+                } else {
+                    this.setState({
+                        fileId: null
+                    });
+                }
+            }
+        }
+        this.props.onRequestCloseFile();
+    }
+    isGoogleReady() {
+        return !!window.gapi;
+    }
+    
+    isGoogleAuthReady() {
+        return !!window.gapi.auth;
+    }
+    isGoogleDriveReady() {
+        return !!window.gapi.client.drive;
+    }
+    
+    onApiLoad() {
+        window.gapi.load('auth');
+        window.gapi.load('client', () => {
+            window.gapi.client.load('drive', 'v3');
+        });
+    }
+
+
     buildAboutMenu (onClickAbout) {
         if (!onClickAbout) {
             // hide the button
@@ -512,6 +676,39 @@ class MenuBar extends React.Component {
                                             </MenuItem>
                                         )}</SB3Downloader>
                                     </MenuSection>
+                                    <MenuSection>
+                                        <MenuItem
+                                            onClick={this.handleClickDriveSave}
+                                        >
+                                            <FormattedMessage
+                                                defaultMessage="Save project to Google Drive"
+                                                description="Menu bar item for saving a project to Google Drive" // eslint-disable-line max-len
+                                                id="gui.menuBar.saveToDrive"
+                                            />
+                                        </MenuItem>
+                                        <GoogleChooser 
+                                            appId={APP_ID}
+                                            clientId={CLIENT_ID}
+                                            developerKey={DEVELOPER_KEY}
+                                            scope={DRIVE_SCOPE}
+                                            onAuthenticate={this.handleDriveAuthenticate}
+                                            onChange={this.handleDriveProjectSelect}
+                                            onAuthFailed={data => console.log('on auth failed:', data)}
+                                            multiselect={false}
+                                            navHidden={false}
+                                            authImmediate={false}
+                                            viewID={'DOCS'}
+                                            query={'.sb3'}
+                                            >
+                                            <MenuItem classname="google">
+                                                <FormattedMessage
+                                                    defaultMessage="Load project from Google Drive"
+                                                    description="Menu bar item for loading a project from Google Drive" // eslint-disable-line max-len
+                                                    id="gui.menuBar.loadFromDrive"
+                                                />
+                                            </MenuItem>
+                                        </GoogleChooser>
+                                    </MenuSection>
                                 </MenuBarMenu>
                             </div>
                         )}
@@ -614,6 +811,7 @@ class MenuBar extends React.Component {
                             </div>
                         )}
                     </div>
+                    <Divider className={classNames(styles.divider)} />
                     {this.props.canEditTitle ? (
                         <div className={classNames(styles.menuBarItem, styles.growable)}>
                             <MenuBarItemTooltip
@@ -921,8 +1119,9 @@ MenuBar.propTypes = {
     shouldSaveBeforeTransition: PropTypes.func,
     showComingSoon: PropTypes.bool,
     username: PropTypes.string,
-    userOwnsProject: PropTypes.bool,
-    vm: PropTypes.instanceOf(VM).isRequired
+    vm: PropTypes.instanceOf(VM).isRequired,
+    onReceivedProjectTitle: PropTypes.func,
+    userOwnsProject: PropTypes.bool
 };
 
 MenuBar.defaultProps = {
@@ -982,6 +1181,7 @@ const mapDispatchToProps = dispatch => ({
     onClickSave: () => dispatch(manualUpdateProject()),
     onClickSaveAsCopy: () => dispatch(saveProjectAsCopy()),
     onSeeCommunity: () => dispatch(setPlayer(true)),
+    onReceivedProjectTitle: title => dispatch(setProjectTitle(title)),
     onSetTimeTravelMode: mode => dispatch(setTimeTravel(mode))
 });
 
