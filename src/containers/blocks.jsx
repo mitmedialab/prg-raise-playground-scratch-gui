@@ -14,21 +14,21 @@ import ExtensionLibrary from './extension-library.jsx';
 import extensionData from '../lib/libraries/extensions/index.jsx';
 import CustomProcedures from './custom-procedures.jsx';
 import errorBoundaryHOC from '../lib/error-boundary-hoc.jsx';
-import {BLOCKS_DEFAULT_SCALE, STAGE_DISPLAY_SIZES} from '../lib/layout-constants';
+import { BLOCKS_DEFAULT_SCALE, STAGE_DISPLAY_SIZES } from '../lib/layout-constants';
 import DropAreaHOC from '../lib/drop-area-hoc.jsx';
 import DragConstants from '../lib/drag-constants';
 import defineDynamicBlock from '../lib/define-dynamic-block';
-import {DEFAULT_THEME, getColorsForTheme, themeMap} from '../lib/themes';
-import {injectExtensionBlockTheme, injectExtensionCategoryTheme} from '../lib/themes/blockHelpers';
+import { DEFAULT_THEME, getColorsForTheme, themeMap } from '../lib/themes';
+import { injectExtensionBlockTheme, injectExtensionCategoryTheme } from '../lib/themes/blockHelpers';
 
-import {connect} from 'react-redux';
-import {updateToolbox} from '../reducers/toolbox';
-import {activateColorPicker} from '../reducers/color-picker';
-import {closeExtensionLibrary, openSoundRecorder, openConnectionModal, openTextModelModal, openClassifierModelModal, openProgrammaticModal} from '../reducers/modals';
-import {activateCustomProcedures, deactivateCustomProcedures} from '../reducers/custom-procedures';
-import {setConnectionModalExtensionId} from '../reducers/connection-modal';
-import {updateMetrics} from '../reducers/workspace-metrics';
-import {isTimeTravel2020} from '../reducers/time-travel';
+import { connect } from 'react-redux';
+import { updateToolbox } from '../reducers/toolbox';
+import { activateColorPicker } from '../reducers/color-picker';
+import { closeExtensionLibrary, openSoundRecorder, openConnectionModal, openTextModelModal, openClassifierModelModal, openProgrammaticModal } from '../reducers/modals';
+import { activateCustomProcedures, deactivateCustomProcedures } from '../reducers/custom-procedures';
+import { setConnectionModalExtensionId } from '../reducers/connection-modal';
+import { updateMetrics } from '../reducers/workspace-metrics';
+import { isTimeTravel2020 } from '../reducers/time-travel';
 import { openUIEvent, registerButtonCallbackEvent } from "../../../../extensions/dist/globals";
 
 import {
@@ -90,7 +90,7 @@ class Blocks extends React.Component {
         this.onTargetsUpdate = debounce(this.onTargetsUpdate, 100);
         this.toolboxUpdateQueue = [];
     }
-    componentDidMount () {
+    componentDidMount() {
         this.ScratchBlocks = VMScratchBlocks(this.props.vm, this.props.useCatBlocks);
         this.ScratchBlocks.prompt = this.handlePromptStart;
         this.ScratchBlocks.statusButtonCallback = this.handleConnectionModalStart;
@@ -103,7 +103,7 @@ class Blocks extends React.Component {
         const workspaceConfig = defaultsDeep({},
             Blocks.defaultOptions,
             this.props.options,
-            {rtl: this.props.isRtl, toolbox: this.props.toolboxXML, colours: getColorsForTheme(this.props.theme)}
+            { rtl: this.props.isRtl, toolbox: this.props.toolboxXML, colours: getColorsForTheme(this.props.theme) }
         );
         this.workspace = this.ScratchBlocks.inject(this.blocks, workspaceConfig);
 
@@ -228,12 +228,18 @@ class Blocks extends React.Component {
                     this.flyout = this.workspace.getFlyout();
                     this.flyout.setRecyclingEnabled(true);
 
+                    /* PRG ADDITION BEGIN */
+
+                    // Moved from `componentDidMount` due to strange blockly error after changing locale.
+                    // Worth retesting after updating scratch, as this may have been addressed in later blockly versions.
                     const registerButtonCallback = (event) =>
                         this.workspace.getFlyout()
                             ? this.workspace.registerButtonCallback(event, () => { this.props.vm.runtime.emit(event) })
                             : this.props.vm.runtime.off(registerButtonCallbackEvent, registerButtonCallback)
 
                     this.props.vm.runtime.on(registerButtonCallbackEvent, registerButtonCallback.bind(this));
+
+                    /* PRG ADDITION END */
                 });
             });
     }
@@ -419,7 +425,7 @@ class Blocks extends React.Component {
         this.workspace.addChangeListener(this.props.vm.blockListener);
 
         if (this.props.vm.editingTarget && this.props.workspaceMetrics.targets[this.props.vm.editingTarget.id]) {
-            const {scrollX, scrollY, scale} = this.props.workspaceMetrics.targets[this.props.vm.editingTarget.id];
+            const { scrollX, scrollY, scale } = this.props.workspaceMetrics.targets[this.props.vm.editingTarget.id];
             this.workspace.scrollX = scrollX;
             this.workspace.scrollY = scrollY;
             this.workspace.scale = scale;
@@ -431,7 +437,7 @@ class Blocks extends React.Component {
         // workspace to be 'undone' here.
         this.workspace.clearUndo();
     }
-    handleMonitorsUpdate (monitors) {
+    handleMonitorsUpdate(monitors) {
         // Update the checkboxes of the relevant monitors.
         // TODO: What about monitors that have fields? See todo in scratch-vm blocks.js changeBlock:
         // https://github.com/LLK/scratch-vm/blob/2373f9483edaf705f11d62662f7bb2a57fbb5e28/src/engine/blocks.js#L569-L576
@@ -449,7 +455,7 @@ class Blocks extends React.Component {
             }
         }
     }
-    handleExtensionAdded (categoryInfo) {
+    handleExtensionAdded(categoryInfo) {
         const defineBlocks = blockInfoArray => {
             if (blockInfoArray && blockInfoArray.length > 0) {
                 const staticBlocksJson = [];
