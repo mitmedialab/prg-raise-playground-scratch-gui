@@ -75,7 +75,7 @@ const baseConfig = new ScratchWebpackConfigBuilder(
         ]
     })
     .addModuleRule({
-        test: /\.(svg|png|wav|mp3|gif|jpg)$/,
+        test: /\.(svg|png|wav|gif|jpg)$/, // removed mp3 as it was conflicting with buffer loading
         resourceQuery: /^$/, // reject any query string
         type: 'asset' // let webpack decide on the best type of asset
     })
@@ -126,7 +126,7 @@ const baseConfig = new ScratchWebpackConfigBuilder(
         },
         include: [
             path.resolve(__dirname, 'src'),
-            path.resolve(__dirname, 'node_modules', 'scratch-vm', 'src'),       
+            path.resolve(__dirname, 'node_modules', 'scratch-vm', 'src'),
             path.resolve(__dirname, '..', 'scratch-vm', 'src'),
         ]
     });
