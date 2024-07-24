@@ -58,10 +58,32 @@ import gdxforInsetIconURL from './gdxfor/gdxfor-small.svg';
 import gdxforConnectionIconURL from './gdxfor/gdxfor-illustration.svg';
 import gdxforConnectionSmallIconURL from './gdxfor/gdxfor-small.svg';
 
+import musicCreationIconURL from './music/music.png';
+import musicCreationInsetIconURL from './music/music-small.svg';
+
 export default [
     /* DO NOT REMOVE */
     ...generatedDetails,
     /* DO NOT REMOVE */
+    {
+        name: 'Music Creation',
+        extensionId: 'musiccreation',
+        iconURL: musicCreationIconURL,
+        insetIconURL: musicCreationInsetIconURL,
+        description: (
+            <FormattedMessage
+                defaultMessage="Create music of your choice."
+                description="my block"
+                id="gui.extension.musiccreation.description"
+            />
+        ),
+        featured: true,
+        disabled: false,
+        internetConnectionRequired: true,
+        bluetoothRequired: false,
+        helpLink: 'https://scratch.mit.edu/wedo'
+
+    },
     {
         name: (
             <FormattedMessage
