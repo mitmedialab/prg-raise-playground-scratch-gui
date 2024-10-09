@@ -30,7 +30,7 @@ importers:
         specifier: ^1.9.4
         version: 1.9.4
       cat-blocks:
-        specifier: ../scratch-blocks
+        specifier: workspace:scratch-blocks@*
         version: link:../scratch-blocks
       classnames:
         specifier: ^2.2.6
