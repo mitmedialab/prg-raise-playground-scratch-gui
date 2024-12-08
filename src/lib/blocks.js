@@ -1,3 +1,5 @@
+import { overridesForCustomArgumentSupport } from './prg/customBlockOverrides';
+
 /**
  * Connect scratch blocks with the vm
  * @param {VirtualMachine} vm - The scratch vm
@@ -101,8 +103,8 @@ export default function (vm, useCatBlocks) {
         if (vm.runtime.targets[0] && vm.runtime.targets[0].getCostumes().length > 0) {
             return vm.runtime.targets[0].getCostumes().map(costume => [costume.name, costume.name])
                 .concat([[next, 'next backdrop'],
-                    [previous, 'previous backdrop'],
-                    [random, 'random backdrop']]);
+                [previous, 'previous backdrop'],
+                [random, 'random backdrop']]);
         }
         return [['', '']];
     };
@@ -355,5 +357,6 @@ export default function (vm, useCatBlocks) {
         return true;
     };
 
+    overridesForCustomArgumentSupport(ScratchBlocks, vm);
     return ScratchBlocks;
 }

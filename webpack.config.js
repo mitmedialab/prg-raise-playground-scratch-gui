@@ -11,6 +11,7 @@ const postcssVars = require('postcss-simple-vars');
 const postcssImport = require('postcss-import');
 
 const ScratchWebpackConfigBuilder = require('scratch-webpack-configuration');
+const { createSveltePreprocessor } = require("./svelte.config.js");
 
 // const STATIC_PATH = process.env.STATIC_PATH || '/static';
 
@@ -74,7 +75,7 @@ const baseConfig = new ScratchWebpackConfigBuilder(
         ]
     })
     .addModuleRule({
-        test: /\.(svg|png|wav|mp3|gif|jpg)$/,
+        test: /\.(svg|png|wav|gif|jpg)$/, // removed mp3 as it was conflicting with buffer loading
         resourceQuery: /^$/, // reject any query string
         type: 'asset' // let webpack decide on the best type of asset
     })
@@ -114,7 +115,21 @@ const baseConfig = new ScratchWebpackConfigBuilder(
                 noErrorOnMissing: true
             }
         ]
-    }));
+    }))
+    .addModuleRule({
+        test: /\.svelte$/,
+        use: {
+            loader: 'svelte-loader',
+            options: {
+                preprocess: createSveltePreprocessor(),
+            }
+        },
+        include: [
+            path.resolve(__dirname, 'src'),
+            path.resolve(__dirname, 'node_modules', 'scratch-vm', 'src'),
+            path.resolve(__dirname, '..', 'scratch-vm', 'src'),
+        ]
+    });
 
 if (!process.env.CI) {
     baseConfig.addPlugin(new webpack.ProgressPlugin());
@@ -148,25 +163,25 @@ const buildConfig = baseConfig.clone()
     .addPlugin(new HtmlWebpackPlugin({
         chunks: ['gui'],
         template: 'src/playground/index.ejs',
-        title: 'Scratch 3.0 GUI'
+        title: 'PRG AI Blocks'
     }))
     .addPlugin(new HtmlWebpackPlugin({
         chunks: ['blocksonly'],
         filename: 'blocks-only.html',
         template: 'src/playground/index.ejs',
-        title: 'Scratch 3.0 GUI: Blocks Only Example'
+        title: 'PRG AI Blocks: Blocks Only Example'
     }))
     .addPlugin(new HtmlWebpackPlugin({
         chunks: ['compatibilitytesting'],
         filename: 'compatibility-testing.html',
         template: 'src/playground/index.ejs',
-        title: 'Scratch 3.0 GUI: Compatibility Testing'
+        title: 'PRG AI Blocks: Compatibility Testing'
     }))
     .addPlugin(new HtmlWebpackPlugin({
         chunks: ['player'],
         filename: 'player.html',
         template: 'src/playground/index.ejs',
-        title: 'Scratch 3.0 GUI: Player Example'
+        title: 'PRG AI Blocks: Player Example'
     }))
     .addPlugin(new CopyWebpackPlugin({
         patterns: [
