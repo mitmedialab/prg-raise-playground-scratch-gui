@@ -7,7 +7,7 @@ exports.FrameworkID = "ExtensionFramework";
 exports.AuxiliaryExtensionInfo = "AuxiliaryExtensionInfo";
 /**
  * Literal values that control the interaction between the extension framework and the Scratch GUI,
- * specifically how dropdowns (tied to dynamic menus) are co-opted to support custom block arguments.
+ * specifically how dropdowns (tied to dynamic menus) are co-opted to support custom block arguments (and their UIs).
  */
 exports.guiDropdownInterop = {
     runtimeKey: "prgDropdownCustomization",
