@@ -2,7 +2,7 @@
   "extends": "@tsconfig/svelte/tsconfig.json",
   "compilerOptions": {
     "ignoreDeprecations": "5.0",
-    "importsNotUsedAsValues": "remove",
+    "verbatimModuleSyntax": true
   },
   "include": [
     "node_modules/scratch-vm/src/**/*",
