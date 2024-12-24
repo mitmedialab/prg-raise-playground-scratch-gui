@@ -36,7 +36,10 @@ const vmManagerHOC = function (WrappedComponent) {
                 this.props.vm.initialized = true;
                 const { extensionManager } = this.props.vm;
                 const otherExtensions = ["gdxfor", "wedo2", "boost", "ev3", "microbit", "makeymakey", "translate", "text2speech", 
-                    "videoSensing", "pen", "music", "arduinoRobot", "gizmoRobot", "microbitRobot", "musiccreation", ];
+                    "videoSensing", "pen", "music", "arduinoRobot", "gizmoRobot", "microbitRobot", "musiccreation", 
+                    "complexprg95grpexample", "tables", "poseFace", "appinventorprg95grpexample", "poseBody", "extensionProbe", 
+                    "projectProbe", "textClassification", "poseHand", "onnxTest", "teachableMachine", "selfieSegmentation", 
+                    "objectDetection"];
                 extensionLibraryContent.forEach(extension => {
                         const { extensionId } = extension;
                         if (!otherExtensions.includes(extensionId)) {
