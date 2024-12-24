@@ -36,10 +36,11 @@ const vmManagerHOC = function (WrappedComponent) {
                 this.props.vm.initialized = true;
                 const { extensionManager } = this.props.vm;
                 const otherExtensions = ["gdxfor", "wedo2", "boost", "ev3", "microbit", "makeymakey", "translate", "text2speech", 
-                    "videoSensing", "pen", "music", "arduinoRobot", "gizmoRobot", "microbitRobot", "musiccreation"];
+                    "videoSensing", "pen", "music", "arduinoRobot", "gizmoRobot", "microbitRobot", "musiccreation", ];
                 extensionLibraryContent.forEach(extension => {
                         const { extensionId } = extension;
                         if (!otherExtensions.includes(extensionId)) {
+                            console.log(extensionId);
                             extensionManager.loadExtensionURL(extensionId);
                         }
                         
