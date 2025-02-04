@@ -316,26 +316,27 @@ class Blocks extends React.Component {
         const selectedCategoryScrollPosition =
             this.workspace
                 .getFlyout()
-                .getCategoryScrollPosition(selectedCategoryName).y * scale;
+                .getCategoryScrollPosition(selectedCategoryName) * scale;
         const offsetWithinCategory =
             this.workspace.getFlyout().getWorkspace().getMetrics().viewTop -
             selectedCategoryScrollPosition;
 
         this.workspace.updateToolbox(this.props.toolboxXML);
+        this.workspace.getToolbox().runAfterRerender(() => {
+            const newCategoryScrollPosition = this.workspace
+                .getFlyout()
+                .getCategoryScrollPosition(selectedCategoryName);
+            if (newCategoryScrollPosition) {
+                this.workspace
+                    .getFlyout()
+                    .getWorkspace()
+                    .scrollbar.setY(
+                        newCategoryScrollPosition * scale + offsetWithinCategory
+                    );
+            }
+        });
         this.workspace.getToolbox().forceRerender();
         this._renderedToolboxXML = this.props.toolboxXML;
-
-        const newCategoryScrollPosition = this.workspace
-            .getFlyout()
-            .getCategoryScrollPosition(selectedCategoryName);
-        if (newCategoryScrollPosition) {
-            this.workspace
-                .getFlyout()
-                .getWorkspace()
-                .scrollbar.setY(
-                    newCategoryScrollPosition.y * scale + offsetWithinCategory
-                );
-        }
 
         const queue = this.toolboxUpdateQueue;
         this.toolboxUpdateQueue = [];
