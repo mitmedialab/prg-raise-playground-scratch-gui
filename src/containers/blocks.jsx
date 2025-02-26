@@ -31,6 +31,9 @@ import { updateMetrics } from '../reducers/workspace-metrics';
 import { isTimeTravel2020 } from '../reducers/time-travel';
 import { openUIEvent, registerButtonCallbackEvent } from "../../../../extensions/dist/globals";
 
+// @ts-ignorex
+import {KeyboardNavigation} from '@blockly/keyboard-experiment';
+
 import {
     activateTab,
     SOUNDS_TAB_INDEX
@@ -117,6 +120,8 @@ class Blocks extends React.Component {
         );
         this.workspace = this.ScratchBlocks.inject(this.blocks, workspaceConfig);
 
+        
+
         this.workspace.registerToolboxCategoryCallback(
             "VARIABLE",
             this.ScratchBlocks.ScratchVariables.getVariablesCategory
@@ -182,6 +187,8 @@ class Blocks extends React.Component {
         if (this.props.isVisible) {
             this.setLocale();
         }
+
+        
     }
     shouldComponentUpdate(nextProps, nextState) {
         return (
@@ -234,6 +241,10 @@ class Blocks extends React.Component {
         } else {
             this.workspace.setVisible(false);
         }
+        console.log(this.workspace);
+        setTimeout(() => {
+            const navigationController = new KeyboardNavigation(this.workspace);
+        }, 5000)
     }
     componentWillUnmount() {
         this.detachVM();

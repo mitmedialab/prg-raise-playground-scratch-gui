@@ -37,6 +37,7 @@
     }
   },
   "dependencies": {
+    "@blockly/keyboard-experiment": "^0.0.3",
     "@microbit/microbit-universal-hex": "^0.2.2",
     "@tsconfig/svelte": "^5.0.4",
     "arraybuffer-loader": "^1.0.6",
@@ -114,7 +115,8 @@
   },
   "peerDependencies": {
     "react": "^16.14.0",
-    "react-dom": "^16.14.0"
+    "react-dom": "^16.14.0",
+    "@blockly/keyboard-experiment": "^0.0.3"
   },
   "devDependencies": {
     "@babel/cli": "7.24.5",
@@ -149,8 +151,8 @@
     "react-test-renderer": "16.14.0",
     "redux-mock-store": "1.5.4",
     "rimraf": "2.7.1",
-    "scratch-semantic-release-config": "1.0.14",
     "scratch-blocks": "workspace:*",
+    "scratch-semantic-release-config": "1.0.14",
     "scratch-webpack-configuration": "1.3.0",
     "selenium-webdriver": "3.6.0",
     "semantic-release": "19.0.5",
@@ -161,6 +163,11 @@
     "webpack-cli": "5.1.4",
     "webpack-dev-server": "5.0.4",
     "yauzl": "2.10.0"
+  },
+  "overrides": {
+    "@blockly/keyboard-experiment": {
+      "blockly": "^12.0.0-beta.1"
+    }
   },
   "jest": {
     "setupFiles": [
