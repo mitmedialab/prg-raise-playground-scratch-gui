@@ -5,7 +5,7 @@ import {defineMessages, FormattedMessage, injectIntl, intlShape} from 'react-int
 import PropTypes from 'prop-types';
 import bindAll from 'lodash.bindall';
 import bowser from 'bowser';
-import React from 'react';
+import React, { useRef } from 'react';
 
 import VM from 'scratch-vm';
 
@@ -484,6 +484,26 @@ class MenuBar extends React.Component {
         });
     }
 
+    fileInputRef = useRef<HTMLInputElement | null>(null);
+
+    handleImportExtension = () => {
+        console.log("Import extension clicked");
+        if (this.fileInputRef.current) {
+            console.log("Triggering file input...");
+            this.fileInputRef.current.click();
+        }
+    };
+
+    handleFileChange = (event) => {
+        const file = event.target.files?.[0];
+        if (file && file.name.endsWith(".zip")) {
+            console.log("Imported ZIP file:", file);
+            // Process the ZIP file here...
+        } else {
+            alert("Please select a valid ZIP file.");
+        }
+    };
+
 
     buildAboutMenu (onClickAbout) {
         if (!onClickAbout) {
@@ -708,6 +728,14 @@ class MenuBar extends React.Component {
                                                 />
                                             </MenuItem>
                                         </GoogleChooser>
+                                    </MenuSection>
+                                    <MenuSection>
+                                    <MenuItem
+                                            onClick={this.props.onStartSelectingExtensionUpload}
+                                        >
+                                            Import Extension
+                                        </MenuItem>
+                                        
                                     </MenuSection>
                                 </MenuBarMenu>
                             </div>
@@ -1111,6 +1139,7 @@ MenuBar.propTypes = {
     onSetTimeTravelMode: PropTypes.func,
     onShare: PropTypes.func,
     onStartSelectingFileUpload: PropTypes.func,
+    onStartSelectingExtensionUpload: PropTypes.func,
     onToggleLoginOpen: PropTypes.func,
     projectTitle: PropTypes.string,
     renderLogin: PropTypes.func,
