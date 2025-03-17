@@ -249,7 +249,7 @@ const GUIComponent = props => {
                     onProjectTelemetryEvent={onProjectTelemetryEvent}
                     onSeeCommunity={onSeeCommunity}
                     onShare={onShare}
-                    onStartSelectingUpload={onStartSelectingFileUpload}
+                    onStartSelectingFileUpload={onStartSelectingFileUpload}
                     onStartSelectingExtensionUpload={onStartSelectingExtensionUpload}
                     onToggleLoginOpen={onToggleLoginOpen}
                 />
