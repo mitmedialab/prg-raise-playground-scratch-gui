@@ -759,6 +759,7 @@ const xmlClose = '</xml>';
  */
 const makeToolboxXML = function (isInitialSetup, isStage = true, targetId, categoriesXML = [],
     costumeName = '', backdropName = '', soundName = '', colors = defaultColors) {
+        console.log("MAKING XML");
     isStage = isInitialSetup || isStage;
     const gap = [categorySeparator];
 
