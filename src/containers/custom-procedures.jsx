@@ -45,6 +45,7 @@ class CustomProcedures extends React.Component {
         workspaceConfig.theme = theme;
         workspaceConfig.renderer = 'zelos';
         this.workspace = ScratchBlocks.inject(this.blocks, workspaceConfig);
+        console.log("id 2?", this.workspace.id);
 
         // Create the procedure declaration block for editing the mutation.
         this.mutationRoot = this.workspace.newBlock('procedures_declaration');

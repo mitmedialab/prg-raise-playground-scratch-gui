@@ -30,6 +30,7 @@ import { setConnectionModalExtensionId } from '../reducers/connection-modal';
 import { updateMetrics } from '../reducers/workspace-metrics';
 import { isTimeTravel2020 } from '../reducers/time-travel';
 import { openUIEvent, registerButtonCallbackEvent } from "../../../../extensions/dist/globals";
+import {KeyboardNavigation} from '@blockly/keyboard-experiment';
 
 import {
     activateTab,
@@ -175,6 +176,14 @@ class Blocks extends React.Component {
         addFunctionListener(this.workspace, 'zoom', this.onWorkspaceMetricsChange);
 
         this.workspace.getToolbox().selectItemByPosition(0);
+
+        setTimeout(() => {
+            console.log("scratch gui workspace id", this.workspace.id);
+            console.log("workspace flyout id", this.workspace.getFlyout().id);
+            const keyboardNav = new KeyboardNavigation(this.workspace);
+            
+        }, 1000);
+        
 
         this.attachVM();
         // Only update blocks/vm locale when visible to avoid sizing issues
