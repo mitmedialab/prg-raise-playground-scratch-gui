@@ -148,7 +148,22 @@ const distConfig = baseConfig.clone()
 
 // build the examples and debugging tools in `build/`
 const buildConfig = baseConfig.clone()
-    .enableDevServer(process.env.PORT || 8602)
+    .merge({
+        devServer: {
+            client: {
+                overlay: {
+                  runtimeErrors: (error) => {
+                    if (error.message.includes("java.lang.ClassCastException")) {
+                      return false;
+                    }
+                    return true;
+                  },
+                },
+                progress: true
+            },
+            port: process.env.PORT || 8602
+        }
+    })
     .merge({
         entry: {
             gui: './src/playground/index.jsx',
