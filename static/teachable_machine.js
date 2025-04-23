@@ -1,5 +1,4 @@
 "use strict";
-import "https://cdn.jsdelivr.net/npm/@teachablemachine/image@0.8/dist/teachablemachine-image.min.js";
 
 console.log("TeachableMachine");
 
@@ -43,7 +42,7 @@ let constraints = { facingMode: "user", frameRate: 24};
 
 
 
-window.loadModel = async function loadModel(baseUrl) {
+async function loadModel(baseUrl) {
   console.log(typeof baseUrl);
   
   const modelURL = baseUrl + "model.json";
@@ -151,7 +150,7 @@ document.body.appendChild(img);
 
 // Still in Development Mode
 
-window.startVideo = function startVideo() {
+function startVideo() {
   if (isVideoMode) {
     navigator.mediaDevices.getUserMedia({
       video: {facingMode: frontFacing ? "user" : "environment"},
@@ -227,7 +226,7 @@ async function toggleCameraFacingMode() {
 
 // Called from TeachableMachine.java
 // noinspection JSUnusedGlobalSymbols
-window.classifyImageData = function classifyImageData(imageData) {
+function classifyImageData(imageData) {
   if (!isVideoMode) {
     img.onload = function() {
       predict().catch(() => window.TeachableMachine.error(ERROR_CLASSIFICATION_FAILED));
@@ -240,7 +239,7 @@ window.classifyImageData = function classifyImageData(imageData) {
 
 // Called from TeachableMachine.java
 // noinspection JSUnusedGlobalSymbols
-window.classifyVideoData = function classifyVideoData() {
+function classifyVideoData() {
   if (isVideoMode) {
     predict().catch(() => window.TeachableMachine.error(ERROR_CLASSIFICATION_FAILED));
   } else {
@@ -284,7 +283,7 @@ window.classifyVideoData = function classifyVideoData() {
 //   console.log(Stopping);
 // }
 
-window.setInputMode = function setInputMode(inputMode) {
+function setInputMode(inputMode) {
   if (inputMode === "image" && isVideoMode) {
     // stopVideo();
     isVideoMode = false;
