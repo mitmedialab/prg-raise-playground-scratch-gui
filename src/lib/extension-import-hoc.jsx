@@ -198,6 +198,7 @@ const ExtensionImportHOC = (WrappedComponent) => {
           return; // Already loaded
         }
         this.untilScriptLoaded(content);
+        
       });
     }
 
@@ -214,17 +215,17 @@ const ExtensionImportHOC = (WrappedComponent) => {
       
           try {
             // Step 1: Process extension
-            let res = await fetch('http://localhost:3000/process-extension', { method: 'POST', body: formData });
-            await res.json();
-            this.updateCheckbox('process-extension');
+            // let res = await fetch('http://localhost:3000/process-extension', { method: 'POST', body: formData });
+            // await res.json();
+            // this.updateCheckbox('process-extension');
 
             // Step 2: Run ANT
-            res = await fetch('http://localhost:3000/run-ant', { method: 'POST', body: formData });
-            await res.json();
-            this.updateCheckbox('run-ant');
+            // let res = await fetch('http://localhost:3000/run-ant', { method: 'POST', body: formData });
+            // await res.json();
+            // this.updateCheckbox('run-ant');
 
             // Step 3: Extract JSON
-            res = await fetch('http://localhost:3000/extract-json', { method: 'POST', body: formData });
+            let res = await fetch('http://localhost:3000/extract-json', { method: 'POST', body: formData });
             await res.json();
             this.updateCheckbox('extract-json');
 
@@ -274,6 +275,9 @@ const ExtensionImportHOC = (WrappedComponent) => {
             });
       
             await Promise.all(filePromises);
+            // this.untilScriptLoadedUrl("https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@1.3.1/dist/tf.min.js");
+            // this.untilScriptLoadedUrl("https://cdn.jsdelivr.net/npm/@teachablemachine/image@0.8/dist/teachablemachine-image.min.js")
+            // await new Promise(resolve => setTimeout(resolve, 1000));
       
             this.untilCommonObjects(contentMap);
       
