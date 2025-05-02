@@ -21,6 +21,8 @@ import defineDynamicBlock from '../lib/define-dynamic-block';
 import { DEFAULT_THEME, getColorsForTheme, themeMap } from '../lib/themes';
 import { injectExtensionBlockTheme, injectExtensionCategoryTheme } from '../lib/themes/blockHelpers';
 
+import {LexicalVariablesPlugin} from '@mit-app-inventor/blockly-block-lexical-variables';
+
 import { connect } from 'react-redux';
 import { updateToolbox } from '../reducers/toolbox';
 import { activateColorPicker } from '../reducers/color-picker';
@@ -106,6 +108,8 @@ class Blocks extends React.Component {
             { rtl: this.props.isRtl, toolbox: this.props.toolboxXML, colours: getColorsForTheme(this.props.theme) }
         );
         this.workspace = this.ScratchBlocks.inject(this.blocks, workspaceConfig);
+
+        LexicalVariablesPlugin.init(this.workspace);
 
         // Register buttons under new callback keys for creating variables,
         // lists, and procedures from extensions.

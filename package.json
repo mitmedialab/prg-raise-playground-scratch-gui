@@ -38,6 +38,7 @@
   },
   "dependencies": {
     "@microbit/microbit-universal-hex": "^0.2.2",
+    "@mit-app-inventor/blockly-block-lexical-variables": "^3.0.1",
     "@tsconfig/svelte": "^5.0.4",
     "arraybuffer-loader": "^1.0.6",
     "autoprefixer": "^9.0.1",
