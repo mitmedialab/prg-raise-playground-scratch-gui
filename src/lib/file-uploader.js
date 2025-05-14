@@ -34,7 +34,10 @@ const handleFileUpload = function (fileInput, onload, onerror) {
         const file = files[i];
         const reader = new FileReader();
         reader.onload = () => {
-            const fileType = file.type;
+            let fileType = file.type;
+            if (file.name.includes(".glb")) {
+                fileType = "glb";
+            }
             const fileName = extractFileName(file.name);
             onload(reader.result, fileType, fileName, i, files.length);
             readFile(i + 1, files);
@@ -209,8 +212,10 @@ const soundUpload = function (fileData, fileType, storage, handleSound, handleEr
 };
 
 const spriteUpload = function (fileData, fileType, spriteName, storage, handleSprite, handleError = () => {}) {
+    console.log("file type", fileType);
     switch (fileType) {
     case '':
+    case 'glb':
     case 'application/zip': { // We think this is a .sprite2 or .sprite3 file
         handleSprite(new Uint8Array(fileData));
         return;

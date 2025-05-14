@@ -131,6 +131,7 @@ class TargetPane extends React.Component {
         this.props.onActivateTab(BLOCKS_TAB_INDEX);
     }
     handleNewSprite (spriteJSONString) {
+        // PIXI WORK: add the new 3D sprite
         return this.props.vm.addSprite(spriteJSONString)
             .then(this.handleActivateBlocksTab);
     }
@@ -142,6 +143,11 @@ class TargetPane extends React.Component {
         this.props.onShowImporting();
         handleFileUpload(e.target, (buffer, fileType, fileName, fileIndex, fileCount) => {
             spriteUpload(buffer, fileType, fileName, storage, newSprite => {
+                // check for gltf
+                if (fileType == "glb") {
+                    console.log("RUNTIME", this.props.vm.runtime);
+                }
+                // register new dummy sprite if gltf
                 this.handleNewSprite(newSprite)
                     .then(() => {
                         if (fileIndex === fileCount - 1) {
