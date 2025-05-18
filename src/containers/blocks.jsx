@@ -30,7 +30,9 @@ import { setConnectionModalExtensionId } from '../reducers/connection-modal';
 import { updateMetrics } from '../reducers/workspace-metrics';
 import { isTimeTravel2020 } from '../reducers/time-travel';
 import { openUIEvent, registerButtonCallbackEvent } from "../../../../extensions/dist/globals";
-import {KeyboardNavigation} from '@blockly/keyboard-experiment';
+
+// @ts-ignorex
+// import {KeyboardNavigation} from '@blockly/keyboard-experiment';
 
 import {
     activateTab,
@@ -118,6 +120,8 @@ class Blocks extends React.Component {
         );
         this.workspace = this.ScratchBlocks.inject(this.blocks, workspaceConfig);
 
+        
+
         this.workspace.registerToolboxCategoryCallback(
             "VARIABLE",
             this.ScratchBlocks.ScratchVariables.getVariablesCategory
@@ -177,18 +181,14 @@ class Blocks extends React.Component {
 
         this.workspace.getToolbox().selectItemByPosition(0);
 
-        
-        
-
         this.attachVM();
         // Only update blocks/vm locale when visible to avoid sizing issues
         // If locale changes while not visible it will get handled in didUpdate
         if (this.props.isVisible) {
             this.setLocale();
         }
-            console.log("scratch gui workspace id", this.workspace.id);
-            console.log("workspace flyout id", this.workspace.getFlyout().id);
-            this.keyboardNav = new KeyboardNavigation(this.workspace);
+
+        
     }
     shouldComponentUpdate(nextProps, nextState) {
         return (
@@ -241,13 +241,16 @@ class Blocks extends React.Component {
         } else {
             this.workspace.setVisible(false);
         }
+        console.log(this.workspace);
+        setTimeout(() => {
+            //const navigationController = new KeyboardNavigation(this.workspace);
+        }, 5000)
     }
     componentWillUnmount() {
         this.detachVM();
-        console.log("workspace disposed", this.workspace);
         this.workspace.dispose();
         clearTimeout(this.toolboxUpdateTimeout);
-        this.keyboardNav.dispose();
+
         // Clear the flyout blocks so that they can be recreated on mount.
         this.props.vm.clearFlyoutBlocks();
     }
@@ -289,25 +292,24 @@ class Blocks extends React.Component {
         const scale = this.workspace.getFlyout().getWorkspace().scale;
         const selectedCategoryName = this.workspace.getToolbox().getSelectedItem().getName();
         const selectedCategoryScrollPosition = this.workspace.getFlyout().getCategoryScrollPosition(
-            selectedCategoryName) * scale;
+            selectedCategoryName).y * scale;
         const offsetWithinCategory = (this.workspace.getFlyout().getWorkspace().getMetrics().viewTop
             - selectedCategoryScrollPosition);
         this.workspace.updateToolbox(this.props.toolboxXML);
-        this.workspace.getToolbox().runAfterRerender(() => {
-            const newCategoryScrollPosition = this.workspace
-                .getFlyout()
-                .getCategoryScrollPosition(selectedCategoryName);
-            if (newCategoryScrollPosition) {
-                this.workspace
-                    .getFlyout()
-                    .getWorkspace()
-                    .scrollbar.setY(
-                        newCategoryScrollPosition * scale + offsetWithinCategory
-                    );
-            }
-        });
         this.workspace.getToolbox().forceRerender();
         this._renderedToolboxXML = this.props.toolboxXML;
+
+        const newCategoryScrollPosition = this.workspace
+            .getFlyout()
+            .getCategoryScrollPosition(selectedCategoryName);
+        if (newCategoryScrollPosition) {
+            this.workspace
+                .getFlyout()
+                .getWorkspace()
+                .scrollbar.setY(
+                    newCategoryScrollPosition.y * scale + offsetWithinCategory
+                );
+        }
 
         const queue = this.toolboxUpdateQueue;
         this.toolboxUpdateQueue = [];

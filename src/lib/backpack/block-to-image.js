@@ -1,5 +1,5 @@
 import computedStyleToInlineStyle from 'computed-style-to-inline-style';
-import ScratchBlocks from 'scratch-blocks';
+import * as Blockly from 'blockly';
 
 /**
  * Given a blockId, return a data-uri image that can be used to create a thumbnail.
@@ -8,7 +8,7 @@ import ScratchBlocks from 'scratch-blocks';
  */
 export default function (blockId) {
     // Not sure any better way to access the scratch-blocks workspace than this...
-    const block = ScratchBlocks.getMainWorkspace().getBlockById(blockId);
+    const block = Blockly.getMainWorkspace().getBlockById(blockId);
     const blockSvg = block.getSvgRoot().cloneNode(true /* deep */);
 
     // Once we have the cloned SVG, do the rest in a setTimeout to prevent

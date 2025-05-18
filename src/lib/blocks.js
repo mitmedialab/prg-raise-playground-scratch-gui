@@ -7,7 +7,7 @@ import { overridesForCustomArgumentSupport } from './prg/customBlockOverrides';
  * @return {ScratchBlocks} ScratchBlocks connected with the vm
  */
 export default function (vm, useCatBlocks) {
-    const {ScratchBlocks} = useCatBlocks ? require('cat-blocks') : require('scratch-blocks');
+    const Blockly = useCatBlocks ? require('cat-blocks') : require('blockly');
     const jsonForMenuBlock = function (name, menuOptionsFn, category, start) {
         return {
             message0: '%1',
@@ -22,7 +22,7 @@ export default function (vm, useCatBlocks) {
             ],
             inputsInline: true,
             output: "String",
-            outputShape: ScratchBlocks.OUTPUT_SHAPE_ROUND,
+            outputShape: Blockly.OUTPUT_SHAPE_ROUND,
             extensions: [`colours_${category}`],
         };
     };
@@ -46,7 +46,7 @@ export default function (vm, useCatBlocks) {
 
     const jsonForSensingMenus = function (menuOptionsFn) {
         return {
-            message0: ScratchBlocks.Msg.SENSING_OF,
+            message0: Blockly.Msg['SENSING_OF'],
             args0: [
                 {
                     type: 'field_dropdown',
@@ -62,7 +62,7 @@ export default function (vm, useCatBlocks) {
                 }
             ],
             output: true,
-            outputShape: ScratchBlocks.OUTPUT_SHAPE_ROUND,
+            outputShape: Blockly.OUTPUT_SHAPE_ROUND,
             extensions: ["colours_sensing"],
         };
     };
@@ -73,7 +73,7 @@ export default function (vm, useCatBlocks) {
             menu = vm.editingTarget.sprite.sounds.map(sound => [sound.name, sound.name]);
         }
         menu.push([
-            ScratchBlocks.ScratchMsgs.translate('SOUND_RECORD', 'record...'),
+            Blockly.Msg['SOUND_RECORD'],
             'SOUND_RECORD'
         ]);
         return menu;
@@ -87,9 +87,9 @@ export default function (vm, useCatBlocks) {
     };
 
     const backdropsMenu = function () {
-        const next = ScratchBlocks.ScratchMsgs.translate('LOOKS_NEXTBACKDROP', 'next backdrop');
-        const previous = ScratchBlocks.ScratchMsgs.translate('LOOKS_PREVIOUSBACKDROP', 'previous backdrop');
-        const random = ScratchBlocks.ScratchMsgs.translate('LOOKS_RANDOMBACKDROP', 'random backdrop');
+        const next = Blockly.Msg['LOOKS_NEXTBACKDROP'];
+        const previous = Blockly.Msg['LOOKS_PREVIOUSBACKDROP'];
+        const random = Blockly.Msg['LOOKS_RANDOMBACKDROP'];
         if (vm.runtime.targets[0] && vm.runtime.targets[0].getCostumes().length > 0) {
             return vm.runtime.targets[0].getCostumes().map(costume => [costume.name, costume.name])
                 .concat([[next, 'next backdrop'],
@@ -131,50 +131,50 @@ export default function (vm, useCatBlocks) {
             }
             return menu;
         }
-        const myself = ScratchBlocks.ScratchMsgs.translate('CONTROL_CREATECLONEOF_MYSELF', 'myself');
+        const myself = Blockly.Msg['CONTROL_CREATECLONEOF_MYSELF'];
         return [[myself, '_myself_']].concat(spriteMenu());
     };
 
-    ScratchBlocks.Blocks.sound_sounds_menu.init = function () {
+    Blockly.Blocks.sound_sounds_menu.init = function () {
         const json = jsonForMenuBlock('SOUND_MENU', soundsMenu, "sounds", []);
         this.jsonInit(json);
         this.getField("SOUND_MENU").setValidator((newValue) => {
             if (newValue === "SOUND_RECORD") {
-                ScratchBlocks.recordSoundCallback();
+                Blockly.recordSoundCallback();
                 return null;
             }
             return newValue;
         });
     };
 
-    ScratchBlocks.Blocks.looks_costume.init = function () {
+    Blockly.Blocks.looks_costume.init = function () {
         const json = jsonForMenuBlock('COSTUME', costumesMenu, "looks", []);
         this.jsonInit(json);
     };
 
-    ScratchBlocks.Blocks.looks_backdrops.init = function () {
+    Blockly.Blocks.looks_backdrops.init = function () {
         const json = jsonForMenuBlock('BACKDROP', backdropsMenu, "looks", []);
         this.jsonInit(json);
     };
 
-    ScratchBlocks.Blocks.event_whenbackdropswitchesto.init = function () {
+    Blockly.Blocks.event_whenbackdropswitchesto.init = function () {
         const json = jsonForHatBlockMenu(
-            ScratchBlocks.Msg.EVENT_WHENBACKDROPSWITCHESTO,
+            Blockly.Msg['EVENT_WHENBACKDROPSWITCHESTO'],
             'BACKDROP', backdropNamesMenu, "event", []);
         this.jsonInit(json);
     };
 
-    ScratchBlocks.Blocks.motion_pointtowards_menu.init = function () {
-        const mouse = ScratchBlocks.ScratchMsgs.translate('MOTION_POINTTOWARDS_POINTER', 'mouse-pointer');
+    Blockly.Blocks.motion_pointtowards_menu.init = function () {
+        const mouse = Blockly.Msg['MOTION_POINTTOWARDS_POINTER'];
         const json = jsonForMenuBlock('TOWARDS', spriteMenu, "motion", [
             [mouse, '_mouse_']
         ]);
         this.jsonInit(json);
     };
 
-    ScratchBlocks.Blocks.motion_goto_menu.init = function () {
-        const random = ScratchBlocks.ScratchMsgs.translate('MOTION_GOTO_RANDOM', 'random position');
-        const mouse = ScratchBlocks.ScratchMsgs.translate('MOTION_GOTO_POINTER', 'mouse-pointer');
+    Blockly.Blocks.motion_goto_menu.init = function () {
+        const random = Blockly.Msg['MOTION_GOTO_RANDOM'];
+        const mouse = Blockly.Msg['MOTION_GOTO_POINTER'];
         const json = jsonForMenuBlock('TO', spriteMenu, "motion", [
             [random, '_random_'],
             [mouse, '_mouse_']
@@ -182,9 +182,9 @@ export default function (vm, useCatBlocks) {
         this.jsonInit(json);
     };
 
-    ScratchBlocks.Blocks.motion_glideto_menu.init = function () {
-        const random = ScratchBlocks.ScratchMsgs.translate('MOTION_GLIDETO_RANDOM', 'random position');
-        const mouse = ScratchBlocks.ScratchMsgs.translate('MOTION_GLIDETO_POINTER', 'mouse-pointer');
+    Blockly.Blocks.motion_glideto_menu.init = function () {
+        const random = Blockly.Msg['MOTION_GLIDETO_RANDOM'];
+        const mouse = Blockly.Msg['MOTION_GLIDETO_POINTER'];
         const json = jsonForMenuBlock('TO', spriteMenu, "motion", [
             [random, '_random_'],
             [mouse, '_mouse_']
@@ -192,15 +192,15 @@ export default function (vm, useCatBlocks) {
         this.jsonInit(json);
     };
 
-    ScratchBlocks.Blocks.sensing_of_object_menu.init = function () {
-        const stage = ScratchBlocks.ScratchMsgs.translate('SENSING_OF_STAGE', 'Stage');
+    Blockly.Blocks.sensing_of_object_menu.init = function () {
+        const stage = Blockly.Msg['SENSING_OF_STAGE'];
         const json = jsonForMenuBlock('OBJECT', spriteMenu, "sensing", [
             [stage, '_stage_']
         ]);
         this.jsonInit(json);
     };
 
-    ScratchBlocks.Blocks.sensing_of.init = function () {
+    Blockly.Blocks.sensing_of.init = function () {
         const blockId = this.id;
         const blockType = this.type;
 
@@ -218,18 +218,18 @@ export default function (vm, useCatBlocks) {
         // Called every time it opens since it depends on the values in the other block input.
         const menuFn = function () {
             const stageOptions = [
-                [ScratchBlocks.Msg.SENSING_OF_BACKDROPNUMBER, 'backdrop #'],
-                [ScratchBlocks.Msg.SENSING_OF_BACKDROPNAME, 'backdrop name'],
-                [ScratchBlocks.Msg.SENSING_OF_VOLUME, 'volume']
+                [Blockly.Msg.SENSING_OF_BACKDROPNUMBER, 'backdrop #'],
+                [Blockly.Msg.SENSING_OF_BACKDROPNAME, 'backdrop name'],
+                [Blockly.Msg.SENSING_OF_VOLUME, 'volume']
             ];
             const spriteOptions = [
-                [ScratchBlocks.Msg.SENSING_OF_XPOSITION, 'x position'],
-                [ScratchBlocks.Msg.SENSING_OF_YPOSITION, 'y position'],
-                [ScratchBlocks.Msg.SENSING_OF_DIRECTION, 'direction'],
-                [ScratchBlocks.Msg.SENSING_OF_COSTUMENUMBER, 'costume #'],
-                [ScratchBlocks.Msg.SENSING_OF_COSTUMENAME, 'costume name'],
-                [ScratchBlocks.Msg.SENSING_OF_SIZE, 'size'],
-                [ScratchBlocks.Msg.SENSING_OF_VOLUME, 'volume']
+                [Blockly.Msg.SENSING_OF_XPOSITION, 'x position'],
+                [Blockly.Msg.SENSING_OF_YPOSITION, 'y position'],
+                [Blockly.Msg.SENSING_OF_DIRECTION, 'direction'],
+                [Blockly.Msg.SENSING_OF_COSTUMENUMBER, 'costume #'],
+                [Blockly.Msg.SENSING_OF_COSTUMENAME, 'costume name'],
+                [Blockly.Msg.SENSING_OF_SIZE, 'size'],
+                [Blockly.Msg.SENSING_OF_VOLUME, 'volume']
             ];
             if (vm.editingTarget) {
                 let lookupBlocks = vm.editingTarget.blocks;
@@ -247,7 +247,7 @@ export default function (vm, useCatBlocks) {
                     lookupBlocks = vm.runtime.flyoutBlocks;
                 }
                 const sort = function (options) {
-                    options.sort(ScratchBlocks.scratchBlocksUtils.compareStrings);
+                    options.sort(Blockly.scratchBlocksUtils.compareStrings);
                 };
                 // Get all the stage variables (no lists) so we can add them to menu when the stage is selected.
                 const stageVariableOptions = vm.runtime.getTargetForStage().getAllVariableNamesInScopeByType('');
@@ -282,17 +282,17 @@ export default function (vm, useCatBlocks) {
         this.jsonInit(json);
     };
 
-    ScratchBlocks.Blocks.sensing_distancetomenu.init = function () {
-        const mouse = ScratchBlocks.ScratchMsgs.translate('SENSING_DISTANCETO_POINTER', 'mouse-pointer');
+    Blockly.Blocks.sensing_distancetomenu.init = function () {
+        const mouse = Blockly.Msg['SENSING_DISTANCETO_POINTER'];
         const json = jsonForMenuBlock('DISTANCETOMENU', spriteMenu, "sensing", [
             [mouse, '_mouse_']
         ]);
         this.jsonInit(json);
     };
 
-    ScratchBlocks.Blocks.sensing_touchingobjectmenu.init = function () {
-        const mouse = ScratchBlocks.ScratchMsgs.translate('SENSING_TOUCHINGOBJECT_POINTER', 'mouse-pointer');
-        const edge = ScratchBlocks.ScratchMsgs.translate('SENSING_TOUCHINGOBJECT_EDGE', 'edge');
+    Blockly.Blocks.sensing_touchingobjectmenu.init = function () {
+        const mouse = Blockly.Msg['SENSING_TOUCHINGOBJECT_POINTER'];
+        const edge = Blockly.Msg['SENSING_TOUCHINGOBJECT_EDGE'];
         const json = jsonForMenuBlock('TOUCHINGOBJECTMENU', spriteMenu, "sensing", [
             [mouse, '_mouse_'],
             [edge, '_edge_']
@@ -300,12 +300,12 @@ export default function (vm, useCatBlocks) {
         this.jsonInit(json);
     };
 
-    ScratchBlocks.Blocks.control_create_clone_of_menu.init = function () {
+    Blockly.Blocks.control_create_clone_of_menu.init = function () {
         const json = jsonForMenuBlock('CLONE_OPTION', cloneMenu, "control", []);
         this.jsonInit(json);
     };
 
-    ScratchBlocks.CheckableContinuousFlyout.prototype.getCheckboxState = function (blockId) {
+    Blockly.CheckableContinuousFlyout.prototype.getCheckboxState = function (blockId) {
         const monitoredBlock = vm.runtime.monitorBlocks._blocks[blockId];
         return monitoredBlock ? monitoredBlock.isMonitored : false;
     };
@@ -338,10 +338,10 @@ export default function (vm, useCatBlocks) {
     //
     // Shortcutting to true lets us skip an expensive style recalculation when
     // first loading the Scratch editor.
-    ScratchBlocks.utils.is3dSupported = function () {
+    Blockly.utils.is3dSupported = function () {
         return true;
     };
 
-    overridesForCustomArgumentSupport(ScratchBlocks, vm);
-    return ScratchBlocks;
+    overridesForCustomArgumentSupport(Blockly, vm);
+    return Blockly;
 }

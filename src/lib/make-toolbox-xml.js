@@ -1,4 +1,4 @@
-import {ScratchBlocks} from 'scratch-blocks';
+import * as Blockly from 'blockly';
 import {defaultColors} from './themes';
 
 const categorySeparator = '<sep gap="36"/>';
@@ -7,14 +7,11 @@ const blockSeparator = '<sep gap="36"/>'; // At default scale, about 28px
 
 /* eslint-disable no-unused-vars */
 const motion = function (isInitialSetup, isStage, targetId, colors) {
-    const stageSelected = ScratchBlocks.ScratchMsgs.translate(
-        'MOTION_STAGE_SELECTED',
-        'Stage selected: no motion blocks'
-    );
+    const stageSelected = Blockly.Msg['MOTION_STAGE_SELECTED'];
     // Note: the category's secondaryColour matches up with the blocks' tertiary color, both used for border color.
     // Since Blockly uses the UK spelling of "colour", certain attributes are named accordingly.
     return `
-    <category name="${ScratchBlocks.ScratchMsgs.translate('CATEGORY_MOTION', 'Motion')}" toolboxitemid="motion" colour="${colors.colourPrimary}" secondaryColour="${colors.colourTertiary}">
+    <category name="${Blockly.Msg['CATEGORY_MOTION']}" toolboxitemid="motion" colour="${colors.colourPrimary}" secondaryColour="${colors.colourTertiary}">
         ${isStage ? `
         <label text="${stageSelected}"></label>
         ` : `
@@ -160,11 +157,11 @@ const xmlEscape = function (unsafe) {
 };
 
 const looks = function (isInitialSetup, isStage, targetId, costumeName, backdropName, colors) {
-    const hello = ScratchBlocks.ScratchMsgs.translate('LOOKS_HELLO', 'Hello!');
-    const hmm = ScratchBlocks.ScratchMsgs.translate('LOOKS_HMM', 'Hmm...');
+    const hello = Blockly.Msg['LOOKS_HELLO'];
+    const hmm = Blockly.Msg['LOOKS_HMM'];
     // Note: the category's secondaryColour matches up with the blocks' tertiary color, both used for border color.
     return `
-    <category name="${ScratchBlocks.ScratchMsgs.translate('CATEGORY_LOOKS', 'Looks')}" toolboxitemid="looks" colour="${colors.colourPrimary}" secondaryColour="${colors.colourTertiary}">
+    <category name="${Blockly.Msg['CATEGORY_LOOKS']}" toolboxitemid="looks" colour="${colors.colourPrimary}" secondaryColour="${colors.colourTertiary}">
         ${isStage ? '' : `
         <block type="looks_sayforsecs">
             <value name="MESSAGE">
@@ -300,7 +297,7 @@ const looks = function (isInitialSetup, isStage, targetId, costumeName, backdrop
 const sound = function (isInitialSetup, isStage, targetId, soundName, colors) {
     // Note: the category's secondaryColour matches up with the blocks' tertiary color, both used for border color.
     return `
-    <category name="${ScratchBlocks.ScratchMsgs.translate('CATEGORY_SOUND', 'Sound')}" toolboxitemid="sound" colour="${colors.colourPrimary}" secondaryColour="${colors.colourTertiary}">
+    <category name="${Blockly.Msg['CATEGORY_SOUND']}" toolboxitemid="sound" colour="${colors.colourPrimary}" secondaryColour="${colors.colourTertiary}">
         <block id="${targetId}_sound_playuntildone" type="sound_playuntildone">
             <value name="SOUND_MENU">
                 <shadow type="sound_sounds_menu">
@@ -356,7 +353,7 @@ const sound = function (isInitialSetup, isStage, targetId, soundName, colors) {
 const events = function (isInitialSetup, isStage, targetId, colors) {
     // Note: the category's secondaryColour matches up with the blocks' tertiary color, both used for border color.
     return `
-    <category name="${ScratchBlocks.ScratchMsgs.translate('CATEGORY_EVENTS', 'Events')}" toolboxitemid="events" colour="${colors.colourPrimary}" secondaryColour="${colors.colourTertiary}">
+    <category name="${Blockly.Msg['CATEGORY_EVENTS']}" toolboxitemid="events" colour="${colors.colourPrimary}" secondaryColour="${colors.colourTertiary}">
         <block type="event_whenflagclicked"/>
         <block type="event_whenkeypressed">
         </block>
@@ -397,7 +394,7 @@ const control = function (isInitialSetup, isStage, targetId, colors) {
     // Note: the category's secondaryColour matches up with the blocks' tertiary color, both used for border color.
     return `
     <category
-        name="${ScratchBlocks.ScratchMsgs.translate('CATEGORY_CONTROL', 'Control')}"
+        name="${Blockly.Msg['CATEGORY_CONTROL']}"
         toolboxitemid="control"
         colour="${colors.colourPrimary}"
         secondaryColour="${colors.colourTertiary}">
@@ -446,11 +443,11 @@ const control = function (isInitialSetup, isStage, targetId, colors) {
 };
 
 const sensing = function (isInitialSetup, isStage, targetId, colors) {
-    const name = ScratchBlocks.ScratchMsgs.translate('SENSING_ASK_TEXT', 'What\'s your name?');
+    const name = Blockly.Msg['SENSING_ASK_TEXT'];
     // Note: the category's secondaryColour matches up with the blocks' tertiary color, both used for border color.
     return `
     <category
-        name="${ScratchBlocks.ScratchMsgs.translate('CATEGORY_SENSING', 'Sensing')}"
+        name="${Blockly.Msg['CATEGORY_SENSING']}"
         toolboxitemid="sensing"
         colour="${colors.colourPrimary}"
         secondaryColour="${colors.colourTertiary}">
@@ -526,13 +523,13 @@ const sensing = function (isInitialSetup, isStage, targetId, colors) {
 };
 
 const operators = function (isInitialSetup, isStage, targetId, colors) {
-    const apple = ScratchBlocks.ScratchMsgs.translate('OPERATORS_JOIN_APPLE', 'apple');
-    const banana = ScratchBlocks.ScratchMsgs.translate('OPERATORS_JOIN_BANANA', 'banana');
-    const letter = ScratchBlocks.ScratchMsgs.translate('OPERATORS_LETTEROF_APPLE', 'a');
+    const apple = Blockly.Msg['OPERATORS_JOIN_APPLE'];
+    const banana = Blockly.Msg['OPERATORS_JOIN_BANANA'];
+    const letter = Blockly.Msg['OPERATORS_LETTEROF_APPLE'];
     // Note: the category's secondaryColour matches up with the blocks' tertiary color, both used for border color.
     return `
     <category
-        name="${ScratchBlocks.ScratchMsgs.translate('CATEGORY_OPERATORS', 'Operators')}"
+        name="${Blockly.Msg['CATEGORY_OPERATORS']}"
         toolboxitemid="operators"
         colour="${colors.colourPrimary}"
         secondaryColour="${colors.colourTertiary}">
@@ -721,7 +718,7 @@ const variables = function (isInitialSetup, isStage, targetId, colors) {
     // Note: the category's secondaryColour matches up with the blocks' tertiary color, both used for border color.
     return `
     <category
-        name="${ScratchBlocks.ScratchMsgs.translate('CATEGORY_VARIABLES', 'Variables')}"
+        name="${Blockly.Msg['CATEGORY_VARIABLES']}"
         toolboxitemid="variables"
         colour="${colors.colourPrimary}"
         secondaryColour="${colors.colourTertiary}"
@@ -734,7 +731,7 @@ const myBlocks = function (isInitialSetup, isStage, targetId, colors) {
     // Note: the category's secondaryColour matches up with the blocks' tertiary color, both used for border color.
     return `
     <category
-        name="${ScratchBlocks.ScratchMsgs.translate('CATEGORY_MYBLOCKS', 'My Blocks')}"
+        name="${Blockly.Msg['CATEGORY_MYBLOCKS']}"
         toolboxitemid="myBlocks"
         colour="${colors.colourPrimary}"
         secondaryColour="${colors.colourTertiary}"
