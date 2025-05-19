@@ -31,7 +31,11 @@ export const overridesForCustomArgumentSupport = (blocks, vm) => {
   //   return result;
   // }
 
-  // FieldDropdown.fromJson = (...args) => executeWithState(state.init, null, fromJson, args);
+  const originalFromJson = FieldDropdown.fromJson;
+
+  FieldDropdown.fromJson = function (...args) {
+      return executeWithState(state.init, this, originalFromJson, args);
+  };
 
   // FieldDropdown.prototype.showEditor_ = function (...args) {
   //   return executeWithState(state.open, (current = this), showEditor_, args);

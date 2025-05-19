@@ -245,7 +245,7 @@ class Blocks extends React.Component {
     componentWillUnmount() {
         this.detachVM();
         console.log("workspace disposed", this.workspace);
-        this.workspace.dispose();
+        // this.workspace.dispose();
         clearTimeout(this.toolboxUpdateTimeout);
         this.keyboardNav.dispose();
         // Clear the flyout blocks so that they can be recreated on mount.
