@@ -30,7 +30,6 @@ import { setConnectionModalExtensionId } from '../reducers/connection-modal';
 import { updateMetrics } from '../reducers/workspace-metrics';
 import { isTimeTravel2020 } from '../reducers/time-travel';
 import { openUIEvent, registerButtonCallbackEvent } from "../../../../extensions/dist/globals";
-import {KeyboardNavigation} from '@blockly/keyboard-experiment';
 
 import {
     activateTab,
@@ -188,7 +187,6 @@ class Blocks extends React.Component {
         }
             console.log("scratch gui workspace id", this.workspace.id);
             console.log("workspace flyout id", this.workspace.getFlyout().id);
-            this.keyboardNav = new KeyboardNavigation(this.workspace);
     }
     shouldComponentUpdate(nextProps, nextState) {
         return (
@@ -247,7 +245,6 @@ class Blocks extends React.Component {
         console.log("workspace disposed", this.workspace);
         // this.workspace.dispose();
         clearTimeout(this.toolboxUpdateTimeout);
-        this.keyboardNav.dispose();
         // Clear the flyout blocks so that they can be recreated on mount.
         this.props.vm.clearFlyoutBlocks();
     }
