@@ -30,6 +30,7 @@ import { setConnectionModalExtensionId } from '../reducers/connection-modal';
 import { updateMetrics } from '../reducers/workspace-metrics';
 import { isTimeTravel2020 } from '../reducers/time-travel';
 import { openUIEvent, registerButtonCallbackEvent } from "../../../../extensions/dist/globals";
+import {KeyboardNavigation} from "@blockly/keyboard-navigation";
 
 import {
     activateTab,
@@ -187,6 +188,10 @@ class Blocks extends React.Component {
         }
             console.log("scratch gui workspace id", this.workspace.id);
             console.log("workspace flyout id", this.workspace.getFlyout().id);
+            setTimeout(() => {
+                const nav = new KeyboardNavigation(this.workspace);
+            }, 1000);
+            
     }
     shouldComponentUpdate(nextProps, nextState) {
         return (
