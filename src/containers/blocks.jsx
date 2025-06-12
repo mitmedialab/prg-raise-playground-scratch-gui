@@ -112,6 +112,9 @@ class Blocks extends React.Component {
 
         const toolboxWorkspace = this.workspace.getFlyout().getWorkspace();
 
+
+            
+
         const varListButtonCallback = type =>
             (() => this.ScratchBlocks.Variables.createVariable(this.workspace, null, type));
         const procButtonCallback = () => {
@@ -152,6 +155,46 @@ class Blocks extends React.Component {
         if (this.props.isVisible) {
             this.setLocale();
         }
+
+        function getBlockText(block) {
+            const fieldTexts = block.inputList.flatMap(input =>
+              input.fieldRow.map(field => field.getText())
+            );
+            return fieldTexts.join(' ').trim();
+          }
+
+        this.workspace.addChangeListener((event) => {
+
+            if (event.blockId) {
+              const block = this.workspace.getBlockById(event.blockId);
+              const svgRoot = block?.getSvgRoot();
+
+              if (svgRoot) {
+                const label = getBlockText(block);
+                svgRoot.setAttribute('aria-label', label);
+              }
+            }
+          });
+
+         // After Blockly is injected and workspace is initialized
+        const flyout = this.workspace.getFlyout();
+
+        if (flyout) {
+        const flyoutWorkspace = flyout.getWorkspace();
+
+            flyoutWorkspace.addChangeListener((event) => {
+                if (event.blockId) {
+                    const block = flyoutWorkspace.getBlockById(event.blockId);
+                    const svgRoot = block?.getSvgRoot();
+                    if (svgRoot && !svgRoot.getAttribute('aria-label')) {
+                        svgRoot.setAttribute('aria-label', getBlockText(block)); // Use block.type as the opcode label
+                    }
+                }
+            });
+        }
+
+
+          
     }
     shouldComponentUpdate(nextProps, nextState) {
         return (
@@ -202,6 +245,7 @@ class Blocks extends React.Component {
         } else {
             this.workspace.setVisible(false);
         }
+        
     }
     componentWillUnmount() {
         this.detachVM();
