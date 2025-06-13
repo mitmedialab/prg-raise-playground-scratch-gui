@@ -6,7 +6,10 @@ import { guiDropdownInterop } from "../../dist/globals";
  * @returns 
  */
 export const overridesForCustomArgumentSupport = (blocks, vm) => {
+  console.log(blocks, "blocks");
+  return;
   const { FieldDropdown } = blocks;
+  console.log(FieldDropdown.fromJson, "FieldDropdown")
   const { fromJson, prototype } = FieldDropdown;
   const { setValue, showEditor_ } = prototype;
   const { state, runtimeKey, runtimeProperties } = guiDropdownInterop;
@@ -25,13 +28,15 @@ export const overridesForCustomArgumentSupport = (blocks, vm) => {
   }
 
   const executeWithState = (state, dropdown, fn, args) => {
+    console.log(fn, args)
     setState(state, dropdown);
     const result = fn.apply(dropdown, args);
     setState(null);
     return result;
   }
 
-  FieldDropdown.fromJson = (...args) => executeWithState(state.init, null, fromJson, args);
+  FieldDropdown.fromJson = (...args) => 
+    executeWithState(state.init, null, fromJson.bind(FieldDropdown), args);
 
   FieldDropdown.prototype.showEditor_ = function (...args) {
     return executeWithState(state.open, (current = this), showEditor_, args);

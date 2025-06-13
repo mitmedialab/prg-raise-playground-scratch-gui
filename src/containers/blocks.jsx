@@ -36,6 +36,9 @@ import {
     SOUNDS_TAB_INDEX
 } from '../reducers/editor-tab';
 
+import {KeyboardNavigation} from '@blockly/keyboard-navigation';
+
+
 const addFunctionListener = (object, property, callback) => {
     const oldFn = object[property];
     object[property] = function (...args) {
@@ -103,8 +106,11 @@ class Blocks extends React.Component {
         const workspaceConfig = defaultsDeep({},
             Blocks.defaultOptions,
             this.props.options,
-            { rtl: this.props.isRtl, toolbox: this.props.toolboxXML, colours: getColorsForTheme(this.props.theme) }
+            { rtl: this.props.isRtl, toolbox: this.props.toolboxXML, colours: getColorsForTheme(this.props.theme) },
+            {theme: this.props.theme}
         );
+        
+        console.log(workspaceConfig, this.props.options, Blocks.defaultOptions);
         this.workspace = this.ScratchBlocks.inject(this.blocks, workspaceConfig);
 
         // Register buttons under new callback keys for creating variables,
@@ -152,6 +158,8 @@ class Blocks extends React.Component {
         if (this.props.isVisible) {
             this.setLocale();
         }
+
+        this.keyboardNav = new KeyboardNavigation(this.workspace);
     }
     shouldComponentUpdate(nextProps, nextState) {
         return (
@@ -205,7 +213,7 @@ class Blocks extends React.Component {
     }
     componentWillUnmount() {
         this.detachVM();
-        this.workspace.dispose();
+        this.workspace?.dispose();
         clearTimeout(this.toolboxUpdateTimeout);
 
         // Clear the flyout blocks so that they can be recreated on mount.
@@ -690,7 +698,7 @@ Blocks.defaultOptions = {
     },
     comments: true,
     collapse: false,
-    sounds: false
+    sounds: false,
 };
 
 Blocks.defaultProps = {
