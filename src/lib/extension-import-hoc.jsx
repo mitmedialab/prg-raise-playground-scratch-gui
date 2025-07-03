@@ -49,7 +49,7 @@ const ExtensionImportHOC = (WrappedComponent) => {
 
       // Create <input> element for file selection
       this.inputElement = document.createElement('input');
-      this.inputElement.accept = '.aix';
+      this.inputElement.accept = '.zip';
       this.inputElement.style.display = 'none';
       this.inputElement.type = 'file';
       this.inputElement.onchange = this.handleChange;
@@ -225,25 +225,25 @@ const ExtensionImportHOC = (WrappedComponent) => {
             // this.updateCheckbox('run-ant');
 
             // Step 3: Extract JSON
-            let res = await fetch('http://localhost:3000/extract-json', { method: 'POST', body: formData });
-            await res.json();
-            this.updateCheckbox('extract-json');
+            // let res = await fetch('http://localhost:3000/extract-json', { method: 'POST', body: formData });
+            // await res.json();
+            // this.updateCheckbox('extract-json');
 
-            // Step 4: Generate Extension
-            res = await fetch('http://localhost:3000/generate-extension', { method: 'POST', body: formData });
-            await res.json();
-            this.updateCheckbox('generate-extension');
+            // // Step 4: Generate Extension
+            // res = await fetch('http://localhost:3000/generate-extension', { method: 'POST', body: formData });
+            // await res.json();
+            // this.updateCheckbox('generate-extension');
 
-            // Step 5: Build Extension
-            res = await fetch('http://localhost:3000/build-extension', { method: 'POST', body: formData });
-            const data = await res.json();
-            this.updateCheckbox('build-extension');
+            // // Step 5: Build Extension
+            // res = await fetch('http://localhost:3000/build-extension', { method: 'POST', body: formData });
+            // const data = await res.json();
+            // this.updateCheckbox('build-extension');
 
       
-            // Fetch and process the zip file
-            const response = await fetch(data.downloadUrl);
-            const blob = await response.blob();
-            this.fileToUpload = blob;
+            // // Fetch and process the zip file
+            // const response = await fetch(data.downloadUrl);
+            // const blob = await response.blob();
+            // this.fileToUpload = blob;
       
             // Load ZIP with JSZip
             const zip = await JSZip.loadAsync(this.fileToUpload);
@@ -267,8 +267,9 @@ const ExtensionImportHOC = (WrappedComponent) => {
               } else if (fileName === "ExtensionFramework.js") {
                 contentMap["ExtensionFramework"] = content;
               } else {
+                console.log(fileName);
                 const id = fileName.split('.').slice(0, -1).join('.');
-                if (!fileName.includes(".map")) {
+                if (!fileName.includes(".map") && !fileName.includes("._")) {
                   scriptJs = content;
                 }
               }
@@ -281,25 +282,26 @@ const ExtensionImportHOC = (WrappedComponent) => {
       
             this.untilCommonObjects(contentMap);
       
-            if (!window[extId]) {
-              this.untilScriptLoaded(scriptJs);
-      
-              const { Extension, ...aux } = window[extId];
-      
-              try {
-                const extIdClass = class extends Extension {
-                  constructor(runtime) {
-                    super(runtime, ...window["AuxiliaryExtensionInfo"][extId]);
-                  }
-                };
-                const extensionInstance = new extIdClass(this.props.vm.runtime);
-                extensionInstance["internal_init"]();
-      
-                const serviceName = this.props.vm.extensionManager._registerInternalExtension(extensionInstance);
-                this.props.vm.extensionManager._loadedExtensions.set(extId, serviceName);
-              } catch (e) {
-                console.error(e);
-              }
+            if (window[extId]) {
+                window[extId] = null;
+            }
+            this.untilScriptLoaded(scriptJs);
+    
+            const { Extension, ...aux } = window[extId];
+    
+            try {
+            const extIdClass = class extends Extension {
+                constructor(runtime) {
+                super(runtime, ...window["AuxiliaryExtensionInfo"][extId]);
+                }
+            };
+            const extensionInstance = new extIdClass(this.props.vm.runtime);
+            extensionInstance["internal_init"]();
+    
+            const serviceName = this.props.vm.extensionManager._registerInternalExtension(extensionInstance);
+            this.props.vm.extensionManager._loadedExtensions.set(extId, serviceName);
+            } catch (e) {
+            console.error(e);
             }
           } catch (err) {
             console.error("Error:", err);
