@@ -190,31 +190,38 @@ const ExtensionImportHOC = (WrappedComponent) => {
         let extId = "";
         let contentMap = {};
 
-        Object.keys(map).map(async (relativePath) => {
-          const content = map[relativePath];
-          const fileName = relativePath;
+        await Promise.all(
+          Object.keys(map).map(async (relativePath) => {
+            const content = map[relativePath];
+            const fileName = relativePath;
 
-          console.log(fileName);
-
-          if (fileName === "AuxiliaryExtensionInfo.js") {
-            const extensionJSON = await this.readAuxiliaryExtensionInfo(content);
-            if (!window["AuxiliaryExtensionInfo"]) {
-              window["AuxiliaryExtensionInfo"] = extensionJSON;
-            }
-            const name = Object.keys(extensionJSON)[0];
-            extId = name;
-            this.extJson = extensionJSON;
-            contentMap["AuxiliaryExtensionInfo"] = content;
-          } else if (fileName === "ExtensionFramework.js") {
-            contentMap["ExtensionFramework"] = content;
-          } else {
             console.log(fileName);
-            const id = fileName.split('.').slice(0, -1).join('.');
-            if (!fileName.includes(".map") && !fileName.includes("._")) {
-              scriptJs = content;
+
+            if (fileName === "AuxiliaryExtensionInfo.js") {
+              console.log("loading");
+              const extensionJSON = await this.readAuxiliaryExtensionInfo(content);
+              if (!window["AuxiliaryExtensionInfo"]) {
+                window["AuxiliaryExtensionInfo"] = extensionJSON;
+              }
+              console.log(Object.keys(extensionJSON));
+              const name = Object.keys(extensionJSON)[0];
+              
+              extId = name;
+              console.log("name", extId);
+              this.extJson = extensionJSON;
+              console.log(content);
+              contentMap["AuxiliaryExtensionInfo"] = content;
+            } else if (fileName === "ExtensionFramework.js") {
+              contentMap["ExtensionFramework"] = content;
+            } else {
+              console.log(fileName);
+              const id = fileName.split('.').slice(0, -1).join('.');
+              if (!fileName.includes(".map") && !fileName.includes("._")) {
+                scriptJs = content;
+              }
             }
-          }
-        });
+          })
+        );
 
         console.log("after");
 
@@ -226,7 +233,9 @@ const ExtensionImportHOC = (WrappedComponent) => {
 
         console.log("after 2");
         console.log(scriptJs);
-        this.untilScriptLoaded(scriptJs);
+        // TODO: remove scripts if they've already been loaded
+        console.log("ext id", extId);
+        this.untilScriptLoaded(scriptJs, extId);
 
         await new Promise(resolve => setTimeout(resolve, 500));
 
@@ -255,15 +264,25 @@ const ExtensionImportHOC = (WrappedComponent) => {
       return window[id];
     }
 
-    untilScriptLoaded(content) {
+    untilScriptLoaded(content, id) {
+      // Check for existing script
+      const existingScript = document.getElementById(id);
+      if (existingScript) {
+        existingScript.remove();
+      }
+    
+      // Create and insert new script
       const scriptTag = document.createElement('script');
       scriptTag.textContent = content;
+      scriptTag.id = id;
+    
       try {
         document.body.appendChild(scriptTag);
       } catch (e) {
-
+        console.error("Error appending script:", e);
       }
     }
+    
 
     validateCommonObject(id) {
       this.getCommonObject(id)
@@ -279,7 +298,7 @@ const ExtensionImportHOC = (WrappedComponent) => {
           }
           return; // Already loaded
         }
-        this.untilScriptLoaded(content);
+        this.untilScriptLoaded(content, id);
         
       });
     }
