@@ -32,6 +32,21 @@ const ExtensionImportHOC = (WrappedComponent) => {
       ]);
     }
 
+    componentDidMount() {
+      console.log("EXTENSION IMPORTED");
+      window.addEventListener("message", (event) => {
+        // ✅ (Optional) Check origin for security
+        if (event.origin !== "http://localhost:5173/") return;
+      
+        // Handle the message
+        console.log("📩 Message from parent:", event.data);
+      
+        if (event.data.type === "loadProject") {
+          // Do something with event.data.payload
+        }
+      });
+    }
+
     componentWillUnmount() {
       this.removeFileObjects();
     }
@@ -169,6 +184,73 @@ const ExtensionImportHOC = (WrappedComponent) => {
       });
     }
 
+    async refreshExtension(map) {
+      // Process ZIP files
+        let scriptJs = "";
+        let extId = "";
+        let contentMap = {};
+
+        Object.keys(map).map(async (relativePath) => {
+          const content = map[relativePath];
+          const fileName = relativePath;
+
+          console.log(fileName);
+
+          if (fileName === "AuxiliaryExtensionInfo.js") {
+            const extensionJSON = await this.readAuxiliaryExtensionInfo(content);
+            if (!window["AuxiliaryExtensionInfo"]) {
+              window["AuxiliaryExtensionInfo"] = extensionJSON;
+            }
+            const name = Object.keys(extensionJSON)[0];
+            extId = name;
+            this.extJson = extensionJSON;
+            contentMap["AuxiliaryExtensionInfo"] = content;
+          } else if (fileName === "ExtensionFramework.js") {
+            contentMap["ExtensionFramework"] = content;
+          } else {
+            console.log(fileName);
+            const id = fileName.split('.').slice(0, -1).join('.');
+            if (!fileName.includes(".map") && !fileName.includes("._")) {
+              scriptJs = content;
+            }
+          }
+        });
+
+        console.log("after");
+
+        this.untilCommonObjects(contentMap);
+
+        if (window[extId]) {
+            window[extId] = null;
+        }
+
+        console.log("after 2");
+        console.log(scriptJs);
+        this.untilScriptLoaded(scriptJs);
+
+        await new Promise(resolve => setTimeout(resolve, 500));
+
+        const { Extension, ...aux } = window[extId];
+
+        console.log("after 3");
+        try {
+          const extIdClass = class extends Extension {
+              constructor(runtime) {
+                super(runtime, ...window["AuxiliaryExtensionInfo"][extId]);
+              }
+          };
+          const extensionInstance = new extIdClass(this.props.vm.runtime);
+          extensionInstance["internal_init"]();
+
+          console.log("after 4");
+
+          const serviceName = this.props.vm.extensionManager._registerInternalExtension(extensionInstance);
+          this.props.vm.extensionManager._loadedExtensions.set(extId, serviceName);
+        } catch (e) {
+          console.error(e);
+        }
+    }
+
     getCommonObject(id) {
       return window[id];
     }
@@ -201,6 +283,8 @@ const ExtensionImportHOC = (WrappedComponent) => {
         
       });
     }
+
+
 
     extJson = {};
     async handleChange(e) {
@@ -247,62 +331,93 @@ const ExtensionImportHOC = (WrappedComponent) => {
       
             // Load ZIP with JSZip
             const zip = await JSZip.loadAsync(this.fileToUpload);
-            
-            // Process ZIP files
-            let scriptJs = "";
-            let extId = "";
-            let contentMap = {};
-      
+
+            let fileMap = {};
             const filePromises = Object.keys(zip.files).map(async (relativePath) => {
               const file = zip.files[relativePath];
               const fileName = relativePath.split('/').pop();
               const content = await file.async("string");
-      
-              if (fileName === "AuxiliaryExtensionInfo.js") {
-                const extensionJSON = await this.readAuxiliaryExtensionInfo(content);
-                const name = Object.keys(extensionJSON)[0];
-                extId = name;
-                this.extJson = extensionJSON;
-                contentMap["AuxiliaryExtensionInfo"] = content;
-              } else if (fileName === "ExtensionFramework.js") {
-                contentMap["ExtensionFramework"] = content;
-              } else {
-                console.log(fileName);
-                const id = fileName.split('.').slice(0, -1).join('.');
-                if (!fileName.includes(".map") && !fileName.includes("._")) {
-                  scriptJs = content;
-                }
-              }
+              fileMap[fileName] = content;
             });
-      
+
             await Promise.all(filePromises);
-            // this.untilScriptLoadedUrl("https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@1.3.1/dist/tf.min.js");
-            // this.untilScriptLoadedUrl("https://cdn.jsdelivr.net/npm/@teachablemachine/image@0.8/dist/teachablemachine-image.min.js")
-            // await new Promise(resolve => setTimeout(resolve, 1000));
+
+            console.log("file map", fileMap);
+
+            await this.refreshExtension(fileMap);
       
-            this.untilCommonObjects(contentMap);
+              // if (fileName === "AuxiliaryExtensionInfo.js") {
+              //   const extensionJSON = await this.readAuxiliaryExtensionInfo(content);
+              //   const name = Object.keys(extensionJSON)[0];
+              //   extId = name;
+              //   this.extJson = extensionJSON;
+              //   contentMap["AuxiliaryExtensionInfo"] = content;
+              // } else if (fileName === "ExtensionFramework.js") {
+              //   contentMap["ExtensionFramework"] = content;
+              // } else {
+              //   console.log(fileName);
+              //   const id = fileName.split('.').slice(0, -1).join('.');
+              //   if (!fileName.includes(".map") && !fileName.includes("._")) {
+              //     scriptJs = content;
+              //   }
+              // }
+
+            
+            // Process ZIP files
+            // let scriptJs = "";
+            // let extId = "";
+            // let contentMap = {};
       
-            if (window[extId]) {
-                window[extId] = null;
-            }
-            this.untilScriptLoaded(scriptJs);
+            // const filePromises = Object.keys(zip.files).map(async (relativePath) => {
+            //   const file = zip.files[relativePath];
+            //   const fileName = relativePath.split('/').pop();
+            //   const content = await file.async("string");
+      
+            //   if (fileName === "AuxiliaryExtensionInfo.js") {
+            //     const extensionJSON = await this.readAuxiliaryExtensionInfo(content);
+            //     const name = Object.keys(extensionJSON)[0];
+            //     extId = name;
+            //     this.extJson = extensionJSON;
+            //     contentMap["AuxiliaryExtensionInfo"] = content;
+            //   } else if (fileName === "ExtensionFramework.js") {
+            //     contentMap["ExtensionFramework"] = content;
+            //   } else {
+            //     console.log(fileName);
+            //     const id = fileName.split('.').slice(0, -1).join('.');
+            //     if (!fileName.includes(".map") && !fileName.includes("._")) {
+            //       scriptJs = content;
+            //     }
+            //   }
+            // });
+      
+            // await Promise.all(filePromises);
+            // // this.untilScriptLoadedUrl("https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@1.3.1/dist/tf.min.js");
+            // // this.untilScriptLoadedUrl("https://cdn.jsdelivr.net/npm/@teachablemachine/image@0.8/dist/teachablemachine-image.min.js")
+            // // await new Promise(resolve => setTimeout(resolve, 1000));
+      
+            // this.untilCommonObjects(contentMap);
+      
+            // if (window[extId]) {
+            //     window[extId] = null;
+            // }
+            // this.untilScriptLoaded(scriptJs);
     
-            const { Extension, ...aux } = window[extId];
+            // const { Extension, ...aux } = window[extId];
     
-            try {
-            const extIdClass = class extends Extension {
-                constructor(runtime) {
-                super(runtime, ...window["AuxiliaryExtensionInfo"][extId]);
-                }
-            };
-            const extensionInstance = new extIdClass(this.props.vm.runtime);
-            extensionInstance["internal_init"]();
+            // try {
+            // const extIdClass = class extends Extension {
+            //     constructor(runtime) {
+            //     super(runtime, ...window["AuxiliaryExtensionInfo"][extId]);
+            //     }
+            // };
+            // const extensionInstance = new extIdClass(this.props.vm.runtime);
+            // extensionInstance["internal_init"]();
     
-            const serviceName = this.props.vm.extensionManager._registerInternalExtension(extensionInstance);
-            this.props.vm.extensionManager._loadedExtensions.set(extId, serviceName);
-            } catch (e) {
-            console.error(e);
-            }
+            // const serviceName = this.props.vm.extensionManager._registerInternalExtension(extensionInstance);
+            // this.props.vm.extensionManager._loadedExtensions.set(extId, serviceName);
+            // } catch (e) {
+            // console.error(e);
+            // }
           } catch (err) {
             console.error("Error:", err);
             alert('Conversion failed: ' + err.message);
