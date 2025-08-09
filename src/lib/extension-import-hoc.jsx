@@ -34,7 +34,7 @@ const ExtensionImportHOC = (WrappedComponent) => {
 
     componentDidMount() {
       console.log("EXTENSION IMPORTED");
-      window.addEventListener("message", (event) => {
+      window.addEventListener("message", async (event) => {
         // ✅ (Optional) Check origin for security
         if (event.origin !== "http://localhost:5173/") return;
       
@@ -43,6 +43,9 @@ const ExtensionImportHOC = (WrappedComponent) => {
       
         if (event.data.type === "loadProject") {
           // Do something with event.data.payload
+          console.log(event.data.map);
+          await this.refreshExtension(event.data.map);
+          console.log("REFRESHED");
         }
       });
     }
