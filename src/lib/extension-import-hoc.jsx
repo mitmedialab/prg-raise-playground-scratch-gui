@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import JSZip from 'jszip';
 import bindAll from 'lodash.bindall';
 import { closeFileMenu } from '../reducers/menus';
+import { updateToolbox, toolboxInitialState } from '../reducers/toolbox';
 
 
 const messages = defineMessages({
@@ -36,16 +37,17 @@ const ExtensionImportHOC = (WrappedComponent) => {
       console.log("EXTENSION IMPORTED");
       window.addEventListener("message", async (event) => {
         // ✅ (Optional) Check origin for security
-        if (event.origin !== "http://localhost:5173/") return;
-      
+        console.log("EXTENSION IMPORT EVENT", event);
+        if (event.origin != "http://localhost:5173") return;
+
         // Handle the message
         console.log("📩 Message from parent:", event.data);
-      
         if (event.data.type === "loadProject") {
+          console.log("REFRESHING EXTENSION");
           // Do something with event.data.payload
-          console.log(event.data.map);
+          console.log(updateToolbox);
+          console.log(updateToolbox(toolboxInitialState.toolboxXML))
           await this.refreshExtension(event.data.map);
-          console.log("REFRESHED");
         }
       });
     }
