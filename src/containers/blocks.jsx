@@ -495,6 +495,21 @@ class Blocks extends React.Component {
         // Update the toolbox with new blocks if possible
         const toolboxXML = this.getToolboxXML();
         if (toolboxXML) {
+            this.ScratchBlocks.svgResize(this.workspace);
+            const categoryId = this.workspace.getToolbox().getSelectedCategoryId();
+            this.workspace.getToolbox().HtmlDiv.setAttribute("id", "toolbox");
+            this.workspace.getFlyout().svgGroup_.setAttribute("id", "flyout");
+            this.workspace.getFlyout().svgBackground_.setAttribute("id", "flyout_background");
+            this.workspace.getFlyout().scrollbar_.svgGroup_.setAttribute("id", "flyout_scroll");
+            document.getElementById("toolbox").remove();
+            document.getElementById("flyout").remove();
+            // document.getElementById("flyout_background").remove();
+            document.getElementById("flyout_scroll").remove();
+            console.log(document.getElementsByClassName(".blocklyScrollbarVertical.blocklyFlyoutScrollbar"));
+            this.workspace.getToolbox().init();
+            this.workspace.getToolbox().setSelectedCategoryById(categoryId);
+            const xml = this.ScratchBlocks.Xml.workspaceToDom(this.workspace);
+            this.ScratchBlocks.Xml.clearWorkspaceAndLoadFromXml(xml, this.workspace);
             this.props.updateToolboxState(toolboxXML);
         }
     }
