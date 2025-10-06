@@ -57,6 +57,7 @@ class Blocks extends React.Component {
             'attachVM',
             'detachVM',
             'getToolboxXML',
+            'categoryScrollUpdate',
             'handleCategorySelected',
             'handleConnectionModalStart',
             'handleDrop',
@@ -298,6 +299,7 @@ class Blocks extends React.Component {
         this.props.vm.addListener('BLOCKSINFO_UPDATE', this.handleBlocksInfoUpdate);
         this.props.vm.addListener('PERIPHERAL_CONNECTED', this.handleStatusButtonUpdate);
         this.props.vm.addListener('PERIPHERAL_DISCONNECTED', this.handleStatusButtonUpdate);
+        this.props.vm.addListener('CATEGORY_SCROLL_UPDATE', this.categoryScrollUpdate)
     }
     detachVM() {
         this.props.vm.removeListener('SCRIPT_GLOW_ON', this.onScriptGlowOn);
@@ -312,6 +314,7 @@ class Blocks extends React.Component {
         this.props.vm.removeListener('BLOCKSINFO_UPDATE', this.handleBlocksInfoUpdate);
         this.props.vm.removeListener('PERIPHERAL_CONNECTED', this.handleStatusButtonUpdate);
         this.props.vm.removeListener('PERIPHERAL_DISCONNECTED', this.handleStatusButtonUpdate);
+        this.props.vm.removeListener('CATEGORY_SCROLL_UPDATE', this.categoryScrollUpdate)
     }
 
     updateToolboxBlockValue(id, value) {
@@ -325,6 +328,8 @@ class Blocks extends React.Component {
             }
         });
     }
+
+    
 
     onTargetsUpdate() {
         if (this.props.vm.editingTarget && this.workspace.getFlyout()) {
@@ -512,6 +517,9 @@ class Blocks extends React.Component {
     }
     setBlocks(blocks) {
         this.blocks = blocks;
+    }
+    categoryScrollUpdate(categoryId) {
+        this.workspace.toolbox_.scrollToCategoryById(categoryId);
     }
     handlePromptStart(message, defaultValue, callback, optTitle, optVarType) {
         const p = { prompt: { callback, message, defaultValue } };
