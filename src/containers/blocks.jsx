@@ -57,7 +57,9 @@ class Blocks extends React.Component {
             'attachVM',
             'detachVM',
             'getToolboxXML',
+            /** PRG ADDITION BEGIN */
             'categoryScrollUpdate',
+            /** PRG ADDITION END */
             'handleCategorySelected',
             'handleConnectionModalStart',
             'handleDrop',
@@ -299,7 +301,9 @@ class Blocks extends React.Component {
         this.props.vm.addListener('BLOCKSINFO_UPDATE', this.handleBlocksInfoUpdate);
         this.props.vm.addListener('PERIPHERAL_CONNECTED', this.handleStatusButtonUpdate);
         this.props.vm.addListener('PERIPHERAL_DISCONNECTED', this.handleStatusButtonUpdate);
+        /** PRG ADDITION BEGIN */
         this.props.vm.addListener('CATEGORY_SCROLL_UPDATE', this.categoryScrollUpdate)
+        /** PRG ADDITION END */
     }
     detachVM() {
         this.props.vm.removeListener('SCRIPT_GLOW_ON', this.onScriptGlowOn);
@@ -314,7 +318,9 @@ class Blocks extends React.Component {
         this.props.vm.removeListener('BLOCKSINFO_UPDATE', this.handleBlocksInfoUpdate);
         this.props.vm.removeListener('PERIPHERAL_CONNECTED', this.handleStatusButtonUpdate);
         this.props.vm.removeListener('PERIPHERAL_DISCONNECTED', this.handleStatusButtonUpdate);
+        /** PRG ADDITION BEGIN */
         this.props.vm.removeListener('CATEGORY_SCROLL_UPDATE', this.categoryScrollUpdate)
+        /** PRG ADDITION END */
     }
 
     updateToolboxBlockValue(id, value) {
@@ -518,9 +524,11 @@ class Blocks extends React.Component {
     setBlocks(blocks) {
         this.blocks = blocks;
     }
+    /** PRG ADDITION BEGIN */
     categoryScrollUpdate(categoryId) {
         this.workspace.toolbox_.scrollToCategoryById(categoryId);
     }
+    /** PRG ADDITION END */
     handlePromptStart(message, defaultValue, callback, optTitle, optVarType) {
         const p = { prompt: { callback, message, defaultValue } };
         p.prompt.title = optTitle ? optTitle :
