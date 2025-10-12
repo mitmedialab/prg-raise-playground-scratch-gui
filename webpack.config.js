@@ -30,9 +30,13 @@ const baseConfig = new ScratchWebpackConfigBuilder(
             }
         },
         resolve: {
+            alias: {
+                '@jibo/three': path.resolve(__dirname, '../../PRG-Virtual_Jibo/threejs-r70/three.js')
+            },
             fallback: {
                 Buffer: require.resolve('buffer/'),
-                stream: require.resolve('stream-browserify')
+                stream: require.resolve('stream-browserify'),
+                fs: false
             }
         },
         optimization: {
@@ -193,6 +197,10 @@ const buildConfig = baseConfig.clone()
                 from: 'extensions/**',
                 to: 'static',
                 context: 'src/examples'
+            },
+            {
+                from: '../../PRG-Virtual_Jibo/res',
+                to: 'res'
             }
         ]
     }));
