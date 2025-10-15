@@ -31,7 +31,7 @@ const baseConfig = new ScratchWebpackConfigBuilder(
         },
         resolve: {
             alias: {
-                '@jibo/three': path.resolve(__dirname, '../../PRG-Virtual_Jibo/threejs-r70/three.js')
+                '@jibo/three': path.resolve(__dirname, 'static/PRG-Virtual_Jibo/threejs-r70/three.js')
             },
             fallback: {
                 Buffer: require.resolve('buffer/'),
