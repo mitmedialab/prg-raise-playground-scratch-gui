@@ -197,14 +197,6 @@ const buildConfig = baseConfig.clone()
                 from: 'extensions/**',
                 to: 'static',
                 context: 'src/examples'
-            },
-            {
-                from: '../../PRG-Virtual_Jibo/res',
-                to: 'res'
-            },
-            {
-                from: '../../PRG-Virtual_Jibo/demo/dist/animations',
-                to: 'static/animations'
             }
         ]
     }));
