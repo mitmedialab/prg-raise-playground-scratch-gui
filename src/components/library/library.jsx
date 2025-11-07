@@ -145,6 +145,15 @@ class LibraryComponent extends React.Component {
             ));
         }
         return this.props.data.filter(dataItem => (
+            dataItem.name !== "PRG Microbit Robot" &&
+            dataItem.name !== "PRG Gizmo Robot" &&
+            dataItem.name !== "PRG Arduino Robot" &&
+            dataItem.name !== "App Inventor Example" &&
+            dataItem.name !== "Onnx Example" &&
+            dataItem.name !== "Extension Probe" &&
+            dataItem.name !== "Project Probe" &&
+            dataItem.name !== "Simple Typescript Extension" &&
+            dataItem.name !== "Realistic Typescript-Based Extension" &&
             dataItem.tags &&
             dataItem.tags
                 .map(String.prototype.toLowerCase.call, String.prototype.toLowerCase)
