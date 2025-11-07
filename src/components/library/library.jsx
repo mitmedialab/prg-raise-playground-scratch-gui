@@ -128,9 +128,16 @@ class LibraryComponent extends React.Component {
         this.setState({filterQuery: ''});
     }
     getFilteredData () {
+        const doNotInclude = ["PRG Microbit Robot", "PRG Gizmo Robot", "PRG Arduino Robot", "App Inventor Example", "Onnx Example", "Extension Probe", "Project Probe", "Simple Typescript Extension", "Realistic Typescript-Based Extension"];
+        console.log("HERE");
+        console.log(this.props.data);
         if (this.state.selectedTag === 'all') {
+            console.log("data item", this.props.data);
             if (!this.state.filterQuery) return this.props.data;
+            
             return this.props.data.filter(dataItem => (
+                
+                !doNotInclude.includes(dataItem.name) &&
                 (dataItem.tags || [])
                     // Second argument to map sets `this`
                     .map(String.prototype.toLowerCase.call, String.prototype.toLowerCase)
@@ -144,16 +151,10 @@ class LibraryComponent extends React.Component {
                     .indexOf(this.state.filterQuery.toLowerCase()) !== -1
             ));
         }
+        console.log("DATA", this.props.data);
         return this.props.data.filter(dataItem => (
-            dataItem.name !== "PRG Microbit Robot" &&
-            dataItem.name !== "PRG Gizmo Robot" &&
-            dataItem.name !== "PRG Arduino Robot" &&
-            dataItem.name !== "App Inventor Example" &&
-            dataItem.name !== "Onnx Example" &&
-            dataItem.name !== "Extension Probe" &&
-            dataItem.name !== "Project Probe" &&
-            dataItem.name !== "Simple Typescript Extension" &&
-            dataItem.name !== "Realistic Typescript-Based Extension" &&
+            console.log("DATA ITEM NAME:", dataItem),
+            !doNotInclude.includes(typeof dataItem.name === 'string' ? dataItem.name : this.props.intl.formatMessage(dataItem.name.props)) &&
             dataItem.tags &&
             dataItem.tags
                 .map(String.prototype.toLowerCase.call, String.prototype.toLowerCase)
