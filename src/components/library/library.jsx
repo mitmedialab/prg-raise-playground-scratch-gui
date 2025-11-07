@@ -29,6 +29,8 @@ const messages = defineMessages({
 const ALL_TAG = {tag: 'all', intlLabel: messages.allTag};
 const tagListPrefix = [ALL_TAG];
 
+const doNotInclude = ["microbitRobot", "gizmoRobot", "arduinoRobot", "simpleprg95grpexample", "projectProbe", "onnxTest", "extensionProbe", "complexprg95grpexample", "appinventorprg95grpexample"]
+
 class LibraryComponent extends React.Component {
     constructor (props) {
         super(props);
@@ -128,16 +130,13 @@ class LibraryComponent extends React.Component {
         this.setState({filterQuery: ''});
     }
     getFilteredData () {
-        const doNotInclude = ["PRG Microbit Robot", "PRG Gizmo Robot", "PRG Arduino Robot", "App Inventor Example", "Onnx Example", "Extension Probe", "Project Probe", "Simple Typescript Extension", "Realistic Typescript-Based Extension"];
-        console.log("HERE");
-        console.log(this.props.data);
         if (this.state.selectedTag === 'all') {
             console.log("data item", this.props.data);
-            if (!this.state.filterQuery) return this.props.data;
+            if (!this.state.filterQuery) return this.props.data.filter(dataItem => (!doNotInclude.includes(dataItem.extensionId)));
             
             return this.props.data.filter(dataItem => (
                 
-                !doNotInclude.includes(dataItem.name) &&
+                !doNotInclude.includes(dataItem.extensionId) &&
                 (dataItem.tags || [])
                     // Second argument to map sets `this`
                     .map(String.prototype.toLowerCase.call, String.prototype.toLowerCase)
@@ -151,10 +150,8 @@ class LibraryComponent extends React.Component {
                     .indexOf(this.state.filterQuery.toLowerCase()) !== -1
             ));
         }
-        console.log("DATA", this.props.data);
         return this.props.data.filter(dataItem => (
-            console.log("DATA ITEM NAME:", dataItem),
-            !doNotInclude.includes(typeof dataItem.name === 'string' ? dataItem.name : this.props.intl.formatMessage(dataItem.name.props)) &&
+            !doNotInclude.includes(dataItem.extensionId) &&
             dataItem.tags &&
             dataItem.tags
                 .map(String.prototype.toLowerCase.call, String.prototype.toLowerCase)
