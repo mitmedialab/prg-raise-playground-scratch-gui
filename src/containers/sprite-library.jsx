@@ -123,7 +123,7 @@ class SpriteLibrary extends React.PureComponent {
                     assetId: "8313a2229d555bbdb8ce92dffed067ad",
                     name: "goaicostume7",
                     bitmapResolution: 1,
-                    md5ext: `data:image/svg;base64,${encoder
+                    md5ext: `data:image/svg+xml;base64,${encoder
                         .encode(goaicostume7)
                         .toBase64()}`,
                     dataFormat: "svg",
