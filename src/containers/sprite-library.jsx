@@ -39,10 +39,6 @@ class SpriteLibrary extends React.PureComponent {
         }
         const encoder = new _TextEncoder();
 
-        console.log(
-            "COSTUME 1",
-            `data:image/svg;base64,${encoder.encode(goaicostume1).toBase64()}`
-        );
         spriteLibraryContent.push({
             name: "GoAI",
             tags: [
@@ -61,7 +57,9 @@ class SpriteLibrary extends React.PureComponent {
                     assetId: "b7853f557e4426412e64bb3da6531a99",
                     name: "goaicostume1",
                     bitmapResolution: 1,
-                    md5ext: `b7853f557e4426412e64bb3da6531a99.svg`,
+                    md5ext: `data:image/svg+xml;base64,${encoder
+                        .encode(goaicostume1)
+                        .toBase64()}`,
                     dataFormat: "svg",
                     rotationCenterX: 128,
                     rotationCenterY: 145,
@@ -145,6 +143,9 @@ class SpriteLibrary extends React.PureComponent {
                 },
             ],
             blocks: {},
+        });
+        spriteLibraryContent.sort((a, b) => {
+            return a.name.localeCompare(b.name);
         });
     }
     handleItemSelect(item) {
