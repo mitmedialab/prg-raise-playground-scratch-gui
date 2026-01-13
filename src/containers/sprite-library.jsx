@@ -39,114 +39,118 @@ class SpriteLibrary extends React.PureComponent {
         }
         const encoder = new _TextEncoder();
 
-        spriteLibraryContent.push({
-            name: "GoAI",
-            tags: [
-                "sports",
-                "basketball",
-                "people",
-                "wheelchair",
-                "handicap",
-                "handicapable",
-                "alex eben meyer",
-            ],
-            isStage: false,
-            variables: {},
-            costumes: [
-                {
-                    assetId: "b7853f557e4426412e64bb3da6531a99",
-                    name: "goaicostume1",
-                    bitmapResolution: 1,
-                    md5ext: `data:image/svg+xml;base64,${encoder
-                        .encode(goaicostume1)
-                        .toBase64()}`,
-                    dataFormat: "svg",
-                    rotationCenterX: 128,
-                    rotationCenterY: 145,
-                },
-                {
-                    assetId: "e6ddc55a6ddd9cc9d84fe0b4c21e016f",
-                    name: "goaicostume2",
-                    bitmapResolution: 1,
-                    md5ext: `data:image/svg+xml;base64,${encoder
-                        .encode(goaicostume2)
-                        .toBase64()}`,
-                    dataFormat: "svg",
-                    rotationCenterX: 128,
-                    rotationCenterY: 145,
-                },
-                {
-                    assetId: "f60f99278455c843b7833fb7615428dd",
-                    name: "goaicostume3",
-                    bitmapResolution: 1,
-                    md5ext: `data:image/svg+xml;base64,${encoder
-                        .encode(goaicostume3)
-                        .toBase64()}`,
-                    dataFormat: "svg",
-                    rotationCenterX: 128,
-                    rotationCenterY: 145,
-                },
-                {
-                    assetId: "b2f75ac1cd84615efaea6a7d7a4ee205",
-                    name: "goaicostume4",
-                    bitmapResolution: 1,
-                    md5ext: `data:image/svg+xml;base64,${encoder
-                        .encode(goaicostume4)
-                        .toBase64()}`,
-                    dataFormat: "svg",
-                    rotationCenterX: 128,
-                    rotationCenterY: 145,
-                },
-                {
-                    assetId: "580fba92f23d5592200eb5a9079dc38f",
-                    name: "goaicostume5",
-                    bitmapResolution: 1,
-                    md5ext: `data:image/svg+xml;base64,${encoder
-                        .encode(goaicostume5)
-                        .toBase64()}`,
-                    dataFormat: "svg",
-                    rotationCenterX: 128,
-                    rotationCenterY: 145,
-                },
-                {
-                    assetId: "e51942bb4651e616549cfce1ad36ff83",
-                    name: "goaicostume6",
-                    bitmapResolution: 1,
-                    md5ext: `data:image/svg+xml;base64,${encoder
-                        .encode(goaicostume6)
-                        .toBase64()}`,
-                    dataFormat: "svg",
-                    rotationCenterX: 128,
-                    rotationCenterY: 145,
-                },
-                {
-                    assetId: "8313a2229d555bbdb8ce92dffed067ad",
-                    name: "goaicostume7",
-                    bitmapResolution: 1,
-                    md5ext: `data:image/svg+xml;base64,${encoder
-                        .encode(goaicostume7)
-                        .toBase64()}`,
-                    dataFormat: "svg",
-                    rotationCenterX: 128,
-                    rotationCenterY: 145,
-                },
-            ],
-            sounds: [
-                {
-                    assetId: "1727f65b5f22d151685b8e5917456a60",
-                    name: "Basketball Bounce",
-                    dataFormat: "wav",
-                    format: "adpcm",
-                    rate: 22050,
-                    sampleCount: 8129,
-                    md5ext: "1727f65b5f22d151685b8e5917456a60.wav",
-                },
-            ],
-            blocks: {},
-        });
-        spriteLibraryContent.sort((a, b) => {
-            return a.name.localeCompare(b.name);
-        });
+        const exists = spriteLibraryContent.some((p) => p.name === "GoAI");
+
+        if (!exists) {
+            spriteLibraryContent.push({
+                name: "GoAI",
+                tags: [
+                    "sports",
+                    "basketball",
+                    "people",
+                    "wheelchair",
+                    "handicap",
+                    "handicapable",
+                    "alex eben meyer",
+                ],
+                isStage: false,
+                variables: {},
+                costumes: [
+                    {
+                        assetId: "b7853f557e4426412e64bb3da6531a99",
+                        name: "goaicostume1",
+                        bitmapResolution: 1,
+                        md5ext: `data:image/svg+xml;base64,${encoder
+                            .encode(goaicostume1)
+                            .toBase64()}`,
+                        dataFormat: "svg",
+                        rotationCenterX: 128,
+                        rotationCenterY: 145,
+                    },
+                    {
+                        assetId: "e6ddc55a6ddd9cc9d84fe0b4c21e016f",
+                        name: "goaicostume2",
+                        bitmapResolution: 1,
+                        md5ext: `data:image/svg+xml;base64,${encoder
+                            .encode(goaicostume2)
+                            .toBase64()}`,
+                        dataFormat: "svg",
+                        rotationCenterX: 128,
+                        rotationCenterY: 145,
+                    },
+                    {
+                        assetId: "f60f99278455c843b7833fb7615428dd",
+                        name: "goaicostume3",
+                        bitmapResolution: 1,
+                        md5ext: `data:image/svg+xml;base64,${encoder
+                            .encode(goaicostume3)
+                            .toBase64()}`,
+                        dataFormat: "svg",
+                        rotationCenterX: 128,
+                        rotationCenterY: 145,
+                    },
+                    {
+                        assetId: "b2f75ac1cd84615efaea6a7d7a4ee205",
+                        name: "goaicostume4",
+                        bitmapResolution: 1,
+                        md5ext: `data:image/svg+xml;base64,${encoder
+                            .encode(goaicostume4)
+                            .toBase64()}`,
+                        dataFormat: "svg",
+                        rotationCenterX: 128,
+                        rotationCenterY: 145,
+                    },
+                    {
+                        assetId: "580fba92f23d5592200eb5a9079dc38f",
+                        name: "goaicostume5",
+                        bitmapResolution: 1,
+                        md5ext: `data:image/svg+xml;base64,${encoder
+                            .encode(goaicostume5)
+                            .toBase64()}`,
+                        dataFormat: "svg",
+                        rotationCenterX: 128,
+                        rotationCenterY: 145,
+                    },
+                    {
+                        assetId: "e51942bb4651e616549cfce1ad36ff83",
+                        name: "goaicostume6",
+                        bitmapResolution: 1,
+                        md5ext: `data:image/svg+xml;base64,${encoder
+                            .encode(goaicostume6)
+                            .toBase64()}`,
+                        dataFormat: "svg",
+                        rotationCenterX: 128,
+                        rotationCenterY: 145,
+                    },
+                    {
+                        assetId: "8313a2229d555bbdb8ce92dffed067ad",
+                        name: "goaicostume7",
+                        bitmapResolution: 1,
+                        md5ext: `data:image/svg+xml;base64,${encoder
+                            .encode(goaicostume7)
+                            .toBase64()}`,
+                        dataFormat: "svg",
+                        rotationCenterX: 128,
+                        rotationCenterY: 145,
+                    },
+                ],
+                sounds: [
+                    {
+                        assetId: "1727f65b5f22d151685b8e5917456a60",
+                        name: "Basketball Bounce",
+                        dataFormat: "wav",
+                        format: "adpcm",
+                        rate: 22050,
+                        sampleCount: 8129,
+                        md5ext: "1727f65b5f22d151685b8e5917456a60.wav",
+                    },
+                ],
+                blocks: {},
+            });
+            spriteLibraryContent.sort((a, b) => {
+                return a.name.localeCompare(b.name);
+            });
+        }
     }
     handleItemSelect(item) {
         // Randomize position of library sprite
