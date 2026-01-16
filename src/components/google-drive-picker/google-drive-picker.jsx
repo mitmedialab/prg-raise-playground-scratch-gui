@@ -72,6 +72,8 @@ class GoogleChooser extends React.Component {
             scope: this.props.scope,
             callback: callback,
         });
+
+        client.requestAccessToken();
     }
 
     onChoose() {
