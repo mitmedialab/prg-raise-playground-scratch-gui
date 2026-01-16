@@ -154,12 +154,6 @@ const MenuItemTooltip = ({ id, isRtl, children, className }) => (
     </ComingSoonTooltip>
 );
 
-// const DEVELOPER_KEY = "AIzaSyBIPXvNtIfNTLBzZ_BPxibw0HGM7skYors";
-// const DRIVE_SCOPE = "https://www.googleapis.com/auth/drive.file";
-// const APP_ID = "618909706959";
-// const CLIENT_ID =
-//     "618909706959-p7ppa1u2pmn2l1us5feunasure5eec36.apps.googleusercontent.com";
-
 const APP_ID = "906634949042"; // first part of client ID
 const CLIENT_ID =
     "906634949042-5jbc7q594e69spg2i0bkt9a14iojvtsp.apps.googleusercontent.com";
