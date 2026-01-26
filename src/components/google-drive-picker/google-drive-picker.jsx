@@ -103,7 +103,7 @@ class GoogleChooser extends React.Component {
             if (this.props.openPickerAfterAuth) {
                 this.createPicker(oauthToken);
             } else {
-                this.props.handleDriveSave();
+                this.handleDriveSave(oauthToken);
             }
         } else {
             this.doAuth((response) => {
@@ -111,8 +111,8 @@ class GoogleChooser extends React.Component {
                     if (this.props.openPickerAfterAuth) {
                         this.createPicker(response.access_token);
                     } else {
-                        this.props.onAuthenticate(response.access_token);
-                        this.props.handleDriveSave();
+                        //this.props.onAuthenticate(response.access_token);
+                        this.handleDriveSave(response.access_token);
                     }
                 } else {
                     this.props.onAuthFailed(response);
@@ -164,6 +164,33 @@ class GoogleChooser extends React.Component {
         }
 
         picker.build().setVisible(true);
+    }
+
+    handleDriveSave(oauthToken) {
+        // check if we have already created file
+        let fileName = prompt("Name your project", this.props.projectTitle);
+        if (fileName != null && fileName != "") {
+            window.gapi.client.drive.files
+                .create({
+                    name: fileName + ".sb3",
+                    mimeType: "application/x-zip",
+                })
+                .then((response) => {
+                    if (response.status == 200) {
+                        let fileId = response.result.id;
+                        const url =
+                            "https://www.googleapis.com/upload/drive/v3/files/" +
+                            fileId +
+                            "?uploadType=media;" +
+                            oauthToken;
+                        this.props.vm.uploadProjectToURL(url);
+
+                        // show alert that we are saving project
+                        window.alert("Project saved");
+                        this.props.onRequestCloseFile();
+                    }
+                });
+        }
     }
 
     render() {

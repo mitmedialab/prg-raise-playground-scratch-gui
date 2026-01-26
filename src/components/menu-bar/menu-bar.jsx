@@ -198,14 +198,17 @@ class MenuBar extends React.Component {
             "handleDriveAuthenticate",
             "handleDriveProjectSelect",
             "handleClickLoadProjectLink",
-            "handleClickDriveSave",
             "onApiLoad",
         ]);
         this.state = {
             authToken: "",
-            fileId: "",
         };
     }
+    DEVELOPER_KEY = "AIzaSyBIPXvNtIfNTLBzZ_BPxibw0HGM7skYors";
+    DRIVE_SCOPE = "https://www.googleapis.com/auth/drive.file";
+    APP_ID = "618909706959";
+    CLIENT_ID =
+        "618909706959-p7ppa1u2pmn2l1us5feunasure5eec36.apps.googleusercontent.com";
     componentDidMount() {
         document.addEventListener("keydown", this.handleKeyPress);
         if (this.isGoogleReady()) {
@@ -372,16 +375,7 @@ class MenuBar extends React.Component {
             }
         }
     }
-    doAuth(callback) {
-        window.gapi.auth.authorize(
-            {
-                client_id: CLIENT_ID,
-                scope: DRIVE_SCOPE,
-                immediate: false,
-            },
-            callback
-        );
-    }
+
     handleClickLoadProjectLink() {
         let templateLink =
             "https://www.dropbox.com/s/o8jegh940y7f7qc/SimpleProject.sb3";
@@ -409,56 +403,7 @@ class MenuBar extends React.Component {
         }
         this.props.onRequestCloseFile();
     }
-    handleClickDriveSave() {
-        // make sure user has logged into Google Drive
-        if (!this.state.authToken) {
-            this.doAuth((response) => {
-                if (response.access_token) {
-                    this.handleDriveAuthenticate(response.access_token);
-                    this.handleClickDriveSave();
-                }
-            });
-            this.props.onRequestCloseFile();
-            return;
-        }
-        // check if we have already created file
-        let fileId = this.state.fileId;
-        if (!fileId) {
-            if (this.isGoogleDriveReady()) {
-                let fileName = prompt(
-                    "Name your project",
-                    this.props.projectTitle
-                );
-                if (fileName != null && fileName != "") {
-                    window.gapi.client.drive.files
-                        .create({
-                            name: fileName + ".sb3",
-                            mimeType: "application/x-zip",
-                        })
-                        .then((response) => {
-                            if (response.status == 200) {
-                                this.setState({
-                                    fileId: response.result.id,
-                                });
-                                this.handleClickDriveSave();
-                            }
-                        });
-                }
-            }
-            this.props.onRequestCloseFile();
-            return;
-        }
-        const url =
-            "https://www.googleapis.com/upload/drive/v3/files/" +
-            fileId +
-            "?uploadType=media;" +
-            this.state.authToken;
-        this.props.vm.uploadProjectToURL(url);
 
-        // show alert that we are saving project
-        window.alert("Project saved");
-        this.props.onRequestCloseFile();
-    }
     handleDriveAuthenticate(token) {
         this.setState({
             authToken: token,
@@ -474,7 +419,6 @@ class MenuBar extends React.Component {
         return matches[1].substring(0, 100); // truncate project title to max 100 chars
     }
     handleDriveProjectSelect(data) {
-        console.log(data);
         if (data.docs) {
             const fileId = data.docs[0].id;
             const url =
@@ -512,13 +456,6 @@ class MenuBar extends React.Component {
     }
     isGoogleReady() {
         return !!window.gapi;
-    }
-
-    isGoogleAuthReady() {
-        return !!window.gapi.auth;
-    }
-    isGoogleDriveReady() {
-        return !!window.gapi.client.drive;
     }
 
     onApiLoad() {
@@ -620,7 +557,6 @@ class MenuBar extends React.Component {
             developerKey: DEVELOPER_KEY,
             scope: DRIVE_SCOPE,
             onAuthenticate: this.handleDriveAuthenticate,
-            handleDriveSave: this.handleClickDriveSave,
             onChange: this.handleDriveProjectSelect,
             onAuthFailed: (data) => console.log("on auth failed:", data),
             multiselect: false,
@@ -628,6 +564,9 @@ class MenuBar extends React.Component {
             authImmediate: false,
             viewID: "DOCS",
             query: ".sb3",
+            vm: this.props.vm,
+            onRequestCloseFile: this.props.onRequestCloseFile,
+            projectTitle: this.props.projectTitle,
         };
 
         // Show the About button only if we have a handler for it (like in the desktop app)
@@ -766,28 +705,30 @@ class MenuBar extends React.Component {
                                         </SB3Downloader>
                                     </MenuSection>
                                     <MenuSection>
-                                        <GoogleChooser
-                                            {...driveChooserProps}
-                                            openPickerAfterAuth={false}
+                                        <MenuItem
+                                        // onClick={this.handleClickDriveSave}
                                         >
-                                            <MenuItem>
+                                            <GoogleChooser
+                                                {...driveChooserProps}
+                                            >
                                                 <FormattedMessage
-                                                    id="gui.menuBar.saveToDrive"
                                                     defaultMessage="Save project to Google Drive"
+                                                    description="Menu bar item for saving a project to Google Drive" // eslint-disable-line max-len
+                                                    id="gui.menuBar.saveToDrive"
                                                 />
-                                            </MenuItem>
-                                        </GoogleChooser>
-                                        <GoogleChooser
-                                            {...driveChooserProps}
-                                            openPickerAfterAuth
-                                        >
-                                            <MenuItem classname="google">
+                                            </GoogleChooser>
+                                        </MenuItem>
+                                        <MenuItem classname="google">
+                                            <GoogleChooser
+                                                {...driveChooserProps}
+                                                openPickerAfterAuth
+                                            >
                                                 <FormattedMessage
                                                     id="gui.menuBar.loadFromDrive"
                                                     defaultMessage="Load project from Google Drive"
                                                 />
-                                            </MenuItem>
-                                        </GoogleChooser>
+                                            </GoogleChooser>
+                                        </MenuItem>
                                     </MenuSection>
                                 </MenuBarMenu>
                             </div>
