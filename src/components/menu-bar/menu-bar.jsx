@@ -231,12 +231,12 @@ class MenuBar extends React.Component {
         // Note that if user is logged in and editing someone else's project,
         // they'll lose their work.
         const readyToReplaceProject = this.props.confirmReadyToReplaceProject(
-            this.props.intl.formatMessage(sharedMessages.replaceProjectWarning)
+            this.props.intl.formatMessage(sharedMessages.replaceProjectWarning),
         );
         this.props.onRequestCloseFile();
         if (readyToReplaceProject) {
             this.props.onClickNew(
-                this.props.canSave && this.props.canCreateNew
+                this.props.canSave && this.props.canCreateNew,
             );
 
             this.setState({
@@ -332,7 +332,7 @@ class MenuBar extends React.Component {
                 const metadata = collectMetadata(
                     this.props.vm,
                     this.props.projectTitle,
-                    this.props.locale
+                    this.props.locale,
                 );
                 this.props.onProjectTelemetryEvent("projectDidSave", metadata);
             }
@@ -381,20 +381,20 @@ class MenuBar extends React.Component {
             "https://www.dropbox.com/s/o8jegh940y7f7qc/SimpleProject.sb3";
         let url = window.prompt(
             "Enter project url (e.g. from Dropbox or Github)",
-            templateLink
+            templateLink,
         );
         if (url != null && url != "") {
             const readyToReplaceProject =
                 this.props.confirmReadyToReplaceProject(
                     this.props.intl.formatMessage(
-                        sharedMessages.replaceProjectWarning
-                    )
+                        sharedMessages.replaceProjectWarning,
+                    ),
                 );
             if (readyToReplaceProject) {
                 this.props.vm.downloadProjectFromURLDirect(url);
 
                 this.props.onReceivedProjectTitle(
-                    this.getProjectTitleFromFilename(url)
+                    this.getProjectTitleFromFilename(url),
                 );
                 this.setState({
                     fileId: null,
@@ -430,14 +430,14 @@ class MenuBar extends React.Component {
             const readyToReplaceProject =
                 this.props.confirmReadyToReplaceProject(
                     this.props.intl.formatMessage(
-                        sharedMessages.replaceProjectWarning
-                    )
+                        sharedMessages.replaceProjectWarning,
+                    ),
                 );
             if (readyToReplaceProject) {
                 this.props.vm.downloadProjectFromURLDirect(url);
 
                 this.props.onReceivedProjectTitle(
-                    this.getProjectTitleFromFilename(data.docs[0].name)
+                    this.getProjectTitleFromFilename(data.docs[0].name),
                 );
 
                 // if project does not have a parentId, it's a shared project and you cannot save
@@ -496,7 +496,7 @@ class MenuBar extends React.Component {
                             key={itemProps.title}
                             isRtl={this.props.isRtl}
                             onClick={this.wrapAboutMenuCallback(
-                                itemProps.onClick
+                                itemProps.onClick,
                             )}
                         >
                             {itemProps.title}
@@ -610,7 +610,7 @@ class MenuBar extends React.Component {
                                     {
                                         [styles.active]:
                                             this.props.fileMenuOpen,
-                                    }
+                                    },
                                 )}
                                 onMouseUp={this.props.onClickFile}
                             >
@@ -681,18 +681,18 @@ class MenuBar extends React.Component {
                                             }
                                         >
                                             {this.props.intl.formatMessage(
-                                                sharedMessages.loadFromComputerTitle
+                                                sharedMessages.loadFromComputerTitle,
                                             )}
                                         </MenuItem>
                                         <SB3Downloader>
                                             {(
                                                 className,
-                                                downloadProjectCallback
+                                                downloadProjectCallback,
                                             ) => (
                                                 <MenuItem
                                                     className={className}
                                                     onClick={this.getSaveToComputerHandler(
-                                                        downloadProjectCallback
+                                                        downloadProjectCallback,
                                                     )}
                                                 >
                                                     <FormattedMessage
@@ -705,6 +705,17 @@ class MenuBar extends React.Component {
                                         </SB3Downloader>
                                     </MenuSection>
                                     <MenuSection>
+                                        <MenuItem classname="google">
+                                            <GoogleChooser
+                                                {...driveChooserProps}
+                                                openPickerAfterAuth
+                                            >
+                                                <FormattedMessage
+                                                    id="gui.menuBar.loadFromDrive"
+                                                    defaultMessage="Load project from Google Drive"
+                                                />
+                                            </GoogleChooser>
+                                        </MenuItem>
                                         <MenuItem
                                         // onClick={this.handleClickDriveSave}
                                         >
@@ -718,17 +729,6 @@ class MenuBar extends React.Component {
                                                 />
                                             </GoogleChooser>
                                         </MenuItem>
-                                        <MenuItem classname="google">
-                                            <GoogleChooser
-                                                {...driveChooserProps}
-                                                openPickerAfterAuth
-                                            >
-                                                <FormattedMessage
-                                                    id="gui.menuBar.loadFromDrive"
-                                                    defaultMessage="Load project from Google Drive"
-                                                />
-                                            </GoogleChooser>
-                                        </MenuItem>
                                     </MenuSection>
                                 </MenuBarMenu>
                             </div>
@@ -739,7 +739,7 @@ class MenuBar extends React.Component {
                                 styles.hoverable,
                                 {
                                     [styles.active]: this.props.editMenuOpen,
-                                }
+                                },
                             )}
                             onMouseUp={this.props.onClickEdit}
                         >
@@ -761,18 +761,18 @@ class MenuBar extends React.Component {
                                 <DeletionRestorer>
                                     {(
                                         handleRestore,
-                                        { restorable, deletedItem }
+                                        { restorable, deletedItem },
                                     ) => (
                                         <MenuItem
                                             className={classNames({
                                                 [styles.disabled]: !restorable,
                                             })}
                                             onClick={this.handleRestoreOption(
-                                                handleRestore
+                                                handleRestore,
                                             )}
                                         >
                                             {this.restoreOptionMessage(
-                                                deletedItem
+                                                deletedItem,
                                             )}
                                         </MenuItem>
                                     )}
@@ -808,7 +808,7 @@ class MenuBar extends React.Component {
                                     {
                                         [styles.active]:
                                             this.props.modeMenuOpen,
-                                    }
+                                    },
                                 )}
                                 onMouseUp={this.props.onClickMode}
                             >
@@ -872,13 +872,13 @@ class MenuBar extends React.Component {
                         <div
                             className={classNames(
                                 styles.menuBarItem,
-                                styles.growable
+                                styles.growable,
                             )}
                         >
                             <MenuBarItemTooltip enable id="title-field">
                                 <ProjectTitleInput
                                     className={classNames(
-                                        styles.titleFieldGrowable
+                                        styles.titleFieldGrowable,
                                     )}
                                 />
                             </MenuBarItemTooltip>
@@ -907,7 +907,7 @@ class MenuBar extends React.Component {
                                             /* eslint-disable react/jsx-no-bind */
                                             onClick={() => {
                                                 this.handleClickShare(
-                                                    waitForUpdate
+                                                    waitForUpdate,
                                                 );
                                             }}
                                             /* eslint-enable react/jsx-no-bind */
@@ -927,7 +927,7 @@ class MenuBar extends React.Component {
                     <div
                         className={classNames(
                             styles.menuBarItem,
-                            styles.communityButtonWrapper
+                            styles.communityButtonWrapper,
                         )}
                     >
                         {this.props.enableCommunity ? (
@@ -942,7 +942,7 @@ class MenuBar extends React.Component {
                                             /* eslint-disable react/jsx-no-bind */
                                             onClick={() => {
                                                 this.handleClickSeeCommunity(
-                                                    waitForUpdate
+                                                    waitForUpdate,
                                                 );
                                             }}
                                             /* eslint-enable react/jsx-no-bind */
@@ -964,11 +964,11 @@ class MenuBar extends React.Component {
                     <div className={styles.fileGroup}>
                         <div
                             aria-label={this.props.intl.formatMessage(
-                                ariaMessages.tutorials
+                                ariaMessages.tutorials,
                             )}
                             className={classNames(
                                 styles.menuBarItem,
-                                styles.hoverable
+                                styles.hoverable,
                             )}
                             onClick={this.props.onOpenTipLibrary}
                         >
@@ -995,7 +995,7 @@ class MenuBar extends React.Component {
                                         className={classNames(
                                             styles.menuBarItem,
                                             styles.hoverable,
-                                            styles.mystuffButton
+                                            styles.mystuffButton,
                                         )}
                                     >
                                         <img
@@ -1011,12 +1011,12 @@ class MenuBar extends React.Component {
                                         {
                                             [styles.active]:
                                                 this.props.accountMenuOpen,
-                                        }
+                                        },
                                     )}
                                     isOpen={this.props.accountMenuOpen}
                                     isRtl={this.props.isRtl}
                                     menuBarMenuClassName={classNames(
-                                        styles.menuBarMenu
+                                        styles.menuBarMenu,
                                     )}
                                     onClick={this.props.onClickAccount}
                                     onClose={this.props.onRequestCloseAccount}
@@ -1030,7 +1030,7 @@ class MenuBar extends React.Component {
                                 <div
                                     className={classNames(
                                         styles.menuBarItem,
-                                        styles.hoverable
+                                        styles.hoverable,
                                     )}
                                     key="join"
                                     onMouseUp={this.props.onOpenRegistration}
@@ -1044,7 +1044,7 @@ class MenuBar extends React.Component {
                                 <div
                                     className={classNames(
                                         styles.menuBarItem,
-                                        styles.hoverable
+                                        styles.hoverable,
                                     )}
                                     key="login"
                                     onMouseUp={this.props.onClickLogin}
@@ -1056,7 +1056,7 @@ class MenuBar extends React.Component {
                                     />
                                     <LoginDropdown
                                         className={classNames(
-                                            styles.menuBarMenu
+                                            styles.menuBarMenu,
                                         )}
                                         isOpen={this.props.loginMenuOpen}
                                         isRtl={this.props.isRtl}
@@ -1076,7 +1076,7 @@ class MenuBar extends React.Component {
                                             className={classNames(
                                                 styles.menuBarItem,
                                                 styles.hoverable,
-                                                styles.mystuffButton
+                                                styles.mystuffButton,
                                             )}
                                         >
                                             <img
@@ -1095,7 +1095,7 @@ class MenuBar extends React.Component {
                                             className={classNames(
                                                 styles.menuBarItem,
                                                 styles.hoverable,
-                                                styles.accountNavMenu
+                                                styles.accountNavMenu,
                                             )}
                                         >
                                             <img
@@ -1169,7 +1169,7 @@ MenuBar.propTypes = {
             PropTypes.shape({
                 title: PropTypes.string, // text for the menu item
                 onClick: PropTypes.func, // call this callback when the menu item is clicked
-            })
+            }),
         ),
     ]),
     onClickAccount: PropTypes.func,
@@ -1280,5 +1280,5 @@ const mapDispatchToProps = (dispatch) => ({
 export default compose(
     injectIntl,
     MenuBarHOC,
-    connect(mapStateToProps, mapDispatchToProps)
+    connect(mapStateToProps, mapDispatchToProps),
 )(MenuBar);
