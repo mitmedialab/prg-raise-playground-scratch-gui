@@ -91,51 +91,6 @@ const projectData = translateFunction => {
                         rotationCenterX: 128,
                         rotationCenterY: 145
                     },
-                    {
-                        assetId: 'f60f99278455c843b7833fb7615428dd',
-                        name: translator(messages.costume, {index: 3}),
-                        bitmapResolution: 1,
-                        md5ext: 'f60f99278455c843b7833fb7615428dd.svg',
-                        dataFormat: 'svg',
-                        rotationCenterX: 128,
-                        rotationCenterY: 145
-                    },
-                    {
-                        assetId: 'b2f75ac1cd84615efaea6a7d7a4ee205',
-                        name: translator(messages.costume, {index: 4}),
-                        bitmapResolution: 1,
-                        md5ext: 'b2f75ac1cd84615efaea6a7d7a4ee205.svg',
-                        dataFormat: 'svg',
-                        rotationCenterX: 128,
-                        rotationCenterY: 145
-                    },
-                    {
-                        assetId: '580fba92f23d5592200eb5a9079dc38f',
-                        name: translator(messages.costume, {index: 5}),
-                        bitmapResolution: 1,
-                        md5ext: '580fba92f23d5592200eb5a9079dc38f.svg',
-                        dataFormat: 'svg',
-                        rotationCenterX: 128,
-                        rotationCenterY: 145
-                    },
-                    {
-                        assetId: 'e51942bb4651e616549cfce1ad36ff83',
-                        name: translator(messages.costume, {index: 6}),
-                        bitmapResolution: 1,
-                        md5ext: 'e51942bb4651e616549cfce1ad36ff83.svg',
-                        dataFormat: 'svg',
-                        rotationCenterX: 128,
-                        rotationCenterY: 145
-                    },
-                    {
-                        assetId: '8313a2229d555bbdb8ce92dffed067ad',
-                        name: translator(messages.costume, {index: 7}),
-                        bitmapResolution: 1,
-                        md5ext: '8313a2229d555bbdb8ce92dffed067ad.svg',
-                        dataFormat: 'svg',
-                        rotationCenterX: 128,
-                        rotationCenterY: 145
-                    }
                 ],
                 sounds: [
                     {

@@ -3,13 +3,7 @@ import PropTypes from "prop-types";
 import React from "react";
 import { injectIntl, intlShape, defineMessages } from "react-intl";
 import VM from "scratch-vm";
-import goaicostume1 from "!!raw-loader!../lib/default-project/goai-neutral1.svg";
-import goaicostume2 from "!!raw-loader!../lib/default-project/goai-neutral2.svg";
-import goaicostume3 from "!!raw-loader!../lib/default-project/goai-joyful.svg";
-import goaicostume4 from "!!raw-loader!../lib/default-project/goai-concerned1.svg";
-import goaicostume5 from "!!raw-loader!../lib/default-project/goai-concerned2.svg";
-import goaicostume6 from "!!raw-loader!../lib/default-project/goai-sad1.svg";
-import goaicostume7 from "!!raw-loader!../lib/default-project/goai-sad2.svg";
+import doodlebotcostume1 from "!!raw-loader!../lib/default-project/doodlebotcostume1.svg";
 
 import spriteLibraryContent from "../lib/libraries/sprites.json";
 import randomizeSpritePosition from "../lib/randomize-sprite-position";
@@ -41,10 +35,10 @@ class SpriteLibrary extends React.PureComponent {
 
         console.log(
             "COSTUME 1",
-            `data:image/svg;base64,${encoder.encode(goaicostume1).toBase64()}`
+            `data:image/svg;base64,${encoder.encode(doodlebotcostume1).toBase64()}`
         );
         spriteLibraryContent.push({
-            name: "GoAI",
+            name: "Doodlebot",
             tags: [
                 "sports",
                 "basketball",
@@ -59,75 +53,9 @@ class SpriteLibrary extends React.PureComponent {
             costumes: [
                 {
                     assetId: "b7853f557e4426412e64bb3da6531a99",
-                    name: "goaicostume1",
+                    name: "doodlebotcostume1",
                     bitmapResolution: 1,
                     md5ext: `b7853f557e4426412e64bb3da6531a99.svg`,
-                    dataFormat: "svg",
-                    rotationCenterX: 128,
-                    rotationCenterY: 145,
-                },
-                {
-                    assetId: "e6ddc55a6ddd9cc9d84fe0b4c21e016f",
-                    name: "goaicostume2",
-                    bitmapResolution: 1,
-                    md5ext: `data:image/svg+xml;base64,${encoder
-                        .encode(goaicostume2)
-                        .toBase64()}`,
-                    dataFormat: "svg",
-                    rotationCenterX: 128,
-                    rotationCenterY: 145,
-                },
-                {
-                    assetId: "f60f99278455c843b7833fb7615428dd",
-                    name: "goaicostume3",
-                    bitmapResolution: 1,
-                    md5ext: `data:image/svg+xml;base64,${encoder
-                        .encode(goaicostume3)
-                        .toBase64()}`,
-                    dataFormat: "svg",
-                    rotationCenterX: 128,
-                    rotationCenterY: 145,
-                },
-                {
-                    assetId: "b2f75ac1cd84615efaea6a7d7a4ee205",
-                    name: "goaicostume4",
-                    bitmapResolution: 1,
-                    md5ext: `data:image/svg+xml;base64,${encoder
-                        .encode(goaicostume4)
-                        .toBase64()}`,
-                    dataFormat: "svg",
-                    rotationCenterX: 128,
-                    rotationCenterY: 145,
-                },
-                {
-                    assetId: "580fba92f23d5592200eb5a9079dc38f",
-                    name: "goaicostume5",
-                    bitmapResolution: 1,
-                    md5ext: `data:image/svg+xml;base64,${encoder
-                        .encode(goaicostume5)
-                        .toBase64()}`,
-                    dataFormat: "svg",
-                    rotationCenterX: 128,
-                    rotationCenterY: 145,
-                },
-                {
-                    assetId: "e51942bb4651e616549cfce1ad36ff83",
-                    name: "goaicostume6",
-                    bitmapResolution: 1,
-                    md5ext: `data:image/svg+xml;base64,${encoder
-                        .encode(goaicostume6)
-                        .toBase64()}`,
-                    dataFormat: "svg",
-                    rotationCenterX: 128,
-                    rotationCenterY: 145,
-                },
-                {
-                    assetId: "8313a2229d555bbdb8ce92dffed067ad",
-                    name: "goaicostume7",
-                    bitmapResolution: 1,
-                    md5ext: `data:image/svg;base64,${encoder
-                        .encode(goaicostume7)
-                        .toBase64()}`,
                     dataFormat: "svg",
                     rotationCenterX: 128,
                     rotationCenterY: 145,
