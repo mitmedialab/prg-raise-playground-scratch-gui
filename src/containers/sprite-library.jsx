@@ -36,13 +36,8 @@ class SpriteLibrary extends React.PureComponent {
         spriteLibraryContent.push({
             name: "Doodlebot",
             tags: [
-                "sports",
-                "basketball",
-                "people",
-                "wheelchair",
-                "handicap",
-                "handicapable",
-                "alex eben meyer",
+                "robot",
+                "creativity"
             ],
             isStage: false,
             variables: {},
@@ -62,7 +57,7 @@ class SpriteLibrary extends React.PureComponent {
             sounds: [
                 {
                     assetId: "1727f65b5f22d151685b8e5917456a60",
-                    name: "Basketball Bounce",
+                    name: "Robot Sound",
                     dataFormat: "wav",
                     format: "adpcm",
                     rate: 22050,
