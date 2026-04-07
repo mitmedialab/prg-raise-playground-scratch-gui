@@ -7,6 +7,7 @@ import motorWav from '!!arraybuffer-loader!./tinybit_motor.wav';
 import backdrop from '!!raw-loader!./cd21514d0531fdffb22204e0ec5ed84a.svg';
 import costume1 from '!!raw-loader!./tinybit_top.svg';
 import costume2 from '!!raw-loader!./tinybit_heart.svg';
+import doodlebotcostume1 from '!!raw-loader!./doodlebotcostume1.svg';
 /* eslint-enable import/no-unresolved */
 
 const defaultProject = translator => {
@@ -50,13 +51,7 @@ const defaultProject = translator => {
         id: 'b7853f557e4426412e64bb3da6531a99',
         assetType: 'ImageVector',
         dataFormat: 'SVG',
-        data: encoder.encode(costume1)
-    },
-    {
-        id: 'e6ddc55a6ddd9cc9d84fe0b4c21e016f',
-        assetType: 'ImageVector',
-        dataFormat: 'SVG',
-        data: encoder.encode(costume2)
+        data: encoder.encode(doodlebotcostume1)
     }
     ];
 };
