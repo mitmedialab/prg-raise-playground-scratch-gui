@@ -122,7 +122,6 @@ class LibraryItem extends React.PureComponent {
             ? `https://cdn.assets.scratch.mit.edu/internalapi/asset/${iconMd5}/get/`
             : this.props.iconRawURL;
 
-        console.log("URL", iconURL);
         return (
             <LibraryItemComponent
                 bluetoothRequired={this.props.bluetoothRequired}
