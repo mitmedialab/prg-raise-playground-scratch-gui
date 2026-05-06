@@ -166,31 +166,128 @@ class GoogleChooser extends React.Component {
         picker.build().setVisible(true);
     }
 
-    handleDriveSave(oauthToken) {
-        // check if we have already created file
-        let fileName = prompt("Name your project", this.props.projectTitle);
-        if (fileName != null && fileName != "") {
-            window.gapi.client.drive.files
-                .create({
-                    name: fileName + ".sb3",
-                    mimeType: "application/x-zip",
-                })
-                .then((response) => {
-                    if (response.status == 200) {
-                        let fileId = response.result.id;
-                        const url =
-                            "https://www.googleapis.com/upload/drive/v3/files/" +
-                            fileId +
-                            "?uploadType=media;" +
-                            oauthToken;
-                        this.props.vm.uploadProjectToURL(url);
+    showSaveDialog(defaultName = "") {
+    return new Promise((resolve) => {
+        const overlay = document.createElement("div");
 
-                        // show alert that we are saving project
-                        window.alert("Project saved");
-                        this.props.onRequestCloseFile();
-                    }
-                });
+        overlay.innerHTML = `
+            <div style="
+                position: fixed;
+                inset: 0;
+                background: rgba(0,0,0,0.4);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                z-index: 9999;
+            ">
+                <div style="
+                    background: white;
+                    padding: 20px;
+                    border-radius: 8px;
+                    width: 300px;
+                    font-family: sans-serif;
+                ">
+                    <h3>Save Project</h3>
+
+                    <input
+                        id="save-name"
+                        type="text"
+                        value="${defaultName}"
+                        style="
+                            width: 100%;
+                            margin-bottom: 12px;
+                            padding: 6px;
+                        "
+                    />
+
+                    <label style="display:flex; gap:8px; margin-bottom:16px;">
+                        <input id="overwrite-check" type="checkbox" />
+                        Overwrite existing file
+                    </label>
+
+                    <div style="display:flex; justify-content:flex-end; gap:8px;">
+                        <button id="cancel-btn">Cancel</button>
+                        <button id="save-btn">Save</button>
+                    </div>
+                </div>
+            </div>
+        `;
+
+        document.body.appendChild(overlay);
+
+        overlay.querySelector("#cancel-btn").onclick = () => {
+            overlay.remove();
+            resolve(null);
+        };
+
+        overlay.querySelector("#save-btn").onclick = () => {
+            const fileName =
+                overlay.querySelector("#save-name").value;
+
+            const overwrite =
+                overlay.querySelector("#overwrite-check").checked;
+
+            overlay.remove();
+
+            resolve({
+                fileName,
+                overwrite
+            });
+        };
+    });
+}
+
+    async handleDriveSave(oauthToken) {
+        // const fileName = prompt("Name your project", this.props.projectTitle);
+        const result = await showSaveDialog(this.props.projectTitle);
+
+        if (!result) return;
+
+        const { fileName, overwrite } = result;
+
+        if (!fileName) return;
+
+        const fullName = fileName + ".sb3";
+
+        // Search for existing file
+        const searchResponse = await window.gapi.client.drive.files.list({
+            q: `name='${fullName}' and trashed=false`,
+            fields: "files(id, name)"
+        });
+
+        const existingFile = searchResponse.result.files?.[0];
+
+        let fileId;
+
+        if (existingFile) {
+            // Overwrite existing file
+            if (!overwrite) {
+                alert("File already exists");
+                return;
+            }
+
+            fileId = existingFile.id;
+        } else {
+            // Create new file
+            const createResponse = await window.gapi.client.drive.files.create({
+                resource: {
+                    name: fullName,
+                    mimeType: "application/x-zip"
+                },
+                fields: "id"
+            });
+
+            fileId = createResponse.result.id;
         }
+
+        // Upload/overwrite content
+        const url =
+            `https://www.googleapis.com/upload/drive/v3/files/${fileId}?uploadType=media`;
+
+        this.props.vm.uploadProjectToURL(url, oauthToken);
+
+        window.alert("Project saved");
+        this.props.onRequestCloseFile();
     }
 
     render() {
