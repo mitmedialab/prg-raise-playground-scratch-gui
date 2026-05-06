@@ -239,7 +239,7 @@ class GoogleChooser extends React.Component {
 
     async handleDriveSave(oauthToken) {
         // const fileName = prompt("Name your project", this.props.projectTitle);
-        const result = await showSaveDialog(this.props.projectTitle);
+        const result = await this.showSaveDialog(this.props.projectTitle);
 
         if (!result) return;
 
