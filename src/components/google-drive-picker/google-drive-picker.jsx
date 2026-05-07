@@ -282,9 +282,9 @@ class GoogleChooser extends React.Component {
 
         // Upload/overwrite content
         const url =
-            `https://www.googleapis.com/upload/drive/v3/files/${fileId}?uploadType=media`;
+            `https://www.googleapis.com/upload/drive/v3/files/${fileId}?uploadType=media;${oauthToken}`;
 
-        this.props.vm.uploadProjectToURL(url, oauthToken);
+        this.props.vm.uploadProjectToURL(url);
 
         window.alert("Project saved");
         this.props.onRequestCloseFile();
