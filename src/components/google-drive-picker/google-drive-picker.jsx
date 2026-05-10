@@ -166,85 +166,9 @@ class GoogleChooser extends React.Component {
         picker.build().setVisible(true);
     }
 
-    showSaveDialog(defaultName = "") {
-    return new Promise((resolve) => {
-        const overlay = document.createElement("div");
-
-        overlay.innerHTML = `
-            <div style="
-                position: fixed;
-                inset: 0;
-                background: rgba(0,0,0,0.4);
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                z-index: 9999;
-            ">
-                <div style="
-                    background: white;
-                    padding: 20px;
-                    border-radius: 8px;
-                    width: 300px;
-                    font-family: sans-serif;
-                ">
-                    <h3>Save Project</h3>
-
-                    <input
-                        id="save-name"
-                        type="text"
-                        value="${defaultName}"
-                        style="
-                            width: 100%;
-                            margin-bottom: 12px;
-                            padding: 6px;
-                        "
-                    />
-
-                    <label style="display:flex; gap:8px; margin-bottom:16px;">
-                        <input id="overwrite-check" type="checkbox" />
-                        Overwrite existing file
-                    </label>
-
-                    <div style="display:flex; justify-content:flex-end; gap:8px;">
-                        <button id="cancel-btn">Cancel</button>
-                        <button id="save-btn">Save</button>
-                    </div>
-                </div>
-            </div>
-        `;
-
-        document.body.appendChild(overlay);
-
-        overlay.querySelector("#cancel-btn").onclick = () => {
-            overlay.remove();
-            resolve(null);
-        };
-
-        overlay.querySelector("#save-btn").onclick = () => {
-            const fileName =
-                overlay.querySelector("#save-name").value;
-
-            const overwrite =
-                overlay.querySelector("#overwrite-check").checked;
-
-            overlay.remove();
-
-            resolve({
-                fileName,
-                overwrite
-            });
-        };
-    });
-}
-
     async handleDriveSave(oauthToken) {
-        // const fileName = prompt("Name your project", this.props.projectTitle);
-        const result = await this.showSaveDialog(this.props.projectTitle);
-
-        if (!result) return;
-
-        const { fileName, overwrite } = result;
-
+        const fileName = prompt("Name your project", this.props.projectTitle);
+        
         if (!fileName) return;
 
         const fullName = fileName + ".sb3";
@@ -260,6 +184,9 @@ class GoogleChooser extends React.Component {
         let fileId;
 
         if (existingFile) {
+            const overwrite = confirm(
+                `"${fullName}" already exists.\n\nOverwrite it?`
+            );
             // Overwrite existing file
             if (!overwrite) {
                 alert("File already exists");
