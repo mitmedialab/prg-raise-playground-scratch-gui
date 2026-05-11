@@ -186,7 +186,7 @@ class GoogleChooser extends React.Component {
 
         if (existingFile) {
             const overwrite = confirm(
-                `"${fullName}" already exists.\n\nOverwrite it?`
+                `"File already exists -- overwrite it?`
             );
             // Overwrite existing file
             if (overwrite) {
