@@ -182,18 +182,25 @@ class GoogleChooser extends React.Component {
         const existingFile = searchResponse.result.files?.[0];
 
         let fileId;
+        
 
         if (existingFile) {
             const overwrite = confirm(
                 `"${fullName}" already exists.\n\nOverwrite it?`
             );
             // Overwrite existing file
-            if (!overwrite) {
-                alert("File already exists");
-                return;
+            if (overwrite) {
+                fileId = existingFile.id;
+            } else {
+                const createResponse = await window.gapi.client.drive.files.create({
+                    resource: {
+                        name: fullName,
+                        mimeType: "application/x-zip"
+                    },
+                    fields: "id"
+                });
+                fileId = createResponse.result.id;
             }
-
-            fileId = existingFile.id;
         } else {
             // Create new file
             const createResponse = await window.gapi.client.drive.files.create({
@@ -203,7 +210,6 @@ class GoogleChooser extends React.Component {
                 },
                 fields: "id"
             });
-
             fileId = createResponse.result.id;
         }
 
