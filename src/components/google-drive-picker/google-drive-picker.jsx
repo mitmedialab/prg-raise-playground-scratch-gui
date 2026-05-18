@@ -167,7 +167,7 @@ class GoogleChooser extends React.Component {
     }
 
     async handleDriveSave(oauthToken) {
-        const fileName = prompt("Name your project", this.props.projectTitle);
+        const fileName = prompt("Name your project -- if a file with this name already exists, you'll be prompted to confirm before overwriting.", this.props.projectTitle);
         
         if (!fileName) return;
 
