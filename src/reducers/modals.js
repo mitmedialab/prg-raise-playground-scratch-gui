@@ -15,6 +15,7 @@ const MODAL_TIPS_LIBRARY = 'tipsLibrary';
 const MODAL_TEXT_MODEL = 'textModelModal';
 const MODAL_CLASSIFIER_MODEL = 'classifierModelModal';
 const MODAL_PROGRAMMATIC = 'programmaticModal';
+const MODAL_FEEDBACK = 'feedbackModal';
 
 const initialState = {
     [MODAL_BACKDROP_LIBRARY]: false,
@@ -29,7 +30,8 @@ const initialState = {
     [MODAL_TIPS_LIBRARY]: false,
     [MODAL_TEXT_MODEL]: false,
     [MODAL_CLASSIFIER_MODEL]: false,
-    [MODAL_PROGRAMMATIC]: undefined
+    [MODAL_PROGRAMMATIC]: undefined,
+    [MODAL_FEEDBACK]: false
 };
 
 const reducer = function (state, action) {
@@ -146,6 +148,12 @@ const closeClassifierModelModal = function () {
 const closeProgrammaticModal = function () {
     return closeModal(MODAL_PROGRAMMATIC);
 }
+const openFeedbackModal = function () {
+    return openModal(MODAL_FEEDBACK);
+};
+const closeFeedbackModal = function () {
+    return closeModal(MODAL_FEEDBACK);
+};
 export {
     reducer as default,
     initialState as modalsInitialState,
@@ -174,5 +182,7 @@ export {
     closeConnectionModal,
     closeTextModelModal,
     closeClassifierModelModal,
-    closeProgrammaticModal
+    closeProgrammaticModal,
+    openFeedbackModal,
+    closeFeedbackModal
 };

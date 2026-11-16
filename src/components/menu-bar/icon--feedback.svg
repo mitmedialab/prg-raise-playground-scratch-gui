@@ -1,0 +1,7 @@
+<svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+    <title>Feedback</title>
+    <path d="M4 3h12a2 2 0 0 1 2 2v7.5a2 2 0 0 1-2 2H9.2l-3.6 2.9c-.5.4-1.1 0-1.1-.5v-2.4H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z" fill="#FFF"/>
+    <circle cx="6.5" cy="8.75" r="1.1" fill="#4C97FF"/>
+    <circle cx="10" cy="8.75" r="1.1" fill="#4C97FF"/>
+    <circle cx="13.5" cy="8.75" r="1.1" fill="#4C97FF"/>
+</svg>

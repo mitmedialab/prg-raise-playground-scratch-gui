@@ -30,6 +30,7 @@ import Alerts from '../../containers/alerts.jsx';
 import DragLayer from '../../containers/drag-layer.jsx';
 import ConnectionModal from '../../containers/connection-modal.jsx';
 import TelemetryModal from '../telemetry-modal/telemetry-modal.jsx';
+import FeedbackModal from '../feedback-modal/feedback-modal.jsx';
 
 import layout, {STAGE_SIZE_MODES} from '../../lib/layout-constants';
 import {resolveStageSize} from '../../lib/screen-utils';
@@ -84,6 +85,7 @@ const GUIComponent = props => {
         costumeLibraryVisible,
         costumesTabVisible,
         enableCommunity,
+        feedbackModalVisible,
         intl,
         isCreating,
         isFullScreen,
@@ -191,6 +193,9 @@ const GUIComponent = props => {
                 )}
                 {tipsLibraryVisible ? (
                     <TipsLibrary />
+                ) : null}
+                {feedbackModalVisible ? (
+                    <FeedbackModal />
                 ) : null}
                 {programmaticModalDetails ? (
                     <ProgrammaticModal vm={vm} {...programmaticModalDetails} />
@@ -443,6 +448,7 @@ GUIComponent.propTypes = {
     telemetryModalVisible: PropTypes.bool,
     theme: PropTypes.string,
     tipsLibraryVisible: PropTypes.bool,
+    feedbackModalVisible: PropTypes.bool,
     textModelModalVisible: PropTypes.bool,
     programmaticModalVisible: PropTypes.bool,
     classifierModelModalVisible: PropTypes.bool,

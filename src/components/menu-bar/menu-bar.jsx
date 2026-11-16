@@ -36,7 +36,7 @@ import GoogleChooser from "../google-drive-picker/google-drive-picker.jsx";
 import SettingsMenu from "./settings-menu.jsx";
 
 import { setProjectTitle } from "../../reducers/project-title";
-import { openTipsLibrary } from "../../reducers/modals";
+import { openTipsLibrary, openFeedbackModal } from "../../reducers/modals";
 import { setPlayer } from "../../reducers/mode";
 import {
     isTimeTravel220022BC,
@@ -84,6 +84,7 @@ import collectMetadata from "../../lib/collect-metadata";
 import styles from "./menu-bar.css";
 
 import helpIcon from "../../lib/assets/icon--tutorials.svg";
+import feedbackIcon from "./icon--feedback.svg";
 import mystuffIcon from "./icon--mystuff.png";
 import profileIcon from "./icon--profile.png";
 import remixIcon from "./icon--remix.svg";
@@ -109,6 +110,11 @@ const ariaMessages = defineMessages({
         id: "gui.menuBar.tutorialsLibrary",
         defaultMessage: "Tutorials",
         description: "accessibility text for the tutorials button",
+    },
+    feedback: {
+        id: "gui.menuBar.feedback",
+        defaultMessage: "Feedback",
+        description: "Menu bar button that opens the questions & feedback form",
     },
 });
 
@@ -977,6 +983,22 @@ class MenuBar extends React.Component {
                                 <FormattedMessage {...ariaMessages.tutorials} />
                             </span>
                         </div>
+                        <div
+                            aria-label={this.props.intl.formatMessage(
+                                ariaMessages.feedback,
+                            )}
+                            className={classNames(
+                                styles.menuBarItem,
+                                styles.hoverable,
+                            )}
+                            role="button"
+                            onClick={this.props.onOpenFeedback}
+                        >
+                            <img className={styles.helpIcon} src={feedbackIcon} />
+                            <span className={styles.tutorialsLabel}>
+                                <FormattedMessage {...ariaMessages.feedback} />
+                            </span>
+                        </div>
                     </div>
                 </div>
 
@@ -1186,6 +1208,7 @@ MenuBar.propTypes = {
     onLogOut: PropTypes.func,
     onOpenRegistration: PropTypes.func,
     onOpenTipLibrary: PropTypes.func,
+    onOpenFeedback: PropTypes.func,
     onProjectTelemetryEvent: PropTypes.func,
     onRequestCloseAbout: PropTypes.func,
     onRequestCloseAccount: PropTypes.func,
@@ -1254,6 +1277,7 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = (dispatch) => ({
     autoUpdateProject: () => dispatch(autoUpdateProject()),
     onOpenTipLibrary: () => dispatch(openTipsLibrary()),
+    onOpenFeedback: () => dispatch(openFeedbackModal()),
     onClickAccount: () => dispatch(openAccountMenu()),
     onRequestCloseAccount: () => dispatch(closeAccountMenu()),
     onClickFile: () => dispatch(openFileMenu()),

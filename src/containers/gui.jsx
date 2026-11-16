@@ -172,6 +172,7 @@ const mapStateToProps = state => {
         ),
         telemetryModalVisible: state.scratchGui.modals.telemetryModal,
         tipsLibraryVisible: state.scratchGui.modals.tipsLibrary,
+        feedbackModalVisible: state.scratchGui.modals.feedbackModal,
         textModelModalVisible: state.scratchGui.modals.textModelModal,
         classifierModelModalVisible: state.scratchGui.modals.classifierModelModal,
         programmaticModalDetails: state.scratchGui.modals.programmaticModal,
