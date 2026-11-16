@@ -43,8 +43,14 @@ const baseConfig = new ScratchWebpackConfigBuilder(
             runtimeChunk: 'single'
         }
     })
+    // driver.js (guided tours) needs its class names left alone, so its stylesheet is loaded as a raw string rather than a css module
+    .addModuleRule({
+        test: /driver\.js[\\/]dist[\\/]driver\.css$/,
+        type: 'asset/source'
+    })
     .addModuleRule({
         test: /\.css$/,
+        exclude: /driver\.js[\\/]dist[\\/]driver\.css$/,
         use: [
             {
                 loader: 'style-loader'

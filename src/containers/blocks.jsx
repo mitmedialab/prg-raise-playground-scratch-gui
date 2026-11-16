@@ -30,6 +30,8 @@ import { setConnectionModalExtensionId } from '../reducers/connection-modal';
 import { updateMetrics } from '../reducers/workspace-metrics';
 import { isTimeTravel2020 } from '../reducers/time-travel';
 import { openUIEvent, registerButtonCallbackEvent } from "../../../../extensions/dist/globals";
+import { setTourPaused, startExtensionTour } from '../lib/tour/extension-tour';
+import installPaletteHelpButton from '../lib/tour/palette-help-button';
 
 import {
     activateTab,
@@ -95,6 +97,21 @@ class Blocks extends React.Component {
         this.ScratchBlocks.prompt = this.handlePromptStart;
         this.ScratchBlocks.statusButtonCallback = this.handleConnectionModalStart;
         this.ScratchBlocks.recordSoundCallback = this.handleOpenSoundRecorder;
+
+        /** PRG ADDITION BEGIN */
+        // A "?" beside the title of each extension that has a guided tour in the palette
+        installPaletteHelpButton(this.ScratchBlocks);
+        this.ScratchBlocks.extensionTour = {
+            has: extensionId => extensionData.some(ext => ext.extensionId === extensionId && ext.tutorial),
+            start: extensionId => startExtensionTour({
+                extensionId,
+                tutorial: extensionData.find(ext => ext.extensionId === extensionId).tutorial,
+                workspace: this.workspace,
+                vm: this.props.vm,
+                ScratchBlocks: this.ScratchBlocks
+            })
+        };
+        /** PRG ADDITION END */
 
         this.ScratchBlocks.FieldColourSlider.activateEyedropper_ = this.props.onActivateColorPicker;
         this.ScratchBlocks.Procedures.externalProcedureDefCallback = this.props.onActivateCustomProcedures;
@@ -170,6 +187,13 @@ class Blocks extends React.Component {
         if (this.props.anyModalVisible && !prevProps.anyModalVisible) {
             this.ScratchBlocks.hideChaff();
         }
+
+        /** PRG ADDITION BEGIN */
+        // Keep any extension tour from covering a window that opens on top of the editor (like the extension library)
+        if (this.props.anyModalVisible !== prevProps.anyModalVisible) {
+            setTourPaused(this.props.anyModalVisible);
+        }
+        /** PRG ADDITION END */
 
         // Only rerender the toolbox when the blocks are visible and the xml is
         // different from the previously rendered toolbox xml.
