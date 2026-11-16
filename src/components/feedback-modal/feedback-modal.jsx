@@ -3,12 +3,11 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import {connect} from 'react-redux';
 import {defineMessages, FormattedMessage, injectIntl, intlShape} from 'react-intl';
-import VM from 'scratch-vm';
 
 import Modal from '../../containers/modal.jsx';
 import Box from '../box/box.jsx';
 import {closeFeedbackModal} from '../../reducers/modals';
-import {FEEDBACK_ENDPOINT, FEEDBACK_MAX_MESSAGE_LENGTH} from '../../lib/feedback-config';
+import {FEEDBACK_ENDPOINT, FEEDBACK_TOKEN, FEEDBACK_MAX_MESSAGE_LENGTH} from '../../lib/feedback-config';
 
 import styles from './feedback-modal.css';
 
@@ -82,26 +81,13 @@ const STATUS = {
 };
 
 /**
- * Non-personal technical context that helps us reproduce bug reports.
- * @param {VM} vm - the Scratch VM, used to list loaded extensions
- * @returns {object} context fields to send along with the message
+ * A random id that lasts until the page is reloaded, which lets the server limit how many messages
+ * one open editor can send. It is only kept in memory (never stored on the device), and it
+ * isn't derived from anything about the person, so it can't recognize anyone across visits.
  */
-const collectContext = vm => {
-    let extensions = [];
-    try {
-        const loaded = vm && vm.extensionManager && vm.extensionManager._loadedExtensions;
-        if (loaded) extensions = Array.from(loaded.keys());
-    } catch (e) {
-        // ignore: context is best-effort only
-    }
-    return {
-        page: window.location.origin + window.location.pathname,
-        extensions: extensions.join(', '),
-        userAgent: navigator.userAgent,
-        language: navigator.language,
-        screen: `${window.screen.width}x${window.screen.height}`
-    };
-};
+const sessionId = window.crypto && window.crypto.randomUUID ?
+    window.crypto.randomUUID() :
+    `${Date.now()}-${String(Math.random()).substring(2)}`;
 
 class FeedbackModal extends React.Component {
     constructor (props) {
@@ -159,7 +145,10 @@ class FeedbackModal extends React.Component {
             name: name.trim(),
             email: trimmedEmail,
             website,
-            ...collectContext(this.props.vm)
+            token: FEEDBACK_TOKEN,
+            clientId: sessionId,
+            // The site's own address, so we know which version of the editor it was sent from
+            page: window.location.origin + window.location.pathname
         };
 
         // text/plain keeps this a "simple" CORS request, which Apps Script supports
@@ -389,8 +378,7 @@ class FeedbackModal extends React.Component {
                 <p className={styles.privacyNote}>
                     <FormattedMessage
                         defaultMessage={'Please don\'t include personal information like your address or ' +
-                            'phone number. To help us fix problems, we also send your browser type and ' +
-                            'which extensions are loaded.'}
+                            'phone number.'}
                         description="Privacy note at the bottom of the feedback form"
                         id="gui.feedbackModal.privacyNote"
                     />
@@ -459,16 +447,11 @@ class FeedbackModal extends React.Component {
 
 FeedbackModal.propTypes = {
     intl: intlShape.isRequired,
-    onRequestClose: PropTypes.func.isRequired,
-    vm: PropTypes.instanceOf(VM)
+    onRequestClose: PropTypes.func.isRequired
 };
-
-const mapStateToProps = state => ({
-    vm: state.scratchGui.vm
-});
 
 const mapDispatchToProps = dispatch => ({
     onRequestClose: () => dispatch(closeFeedbackModal())
 });
 
-export default injectIntl(connect(mapStateToProps, mapDispatchToProps)(FeedbackModal));
+export default injectIntl(connect(null, mapDispatchToProps)(FeedbackModal));
