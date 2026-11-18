@@ -36,7 +36,7 @@ import GoogleChooser from "../google-drive-picker/google-drive-picker.jsx";
 import SettingsMenu from "./settings-menu.jsx";
 
 import { setProjectTitle } from "../../reducers/project-title";
-import { openTipsLibrary } from "../../reducers/modals";
+import { openTipsLibrary, openExamplesLibrary } from "../../reducers/modals";
 import { setPlayer } from "../../reducers/mode";
 import {
     isTimeTravel220022BC,
@@ -109,6 +109,11 @@ const ariaMessages = defineMessages({
         id: "gui.menuBar.tutorialsLibrary",
         defaultMessage: "Tutorials",
         description: "accessibility text for the tutorials button",
+    },
+    examples: {
+        id: "gui.menuBar.examplesLibrary",
+        defaultMessage: "Examples",
+        description: "Menu bar button that opens the library of example projects",
     },
 });
 
@@ -977,6 +982,22 @@ class MenuBar extends React.Component {
                                 <FormattedMessage {...ariaMessages.tutorials} />
                             </span>
                         </div>
+                        <div
+                            aria-label={this.props.intl.formatMessage(
+                                ariaMessages.examples,
+                            )}
+                            className={classNames(
+                                styles.menuBarItem,
+                                styles.hoverable,
+                            )}
+                            role="button"
+                            onClick={this.props.onOpenExamples}
+                        >
+                            <img className={styles.helpIcon} src={helpIcon} />
+                            <span className={styles.tutorialsLabel}>
+                                <FormattedMessage {...ariaMessages.examples} />
+                            </span>
+                        </div>
                     </div>
                 </div>
 
@@ -1186,6 +1207,7 @@ MenuBar.propTypes = {
     onLogOut: PropTypes.func,
     onOpenRegistration: PropTypes.func,
     onOpenTipLibrary: PropTypes.func,
+    onOpenExamples: PropTypes.func,
     onProjectTelemetryEvent: PropTypes.func,
     onRequestCloseAbout: PropTypes.func,
     onRequestCloseAccount: PropTypes.func,
@@ -1254,6 +1276,7 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = (dispatch) => ({
     autoUpdateProject: () => dispatch(autoUpdateProject()),
     onOpenTipLibrary: () => dispatch(openTipsLibrary()),
+    onOpenExamples: () => dispatch(openExamplesLibrary()),
     onClickAccount: () => dispatch(openAccountMenu()),
     onRequestCloseAccount: () => dispatch(closeAccountMenu()),
     onClickFile: () => dispatch(openFileMenu()),

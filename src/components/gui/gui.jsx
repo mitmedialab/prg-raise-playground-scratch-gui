@@ -25,6 +25,7 @@ import Watermark from '../../containers/watermark.jsx';
 import Backpack from '../../containers/backpack.jsx';
 import WebGlModal from '../../containers/webgl-modal.jsx';
 import TipsLibrary from '../../containers/tips-library.jsx';
+import ExamplesLibrary from '../../containers/examples-library.jsx';
 import Cards from '../../containers/cards.jsx';
 import Alerts from '../../containers/alerts.jsx';
 import DragLayer from '../../containers/drag-layer.jsx';
@@ -192,6 +193,7 @@ const GUIComponent = props => {
                 {tipsLibraryVisible ? (
                     <TipsLibrary />
                 ) : null}
+                <ExamplesLibrary />
                 {programmaticModalDetails ? (
                     <ProgrammaticModal vm={vm} {...programmaticModalDetails} />
                 ) : null}
