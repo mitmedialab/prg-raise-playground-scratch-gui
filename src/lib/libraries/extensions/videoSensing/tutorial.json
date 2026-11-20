@@ -1,0 +1,67 @@
+{
+  "$schema": "../../../../../../../extensions/tutorial.schema.json",
+  "steps": [
+    {
+      "title": "Meet Video Sensing",
+      "text": "This extension uses your camera to notice motion, so your sprites can react when you wave, pet them, or pop them. Let's take a quick tour.",
+      "target": {
+        "ui": "category"
+      }
+    },
+    {
+      "title": "Your camera shows up here",
+      "text": "Once the extension is added, your camera video appears on the stage. If your browser asks for permission to use the camera, choose Allow. Then move around, and wave at the camera.",
+      "target": {
+        "ui": "stage"
+      }
+    },
+    {
+      "title": "When you move",
+      "text": "This hat block starts its script when the camera sees enough motion on the sprite or on the whole stage. A bigger number means it needs more motion. Put blocks below it to decide what happens.",
+      "target": {
+        "block": "whenMotionGreaterThan"
+      }
+    },
+    {
+      "title": "How much motion?",
+      "text": "This block reports a number: how much motion there is, or which direction it is going. Check it on a sprite to see what is happening right where that sprite is.",
+      "target": {
+        "block": "videoOn"
+      }
+    },
+    {
+      "title": "Show or hide your video",
+      "text": "Choose whether your camera video shows on the stage. \"on\" shows it mirrored, like a mirror. \"on flipped\" shows it the other way around. \"off\" hides it, and motion sensing keeps working.",
+      "target": {
+        "block": "videoToggle"
+      }
+    },
+    {
+      "title": "See-through video",
+      "text": "Set how see-through the video is, from 0 (fully visible) to 100 (invisible). A higher number makes your sprites and backdrop easier to see.",
+      "target": {
+        "block": "setVideoTransparency"
+      }
+    },
+    {
+      "title": "Try it yourself!",
+      "text": "I've added a “play sound” block to your code area. Drag “when video motion >” on top of it, then wave your hand over your sprite. Pet the cat and hear it meow!",
+      "waitFor": [
+        {
+          "type": "blockPlaced",
+          "block": "whenMotionGreaterThan",
+          "label": "Drag “when video motion >” on top of the “play sound” block",
+          "onTopOf": "sound_playuntildone"
+        },
+        {
+          "type": "scriptRun",
+          "block": "whenMotionGreaterThan",
+          "label": "Wave your hand over your sprite"
+        }
+      ],
+      "addBlocks": [
+        "sound_playuntildone"
+      ]
+    }
+  ]
+}

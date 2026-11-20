@@ -1,0 +1,80 @@
+{
+  "tours": [
+    {
+      "title": "Is it touching?",
+      "description": "Check whether a sprite touches something.",
+      "steps": [
+        {
+          "title": "Touching",
+          "text": "This block is true when your sprite touches the mouse pointer, the edge, or another sprite. Put it in the condition of an “if” block.",
+          "target": {
+            "block": "touchingobject"
+          }
+        },
+        {
+          "title": "Try it yourself!",
+          "text": "I've added a “when green flag clicked” block and an “if” block to your code area. Drag “touching mouse-pointer?” into the “if” condition, then click the green flag.",
+          "waitFor": [
+            {
+              "type": "blockPlaced",
+              "block": "touchingobject",
+              "label": "Drag the “touching” block into the “if” condition",
+              "inside": "control_if"
+            },
+            {
+              "type": "scriptRun",
+              "block": "touchingobject",
+              "label": "Click the green flag"
+            }
+          ],
+          "addBlocks": [
+            "event_whenflagclicked",
+            "control_if"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Ask and answer",
+      "description": "Ask a question and use what someone types.",
+      "steps": [
+        {
+          "title": "Ask",
+          "text": "This block shows a question and waits for someone to type an answer.",
+          "target": {
+            "block": "askandwait"
+          }
+        },
+        {
+          "title": "The answer",
+          "text": "This block holds whatever was typed in the last “ask” block. Use it anywhere a value fits.",
+          "target": {
+            "block": "answer"
+          }
+        },
+        {
+          "title": "Try it yourself!",
+          "text": "I've added “ask” and “say” blocks to your code area. Drag “answer” into the “say” box, then click the green flag and type something.",
+          "waitFor": [
+            {
+              "type": "blockPlaced",
+              "block": "answer",
+              "label": "Drag the “answer” block into the “say” block",
+              "inside": "looks_say"
+            },
+            {
+              "type": "scriptRun",
+              "block": "answer",
+              "label": "Click the green flag"
+            }
+          ],
+          "addBlocks": [
+            "event_whenflagclicked",
+            "sensing_askandwait",
+            "looks_say"
+          ]
+        }
+      ]
+    }
+  ]
+}

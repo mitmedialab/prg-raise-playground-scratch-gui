@@ -1,0 +1,104 @@
+{
+  "tours": [
+    {
+      "title": "Join words",
+      "description": "Put words together.",
+      "steps": [
+        {
+          "title": "Join",
+          "text": "This block sticks two pieces of text together, like “Hello ” and a name.",
+          "target": {
+            "block": "join"
+          }
+        },
+        {
+          "title": "Try it yourself!",
+          "text": "I've added a “say Hello!” block to your code area. Drag “join apple banana” into the “Hello!” box, type your own words, then click the block.",
+          "waitFor": [
+            {
+              "type": "blockPlaced",
+              "block": "join",
+              "label": "Drag the “join” block into the “say” block",
+              "inside": "looks_say"
+            },
+            {
+              "type": "scriptRun",
+              "block": "join",
+              "label": "Click the “say” block"
+            }
+          ],
+          "addBlocks": [
+            "looks_say"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Pick a random number",
+      "description": "Make surprises happen.",
+      "steps": [
+        {
+          "title": "Pick random",
+          "text": "This block gives a different number every time, between the two numbers you choose. Use it for surprises.",
+          "target": {
+            "block": "random"
+          }
+        },
+        {
+          "title": "Try it yourself!",
+          "text": "I've added a “go to x: y:” block to your code area. Drag “pick random 1 to 10” into the “x” box, change it to “-200 to 200”, then click the block a few times.",
+          "waitFor": [
+            {
+              "type": "blockPlaced",
+              "block": "random",
+              "label": "Drag the “pick random” block into the “go to” block",
+              "inside": "motion_gotoxy"
+            },
+            {
+              "type": "scriptRun",
+              "block": "random",
+              "label": "Click the “go to” block"
+            }
+          ],
+          "addBlocks": [
+            "motion_gotoxy"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Compare numbers",
+      "description": "Check which number is bigger.",
+      "steps": [
+        {
+          "title": "Greater than",
+          "text": "This block is true when the first number is bigger than the second. “<” and “=” work the same way. Use them in an “if” block.",
+          "target": {
+            "block": "gt"
+          }
+        },
+        {
+          "title": "Try it yourself!",
+          "text": "I've added a “when green flag clicked” block and an “if” block to your code area. Drag “>” into the “if” condition, then click the green flag.",
+          "waitFor": [
+            {
+              "type": "blockPlaced",
+              "block": "gt",
+              "label": "Drag the “>” block into the “if” condition",
+              "inside": "control_if"
+            },
+            {
+              "type": "scriptRun",
+              "block": "gt",
+              "label": "Click the green flag"
+            }
+          ],
+          "addBlocks": [
+            "event_whenflagclicked",
+            "control_if"
+          ]
+        }
+      ]
+    }
+  ]
+}

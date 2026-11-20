@@ -3,6 +3,8 @@
  * Kept free of any browser or driver.js dependencies so it can be tested on its own.
  */
 
+import fullBlockType from './block-types';
+
 const noop = () => {};
 
 // The kinds of workspace change events that can put a block into the code area
@@ -34,7 +36,7 @@ const watchers = {
     // The user has dragged one of this extension's blocks into the code area, and (if the condition asks for it)
     // attached it to the right block: `inside` a block of that type, or `onTopOf` a block of that type
     blockPlaced: ({block, inside, onTopOf}, {extensionId, workspace, onMet}) => {
-        const type = `${extensionId}_${block}`;
+        const type = fullBlockType(extensionId, block);
         const isInRightPlace = placed =>
             (!inside || isInside(placed, inside)) && (!onTopOf || hasBelow(placed, onTopOf));
         // The main workspace only contains the blocks in the code area (the palette is a separate workspace)
@@ -54,7 +56,7 @@ const watchers = {
     // the green flag or the script. (We can't use the project starting to run for this: while a project has an
     // edge-activated hat in it, the VM treats it as running all the time, so that event wouldn't fire again.)
     scriptRun: ({block}, {extensionId, workspace, vm, onMet}) => {
-        const type = `${extensionId}_${block}`;
+        const type = fullBlockType(extensionId, block);
         // The VM announces a script glowing (that is, running) when it starts, with the id of the script's top block.
         // Scripts in the palette are announced too (when clicked there), but they aren't in the main workspace.
         const listener = ({id}) => {

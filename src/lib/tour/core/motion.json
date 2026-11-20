@@ -1,0 +1,138 @@
+{
+  "tours": [
+    {
+      "title": "Move and turn",
+      "description": "Make a sprite walk and turn.",
+      "steps": [
+        {
+          "title": "Move forward",
+          "text": "This block moves your sprite forward by a number of steps. A bigger number goes farther. (Click a sprite first. The stage can't move!)",
+          "target": {
+            "block": "movesteps"
+          }
+        },
+        {
+          "title": "Try it yourself!",
+          "text": "I've added a “when green flag clicked” block to your code area. Drag “move 10 steps” under it, then click the green flag.",
+          "waitFor": [
+            {
+              "type": "blockPlaced",
+              "block": "movesteps",
+              "label": "Drag the “move” block under the hat block"
+            },
+            {
+              "type": "scriptRun",
+              "block": "movesteps",
+              "label": "Click the green flag"
+            }
+          ],
+          "addBlocks": [
+            "event_whenflagclicked"
+          ]
+        },
+        {
+          "title": "Turn",
+          "text": "This block turns your sprite by a number of degrees. 90 is a quarter turn, and 15 is a little turn.",
+          "target": {
+            "block": "turnright"
+          }
+        },
+        {
+          "title": "Try it yourself!",
+          "text": "Drag “turn 15 degrees” under your “move” block, then click the green flag again. Try different numbers!",
+          "waitFor": [
+            {
+              "type": "blockPlaced",
+              "block": "turnright",
+              "label": "Drag the “turn” block under the “move” block",
+              "onTopOf": "motion_movesteps"
+            },
+            {
+              "type": "scriptRun",
+              "block": "turnright",
+              "label": "Click the green flag"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Glide around",
+      "description": "Slide smoothly from place to place.",
+      "steps": [
+        {
+          "title": "Glide",
+          "text": "This block slides your sprite smoothly to a place over a number of seconds. Choose the place from the menu: the mouse, a random spot, or another sprite. (Click a sprite first. The stage can't move!)",
+          "target": {
+            "block": "glideto"
+          }
+        },
+        {
+          "title": "Try it yourself!",
+          "text": "I've added a “when green flag clicked” block to your code area. Drag “glide 1 secs to random position” under it, then click the green flag.",
+          "waitFor": [
+            {
+              "type": "blockPlaced",
+              "block": "glideto",
+              "label": "Drag the “glide” block under the hat block"
+            },
+            {
+              "type": "scriptRun",
+              "block": "glideto",
+              "label": "Click the green flag"
+            }
+          ],
+          "addBlocks": [
+            "event_whenflagclicked"
+          ]
+        },
+        {
+          "title": "Glide to an exact spot",
+          "text": "This one glides to a spot on the stage. x is left or right, and y is up or down. Both are 0 in the middle. Click the green flag after each change to watch it.",
+          "target": {
+            "block": "glidesecstoxy"
+          }
+        }
+      ]
+    },
+    {
+      "title": "Move with the arrow keys",
+      "description": "Control a sprite from the keyboard.",
+      "steps": [
+        {
+          "title": "Change x",
+          "text": "This block moves your sprite left or right by a number. Positive goes right, and negative goes left. (Click a sprite first. The stage can't move!)",
+          "target": {
+            "block": "changexby"
+          }
+        },
+        {
+          "title": "Try it yourself!",
+          "text": "I've added a “when space key pressed” block to your code area. Click its menu and choose “right arrow”. Then drag “change x by 10” under it, and press the right arrow key.",
+          "waitFor": [
+            {
+              "type": "blockPlaced",
+              "block": "changexby",
+              "label": "Drag the “change x” block under the hat block"
+            },
+            {
+              "type": "scriptRun",
+              "block": "changexby",
+              "label": "Press the key"
+            }
+          ],
+          "addBlocks": [
+            "event_whenkeypressed"
+          ]
+        },
+        {
+          "title": "Change y",
+          "text": "Do the same for up and down: this block moves your sprite up or down by a number. Make a second script with the up arrow key and “change y by 10”.",
+          "target": {
+            "block": "changeyby"
+          }
+        }
+      ]
+    }
+  ]
+}

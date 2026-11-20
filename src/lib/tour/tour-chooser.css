@@ -1,0 +1,56 @@
+@import "../../css/colors.css";
+
+/* The menu of tours beside a category's "?" button. Built with plain DOM, so everything here is `:global`. */
+
+:global(.prg-tour-chooser) {
+    position: fixed;
+    z-index: 5000;
+    box-sizing: border-box;
+    width: 280px;
+    max-width: calc(100vw - 16px);
+    padding: 0.5rem;
+    background: $ui-white;
+    color: $text-primary;
+    border-radius: 0.75rem;
+    box-shadow: 0 5px 25px 5px $ui-black-transparent;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+:global(.prg-tour-chooser-heading) {
+    padding: 0.4rem 0.6rem 0.5rem;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+:global(.prg-tour-chooser-item) {
+    display: block;
+    width: 100%;
+    padding: 0.55rem 0.6rem;
+    border: 0;
+    border-radius: 0.5rem;
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+}
+
+:global(.prg-tour-chooser-item:hover),
+:global(.prg-tour-chooser-item:focus-visible) {
+    background: $ui-primary;
+}
+
+:global(.prg-tour-chooser-title) {
+    display: block;
+    font-size: 0.95rem;
+    font-weight: 700;
+}
+
+:global(.prg-tour-chooser-description) {
+    display: block;
+    margin-top: 0.1rem;
+    font-size: 0.8rem;
+    line-height: 1.35;
+}

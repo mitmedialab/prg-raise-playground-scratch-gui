@@ -1,0 +1,66 @@
+{
+  "$schema": "../../../../../../../extensions/tutorial.schema.json",
+  "steps": [
+    {
+      "title": "Meet Music",
+      "text": "These blocks let you play drums and notes, pick instruments, and set how fast the music goes. Let's take a quick tour, then build a short tune.",
+      "target": {
+        "ui": "category"
+      }
+    },
+    {
+      "title": "Play a drum",
+      "text": "Choose a drum from the menu and how many beats to play it for. Use this to make a beat.",
+      "target": {
+        "block": "playDrumForBeats"
+      }
+    },
+    {
+      "title": "Play a note",
+      "text": "Pick a note (a bigger number is a higher sound) and how many beats it lasts. Put several in a row to create a song.",
+      "target": {
+        "block": "playNoteForBeats"
+      }
+    },
+    {
+      "title": "Rest",
+      "text": "This block stays quiet for a number of beats. Silence between notes makes a tune sound more musical.",
+      "target": {
+        "block": "restForBeats"
+      }
+    },
+    {
+      "title": "Choose an instrument",
+      "text": "Switch the sprite's instrument, like piano, guitar or marimba. Every note it plays afterward uses that instrument.",
+      "target": {
+        "block": "setInstrument"
+      }
+    },
+    {
+      "title": "Change the speed",
+      "text": "The tempo is how fast the beats go. A bigger number is faster. \"change tempo by\" speeds it up or slows it down a little at a time.",
+      "target": {
+        "block": "setTempo"
+      }
+    },
+    {
+      "title": "Try it yourself!",
+      "text": "I've added a “when this sprite clicked” block to your code area. Drag “play note” under it, then click your sprite to hear it. Then try adding more notes, a rest, or a drum!",
+      "waitFor": [
+        {
+          "type": "blockPlaced",
+          "block": "playNoteForBeats",
+          "label": "Drag the “play note” block into the code area"
+        },
+        {
+          "type": "scriptRun",
+          "block": "playNoteForBeats",
+          "label": "Click your sprite"
+        }
+      ],
+      "addBlocks": [
+        "event_whenthisspriteclicked"
+      ]
+    }
+  ]
+}

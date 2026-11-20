@@ -1,0 +1,78 @@
+@import "../../css/colors.css";
+
+/*
+ * The "What does this do?" popover for a block. It's built with plain DOM (it hangs off a scratch-blocks menu, outside
+ * react), so everything here is `:global`.
+ */
+
+:global(.prg-block-help) {
+    position: fixed;
+    z-index: 5000;
+    box-sizing: border-box;
+    width: 300px;
+    max-width: calc(100vw - 16px);
+    background: $ui-white;
+    color: $text-primary;
+    border-radius: 0.75rem;
+    box-shadow: 0 5px 25px 5px $ui-black-transparent;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 0.9rem;
+    line-height: 1.45;
+    overflow: hidden;
+}
+
+/* A stripe in the colour of the block's category ties the popover to the block */
+:global(.prg-block-help-stripe) {
+    height: 0.4rem;
+}
+
+:global(.prg-block-help-body) {
+    padding: 0.9rem 1.1rem 1.1rem;
+}
+
+:global(.prg-block-help-title) {
+    margin: 0 1.5rem 0.4rem 0;
+    font-size: 1.05rem;
+    font-weight: 700;
+    line-height: 1.3;
+}
+
+:global(.prg-block-help-what) {
+    margin: 0;
+}
+
+:global(.prg-block-help-example) {
+    margin: 0.75rem 0 0;
+    padding: 0.5rem 0.7rem;
+    background: $ui-primary;
+    border-radius: 0.5rem;
+}
+
+:global(.prg-block-help-example b) {
+    display: block;
+    margin-bottom: 0.15rem;
+    font-size: 0.75rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+:global(.prg-block-help-close) {
+    position: absolute;
+    top: 0.7rem;
+    right: 0.7rem;
+    width: 1.6rem;
+    height: 1.6rem;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: transparent;
+    color: $text-primary;
+    font-size: 1.2rem;
+    line-height: 1;
+    cursor: pointer;
+}
+
+:global(.prg-block-help-close:hover),
+:global(.prg-block-help-close:focus-visible) {
+    background: $ui-primary;
+}

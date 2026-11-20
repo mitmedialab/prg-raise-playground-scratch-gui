@@ -1,0 +1,52 @@
+{
+  "$schema": "../../../../../../../extensions/tutorial.schema.json",
+  "steps": [
+    {
+      "title": "Meet Text to Speech",
+      "text": "These blocks make your project talk out loud. It needs an internet connection to work. Let's take a quick tour, then make a sprite speak.",
+      "target": {
+        "ui": "category"
+      }
+    },
+    {
+      "title": "Say something",
+      "text": "Type what you want your project to say, and it speaks the words out loud. The script waits until the speaking is done before moving on.",
+      "target": {
+        "block": "speakAndWait"
+      }
+    },
+    {
+      "title": "Set a voice",
+      "text": "Choose how your project sounds: alto, tenor, squeak, giant or kitten. Every \"speak\" block after this one uses the voice you picked.",
+      "target": {
+        "block": "setVoice"
+      }
+    },
+    {
+      "title": "Set a language",
+      "text": "Choose the language it speaks. Pick one that matches the words you typed, or they won't sound right.",
+      "target": {
+        "block": "setLanguage"
+      }
+    },
+    {
+      "title": "Try it yourself!",
+      "text": "I've added a “when this sprite clicked” block to your code area. Drag “speak” under it, then click your sprite to hear it talk. Then try setting a voice first!",
+      "waitFor": [
+        {
+          "type": "blockPlaced",
+          "block": "speakAndWait",
+          "label": "Drag the “speak” block into the code area"
+        },
+        {
+          "type": "scriptRun",
+          "block": "speakAndWait",
+          "label": "Click your sprite"
+        }
+      ],
+      "addBlocks": [
+        "event_whenthisspriteclicked"
+      ]
+    }
+  ]
+}

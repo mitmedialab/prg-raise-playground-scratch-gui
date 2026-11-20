@@ -1,0 +1,109 @@
+{
+  "tours": [
+    {
+      "title": "Play a sound",
+      "description": "Make your sprite play a sound.",
+      "steps": [
+        {
+          "title": "Start a sound",
+          "text": "This block plays the sound you pick. Click its menu to listen to the choices. Make sure your computer's volume is on.",
+          "target": {
+            "block": "play"
+          }
+        },
+        {
+          "title": "Try it yourself!",
+          "text": "I've added a “when this sprite clicked” block to your code area. Drag “start sound” under it, then click your sprite to hear it.",
+          "waitFor": [
+            {
+              "type": "blockPlaced",
+              "block": "play",
+              "label": "Drag the “start sound” block under the hat block"
+            },
+            {
+              "type": "scriptRun",
+              "block": "play",
+              "label": "Click your sprite"
+            }
+          ],
+          "addBlocks": [
+            "event_whenthisspriteclicked"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Play sounds in order",
+      "description": "Play one sound after another.",
+      "steps": [
+        {
+          "title": "Play until done",
+          "text": "This block plays a sound and waits for it to finish before the next block runs. Use it to play sounds one after another.",
+          "target": {
+            "block": "playuntildone"
+          }
+        },
+        {
+          "title": "Try it yourself!",
+          "text": "I've added a “when this sprite clicked” block to your code area. Drag “play sound until done” under it, and add a second one under that with a different sound. Then click your sprite.",
+          "waitFor": [
+            {
+              "type": "blockPlaced",
+              "block": "playuntildone",
+              "label": "Drag the “play sound until done” block under the hat block"
+            },
+            {
+              "type": "scriptRun",
+              "block": "playuntildone",
+              "label": "Click your sprite"
+            }
+          ],
+          "addBlocks": [
+            "event_whenthisspriteclicked"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Change how it sounds",
+      "description": "Make a sound higher, lower, louder or quieter.",
+      "steps": [
+        {
+          "title": "Change the pitch",
+          "text": "This block makes sounds higher or lower, like a chipmunk or a giant. A positive number makes them higher.",
+          "target": {
+            "block": "changeeffectby"
+          }
+        },
+        {
+          "title": "Try it yourself!",
+          "text": "I've added a “when this sprite clicked” block and a “start sound” block to your code area. Drag “change pitch effect by 10” in between them, then click your sprite.",
+          "waitFor": [
+            {
+              "type": "blockPlaced",
+              "block": "changeeffectby",
+              "label": "Drag the “change pitch effect” block above the “start sound” block",
+              "onTopOf": "sound_play"
+            },
+            {
+              "type": "scriptRun",
+              "block": "changeeffectby",
+              "label": "Click your sprite"
+            }
+          ],
+          "addBlocks": [
+            "event_whenthisspriteclicked",
+            "sound_play"
+          ]
+        },
+        {
+          "title": "Volume",
+          "text": "This block makes sounds louder or quieter. 100 is the loudest.",
+          "target": {
+            "block": "setvolumeto"
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -13,6 +13,11 @@ import microbitRobotIconURL from './arduino_extension/microbot_extension.png';
 import gizmoRobotIconURL from './arduino_extension/gizmo_extension.png';
 import gizmoRobotInsetIconURL from './arduino_extension/gizmo_small.png';
 
+// PRG ADDITION: guided tours of Scratch's own extensions
+import musicTutorial from './music/tutorial.json';
+import videoSensingTutorial from './videoSensing/tutorial.json';
+import text2speechTutorial from './text2speech/tutorial.json';
+
 import musicIconURL from './music/music.png';
 import musicInsetIconURL from './music/music-small.svg';
 
@@ -155,6 +160,7 @@ export default [
             />
         ),
         extensionId: 'music',
+        tutorial: musicTutorial,
         iconURL: musicIconURL,
         insetIconURL: musicInsetIconURL,
         description: (
@@ -197,6 +203,7 @@ export default [
             />
         ),
         extensionId: 'videoSensing',
+        tutorial: videoSensingTutorial,
         iconURL: videoSensingIconURL,
         insetIconURL: videoSensingInsetIconURL,
         description: (
@@ -218,6 +225,7 @@ export default [
             />
         ),
         extensionId: 'text2speech',
+        tutorial: text2speechTutorial,
         collaborator: 'Amazon Web Services',
         iconURL: text2speechIconURL,
         insetIconURL: text2speechInsetIconURL,

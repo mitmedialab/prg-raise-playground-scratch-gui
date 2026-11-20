@@ -1,0 +1,75 @@
+{
+  "tours": [
+    {
+      "title": "Make a variable",
+      "description": "Make a box that remembers a value.",
+      "steps": [
+        {
+          "title": "Make a variable",
+          "text": "A variable is a named box that remembers a number or words, like a score. Click this button, name it “score”, and press OK.",
+          "target": {
+            "button": "Make a Variable"
+          }
+        },
+        {
+          "title": "Set it",
+          "text": "This block puts a value into your variable. Use it at the start of a project to set “score” back to 0.",
+          "target": {
+            "block": "setvariableto"
+          }
+        },
+        {
+          "title": "Try it yourself!",
+          "text": "I've added a “when green flag clicked” block to your code area. Drag “set score to 0” under it, then click the green flag.",
+          "waitFor": [
+            {
+              "type": "blockPlaced",
+              "block": "setvariableto",
+              "label": "Drag the “set variable” block under the hat block"
+            },
+            {
+              "type": "scriptRun",
+              "block": "setvariableto",
+              "label": "Click the green flag"
+            }
+          ],
+          "addBlocks": [
+            "event_whenflagclicked"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Keep score",
+      "description": "Count points with a variable.",
+      "steps": [
+        {
+          "title": "Change it",
+          "text": "This block adds a number to your variable, or takes it away if the number is negative. Use it to add 1 to the score. (If you don't see it, make a variable first.)",
+          "target": {
+            "block": "changevariableby"
+          }
+        },
+        {
+          "title": "Try it yourself!",
+          "text": "I've added a “when this sprite clicked” block to your code area. Drag “change score by 1” under it, then click your sprite to see the score go up. Tick the box beside the variable to show it on the stage.",
+          "waitFor": [
+            {
+              "type": "blockPlaced",
+              "block": "changevariableby",
+              "label": "Drag the “change variable” block under the hat block"
+            },
+            {
+              "type": "scriptRun",
+              "block": "changevariableby",
+              "label": "Click your sprite"
+            }
+          ],
+          "addBlocks": [
+            "event_whenthisspriteclicked"
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -31,6 +31,9 @@ import { updateMetrics } from '../reducers/workspace-metrics';
 import { isTimeTravel2020 } from '../reducers/time-travel';
 import { openUIEvent, registerButtonCallbackEvent } from "../../../../extensions/dist/globals";
 import { setTourPaused, startExtensionTour } from '../lib/tour/extension-tour';
+import coreTutorials from '../lib/tour/core-tutorials';
+import installBlockHelp from '../lib/block-help/install';
+import { chooseTour, toursOf } from '../lib/tour/tour-chooser';
 import installPaletteHelpButton from '../lib/tour/palette-help-button';
 
 import {
@@ -99,17 +102,27 @@ class Blocks extends React.Component {
         this.ScratchBlocks.recordSoundCallback = this.handleOpenSoundRecorder;
 
         /** PRG ADDITION BEGIN */
-        // A "?" beside the title of each extension that has a guided tour in the palette
+        // Scratch's own categories have tours too (an extension's own tour wins if the ids ever clash)
+        const tutorialFor = id => extensionData.find(ext => ext.extensionId === id)?.tutorial ?? coreTutorials[id];
+        // A "?" beside the title of each category or extension that has a guided tour in the palette
         installPaletteHelpButton(this.ScratchBlocks);
+        // "What does this do?" in the right-click menu of blocks that have an explanation
+        installBlockHelp(this.ScratchBlocks);
         this.ScratchBlocks.extensionTour = {
-            has: extensionId => extensionData.some(ext => ext.extensionId === extensionId && ext.tutorial),
-            start: extensionId => startExtensionTour({
-                extensionId,
-                tutorial: extensionData.find(ext => ext.extensionId === extensionId).tutorial,
-                workspace: this.workspace,
-                vm: this.props.vm,
-                ScratchBlocks: this.ScratchBlocks
-            })
+            has: extensionId => !!tutorialFor(extensionId),
+            start: (extensionId, buttonRect) => {
+                const begin = tutorial => startExtensionTour({
+                    extensionId,
+                    tutorial,
+                    workspace: this.workspace,
+                    vm: this.props.vm,
+                    ScratchBlocks: this.ScratchBlocks
+                });
+                // Several tours: ask which one. Just one: start it.
+                const tours = toursOf(tutorialFor(extensionId));
+                if (tours.length === 1) begin(tours[0]);
+                else chooseTour(tours, buttonRect, begin);
+            }
         };
         /** PRG ADDITION END */
 

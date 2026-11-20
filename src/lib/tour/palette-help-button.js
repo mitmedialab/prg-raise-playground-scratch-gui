@@ -5,11 +5,11 @@
  * The palette's titles are drawn by scratch-blocks, which is an installed package rather than code we can edit, so
  * this adds to them from the outside: it wraps the functions that draw a category's title. What the button does is
  * decided by `ScratchBlocks.extensionTour`, which the editor sets:
- *   {has(extensionId): boolean, start(extensionId): void}
+ *   {has(extensionId): boolean, start(extensionId, buttonRect): void}
  */
 
 const HELP_BUTTON_CLASS = 'prgTourHelp';
-const HELP_BUTTON_LABEL = 'Learn how to use this extension';
+const HELP_BUTTON_LABEL = 'Take a tour of these blocks';
 const HELP_BUTTON_RADIUS = 10;
 // Space between the end of the title and the button
 const GAP_AFTER_TITLE = 10;
@@ -51,7 +51,7 @@ const addHelpButton = (ScratchBlocks, title) => {
             if (gesture.isDragging()) return;
             gesture.cancel();
         }
-        ScratchBlocks.extensionTour.start(extensionId);
+        ScratchBlocks.extensionTour.start(extensionId, button.getBoundingClientRect());
     });
 };
 

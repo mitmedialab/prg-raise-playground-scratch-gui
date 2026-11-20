@@ -1,0 +1,31 @@
+{
+  "$schema": "../../../../../../../extensions/tutorial.schema.json",
+  "steps": [
+    {
+      "title": "Meet My Blocks",
+      "text": "My Blocks are blocks you make yourself! Put a group of blocks you use often into one block with your own name. Let's take a quick tour.",
+      "target": {
+        "ui": "category"
+      }
+    },
+    {
+      "title": "Make a block",
+      "text": "Click this button, type a name, and press OK. A “define” block appears in your code area.",
+      "target": {
+        "button": "Make a Block"
+      }
+    },
+    {
+      "title": "Put blocks under “define”",
+      "text": "Whatever you attach under the “define” hat block is what runs each time your new block is used. For example, turn and move to make a shape!"
+    },
+    {
+      "title": "Add inputs",
+      "text": "Click “Add an input” while you make the block to let it take numbers or text. Then each time you use it, you can give it a different value, like how big a square should be."
+    },
+    {
+      "title": "Use your block",
+      "text": "Your new block now appears in this palette. Drag it into any script and it will run what's under its “define” block. Change the definition once, and every use updates!"
+    }
+  ]
+}

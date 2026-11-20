@@ -1,0 +1,114 @@
+{
+  "tours": [
+    {
+      "title": "Start with a key",
+      "description": "Make a script run when you press a key.",
+      "steps": [
+        {
+          "title": "Start with a key",
+          "text": "This hat block starts the blocks under it whenever you press a key. Click its menu to choose which key.",
+          "target": {
+            "block": "whenkeypressed"
+          }
+        },
+        {
+          "title": "Try it yourself!",
+          "text": "I've added a “move 10 steps” block to your code area. Drag “when space key pressed” on top of it, then press the space bar. Your sprite moves each time!",
+          "waitFor": [
+            {
+              "type": "blockPlaced",
+              "block": "whenkeypressed",
+              "label": "Drag the “when key pressed” block on top of the “move” block",
+              "onTopOf": "motion_movesteps"
+            },
+            {
+              "type": "scriptRun",
+              "block": "whenkeypressed",
+              "label": "Press the key"
+            }
+          ],
+          "addBlocks": [
+            "motion_movesteps"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Start with a click",
+      "description": "Make a script run when you click a sprite.",
+      "steps": [
+        {
+          "title": "Start with a click",
+          "text": "This hat block starts the blocks under it when someone clicks the sprite. Great for buttons and characters that react.",
+          "target": {
+            "block": "whenthisspriteclicked"
+          }
+        },
+        {
+          "title": "Try it yourself!",
+          "text": "I've added a “say Hello!” block to your code area. Drag “when this sprite clicked” on top of it, then click your sprite.",
+          "waitFor": [
+            {
+              "type": "blockPlaced",
+              "block": "whenthisspriteclicked",
+              "label": "Drag the “when this sprite clicked” block on top of the “say” block",
+              "onTopOf": "looks_say"
+            },
+            {
+              "type": "scriptRun",
+              "block": "whenthisspriteclicked",
+              "label": "Click your sprite"
+            }
+          ],
+          "addBlocks": [
+            "looks_say"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Send a message",
+      "description": "Make one script start another.",
+      "steps": [
+        {
+          "title": "Send a message",
+          "text": "This block sends a message to every sprite. Any script waiting for that message starts.",
+          "target": {
+            "block": "broadcast"
+          }
+        },
+        {
+          "title": "Receive a message",
+          "text": "This hat block starts its script when its message arrives, even from another sprite.",
+          "target": {
+            "block": "whenbroadcastreceived"
+          }
+        },
+        {
+          "title": "Try it yourself!",
+          "text": "I've added a “when green flag clicked” block to your code area. Drag “broadcast message 1” under it. Then drag “when I receive message 1” into the code area, and put a “say” block under it. Click the green flag!",
+          "waitFor": [
+            {
+              "type": "blockPlaced",
+              "block": "broadcast",
+              "label": "Drag the “broadcast” block under the hat block"
+            },
+            {
+              "type": "blockPlaced",
+              "block": "whenbroadcastreceived",
+              "label": "Drag “when I receive” into the code area"
+            },
+            {
+              "type": "scriptRun",
+              "block": "whenbroadcastreceived",
+              "label": "Click the green flag"
+            }
+          ],
+          "addBlocks": [
+            "event_whenflagclicked"
+          ]
+        }
+      ]
+    }
+  ]
+}

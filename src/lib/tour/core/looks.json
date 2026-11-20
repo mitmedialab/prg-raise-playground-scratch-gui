@@ -1,0 +1,121 @@
+{
+  "tours": [
+    {
+      "title": "Make a sprite talk",
+      "description": "Give your sprite a speech bubble.",
+      "steps": [
+        {
+          "title": "Say something",
+          "text": "This block shows a speech bubble for a few seconds. Type your own words in the box.",
+          "target": {
+            "block": "sayforsecs"
+          }
+        },
+        {
+          "title": "Try it yourself!",
+          "text": "I've added a “when this sprite clicked” block to your code area. Drag “say Hello! for 2 seconds” under it, then click your sprite.",
+          "waitFor": [
+            {
+              "type": "blockPlaced",
+              "block": "sayforsecs",
+              "label": "Drag the “say” block under the hat block"
+            },
+            {
+              "type": "scriptRun",
+              "block": "sayforsecs",
+              "label": "Click your sprite"
+            }
+          ],
+          "addBlocks": [
+            "event_whenthisspriteclicked"
+          ]
+        },
+        {
+          "title": "Keep saying",
+          "text": "This one keeps its bubble up until you say something else, or say nothing to clear it. “think” works the same way.",
+          "target": {
+            "block": "say"
+          }
+        }
+      ]
+    },
+    {
+      "title": "Change costumes",
+      "description": "Make a sprite animate.",
+      "steps": [
+        {
+          "title": "Next costume",
+          "text": "Most sprites have several costumes. This block switches to the next one.",
+          "target": {
+            "block": "nextcostume"
+          }
+        },
+        {
+          "title": "Try it yourself!",
+          "text": "I've added a “when this sprite clicked” block to your code area. Drag “next costume” under it, then click your sprite a few times to see it change.",
+          "waitFor": [
+            {
+              "type": "blockPlaced",
+              "block": "nextcostume",
+              "label": "Drag the “next costume” block under the hat block"
+            },
+            {
+              "type": "scriptRun",
+              "block": "nextcostume",
+              "label": "Click your sprite"
+            }
+          ],
+          "addBlocks": [
+            "event_whenthisspriteclicked"
+          ]
+        },
+        {
+          "title": "Pick a costume",
+          "text": "Or choose exactly which costume to show from the menu. Use this together with “wait” blocks to make an animation.",
+          "target": {
+            "block": "switchcostumeto"
+          }
+        }
+      ]
+    },
+    {
+      "title": "Grow, shrink and hide",
+      "description": "Change how big your sprite is, or hide it.",
+      "steps": [
+        {
+          "title": "Change size",
+          "text": "This block makes your sprite bigger or smaller. A positive number grows it, and a negative number shrinks it.",
+          "target": {
+            "block": "changesizeby"
+          }
+        },
+        {
+          "title": "Try it yourself!",
+          "text": "I've added a “when this sprite clicked” block to your code area. Drag “change size by 10” under it, then click your sprite again and again.",
+          "waitFor": [
+            {
+              "type": "blockPlaced",
+              "block": "changesizeby",
+              "label": "Drag the “change size” block under the hat block"
+            },
+            {
+              "type": "scriptRun",
+              "block": "changesizeby",
+              "label": "Click your sprite"
+            }
+          ],
+          "addBlocks": [
+            "event_whenthisspriteclicked"
+          ]
+        },
+        {
+          "title": "Hide",
+          "text": "This block makes your sprite disappear. Try it on its own, then bring your sprite back with “show”.",
+          "target": {
+            "block": "hide"
+          }
+        }
+      ]
+    }
+  ]
+}

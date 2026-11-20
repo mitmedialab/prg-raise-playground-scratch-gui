@@ -1,0 +1,108 @@
+{
+  "tours": [
+    {
+      "title": "Repeat",
+      "description": "Run blocks again and again.",
+      "steps": [
+        {
+          "title": "Repeat",
+          "text": "This block runs the blocks inside it again and again, a number of times. It saves you from dragging the same blocks over and over.",
+          "target": {
+            "block": "repeat"
+          }
+        },
+        {
+          "title": "Forever",
+          "text": "This one never stops. It's perfect for games where something keeps happening.",
+          "target": {
+            "block": "forever"
+          }
+        },
+        {
+          "title": "Try it yourself!",
+          "text": "I've added a “when green flag clicked” block to your code area. Drag “repeat 10” under it, then put a “move” or “turn” block inside, and click the green flag.",
+          "waitFor": [
+            {
+              "type": "blockPlaced",
+              "block": "repeat",
+              "label": "Drag the “repeat” block under the hat block"
+            },
+            {
+              "type": "scriptRun",
+              "block": "repeat",
+              "label": "Click the green flag"
+            }
+          ],
+          "addBlocks": [
+            "event_whenflagclicked"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Wait",
+      "description": "Slow things down.",
+      "steps": [
+        {
+          "title": "Wait",
+          "text": "This block pauses the script for a number of seconds. Use it between two blocks so you have time to see each one.",
+          "target": {
+            "block": "wait"
+          }
+        },
+        {
+          "title": "Try it yourself!",
+          "text": "I've added a “when green flag clicked” block and a “say Hello!” block to your code area. Drag “wait 1 seconds” under the “say” block, and add another “say” under that. Then click the green flag.",
+          "waitFor": [
+            {
+              "type": "blockPlaced",
+              "block": "wait",
+              "label": "Drag the “wait” block under the “say” block"
+            },
+            {
+              "type": "scriptRun",
+              "block": "wait",
+              "label": "Click the green flag"
+            }
+          ],
+          "addBlocks": [
+            "event_whenflagclicked",
+            "looks_say"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Make a choice",
+      "description": "Do something only if it is true.",
+      "steps": [
+        {
+          "title": "If",
+          "text": "This block runs the blocks inside it only if the condition is true. Put a hexagon block, like “touching mouse-pointer?”, in its slot. “if / else” does something else when it isn't true.",
+          "target": {
+            "block": "if"
+          }
+        },
+        {
+          "title": "Try it yourself!",
+          "text": "I've added a “when green flag clicked” block to your code area. Drag “if” under it. Then put “touching mouse-pointer?” (from Sensing) in the condition and a “say” inside, and click the green flag while pointing at your sprite.",
+          "waitFor": [
+            {
+              "type": "blockPlaced",
+              "block": "if",
+              "label": "Drag the “if” block under the hat block"
+            },
+            {
+              "type": "scriptRun",
+              "block": "if",
+              "label": "Click the green flag"
+            }
+          ],
+          "addBlocks": [
+            "event_whenflagclicked"
+          ]
+        }
+      ]
+    }
+  ]
+}

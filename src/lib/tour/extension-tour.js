@@ -6,6 +6,7 @@ import driverStyles from 'driver.js/dist/driver.css'; // eslint-disable-line imp
 import './tour.css';
 import watchConditions from './conditions';
 import prepareCodeArea from './code-area';
+import fullBlockType from './block-types';
 
 /**
  * Guided tours of an extension, in the style of a product walkthrough:
@@ -263,7 +264,7 @@ const resolveTarget = (target, extensionId, workspace) => {
     const flyout = workspace.getFlyout();
 
     if (target.block) {
-        const type = `${extensionId}_${target.block}`;
+        const type = fullBlockType(extensionId, target.block);
         const block = flyout.getWorkspace().getTopBlocks(false)
             .find(({type: blockType}) => blockType === type);
         if (!block) return null;
